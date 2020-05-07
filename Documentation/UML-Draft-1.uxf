@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>30</x>
+      <y>90</y>
+      <w>500</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>org.hl7.fhir.r4.model.Patient
+--
+getGender(): Enum
+getAddress(): [org.hl7.fhir.r4.model.Address]
+getName(): [org.hl7.fhir.r4.model.HumanName]
+getBirthDate(): Date
+--
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>580</x>
+      <y>150</y>
+      <w>230</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>org.hl7.fhir.r4.model.Address
+--
+-city: String
+-state: String
+-country: String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>190</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>520</x>
+      <y>330</y>
+      <w>260</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>org.hl7.fhir.r4.model.HumanName
+--
+getPrefix(): [String]
+getSuffix(): [String]
+getFamily(): String
+getGiven(): [String]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>440</x>
+      <y>270</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;60.0</additional_attributes>
+  </element>
+</diagram>
