@@ -1,35 +1,27 @@
 package org.cholapp;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class main extends Application
-{
-    public static void main(String[] args) {
-        launch(args);
-    }
-
+public class main extends Application{
+    private TableView table = new TableView();
     @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Hello World!");
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
-
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 250));
-        primaryStage.show();
+    public void start(Stage stage) throws Exception {
+        Button addPatientButton = new Button("Add new Patient");
+        stage.setTitle("Hello");
+        TableColumn nameColumn = new TableColumn("NAME");
+        TableColumn cholesterolColumn = new TableColumn("TOTAL CHOLESTEROL");
+        TableColumn timeColumn = new TableColumn("TIME");
+        table.getColumns().addAll(nameColumn, cholesterolColumn, timeColumn);
+        VBox vbox = new VBox();
+        vbox.getChildren().addAll(addPatientButton, table);
+        Scene scene = new Scene(vbox);
+        stage.setScene(scene);
+        stage.show();
     }
 }
