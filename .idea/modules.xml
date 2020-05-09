@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/maven/maven.iml" filepath="$PROJECT_DIR$/maven/maven.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/projecy.iml" filepath="$PROJECT_DIR$/.idea/projecy.iml" />
     </modules>
   </component>
