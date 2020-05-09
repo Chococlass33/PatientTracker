@@ -1,0 +1,6 @@
+.idea/
+projecy.iml
+.DS_Store
+out/
+*.class
+src/Examples/sample.fxml
