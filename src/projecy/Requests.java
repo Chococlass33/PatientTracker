@@ -2,10 +2,7 @@ package projecy;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import org.hl7.fhir.r4.model.Base;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Quantity;
+import org.hl7.fhir.r4.model.*;
 
 import java.math.BigDecimal;
 
@@ -16,11 +13,13 @@ public class Requests {
         FhirContext ctx = FhirContext.forR4();
         this.client = ctx.newRestfulGenericClient(baseURL);
     }
-    public Patient getPatient(String patientID){
+    public CholesterolPatient getPatient(String patientID){
         Patient patient = client.read().resource(Patient.class).withId(patientID).execute();
-        return patient;
+        CholesterolPatient cholesterolPatient = new CholesterolPatient(patient, getPatientCholesterol(patient));
+        return cholesterolPatient;
     }
     public BigDecimal getPatientCholesterol(Patient patient){
+        //ToDo: Getting ID is broken
         String patientID = patient.getId();
         //Put together search string to query for the data
         String searchString =
