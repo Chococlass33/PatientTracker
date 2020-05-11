@@ -15,12 +15,10 @@ public class Requests {
     }
     public CholesterolPatient getPatient(String patientID){
         Patient patient = client.read().resource(Patient.class).withId(patientID).execute();
-        CholesterolPatient cholesterolPatient = new CholesterolPatient(patient, getPatientCholesterol(patient));
+        CholesterolPatient cholesterolPatient = new CholesterolPatient(patient, getPatientCholesterol(patient.getIdElement().getIdPart()));
         return cholesterolPatient;
     }
-    public BigDecimal getPatientCholesterol(Patient patient){
-        //ToDo: Getting ID is broken
-        String patientID = patient.getIdElement().getIdPart();
+    public BigDecimal getPatientCholesterol(String patientID){
         //Put together search string to query for the data
         String searchString =
                 "Observation?patient=" + patientID + "&code=" + cholesterolCode + "&_sort=date&_count=13";

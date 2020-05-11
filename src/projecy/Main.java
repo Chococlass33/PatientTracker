@@ -1,9 +1,12 @@
 package projecy;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Main extends Application {
 
@@ -13,6 +16,12 @@ public class Main extends Application {
         primaryStage.setTitle("Projecty");
         VBox patientView = new PatientTableView(monitoredPatients);
         Scene primaryScene = new Scene(patientView);
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent event) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
         primaryStage.setScene(primaryScene);
         primaryStage.show();
     }
@@ -20,4 +29,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         Application.launch(args);
     }
+
 }
