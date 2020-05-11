@@ -14,7 +14,7 @@ public class Main extends Application {
         Requests requests = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
         MonitoredPatients monitoredPatients = new MonitoredPatients(requests);
         primaryStage.setTitle("Projecty");
-        VBox patientView = new PatientTableView(monitoredPatients);
+        VBox patientView = new MainView(monitoredPatients);
         Scene primaryScene = new Scene(patientView);
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent event) {

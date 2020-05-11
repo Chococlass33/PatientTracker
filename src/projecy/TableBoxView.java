@@ -10,10 +10,10 @@ import org.hl7.fhir.r4.model.Patient;
 
 import java.math.BigDecimal;
 
-public class TableController extends VBox {
-    private TableView<CholesterolPatient> patientTable;
-    public TableController(MonitoredPatients patients) {
-        patientTable = new TableView<CholesterolPatient>(patients.patients);
+public class TableBoxView extends VBox {
+    private javafx.scene.control.TableView<CholesterolPatient> patientTable;
+    public TableBoxView(MonitoredPatients patients) {
+        patientTable = new javafx.scene.control.TableView<CholesterolPatient>(patients.patients);
         //Add column for name
         TableColumn<CholesterolPatient, String> nameColumn = new TableColumn<CholesterolPatient, String>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("name"));
