@@ -9,6 +9,7 @@ public class CholesterolPatient {
     private StringProperty cholesterol = new SimpleStringProperty();
     private StringProperty updateTime = new SimpleStringProperty();
     private String id;
+    private float cholesterolfloat;
     public CholesterolPatient(Patient patient, Base cholesterolResource) {
         name = patient.getName().get(0).getNameAsSingleString();
         this.updateCholesterolAndTime(cholesterolResource);

@@ -42,5 +42,25 @@ public class MonitoredPatients {
     public void setUpdateFrequency(int timeBetweenUpdates) {
         this.updateCholesterolService.scheduleWithFixedDelay(updateCholesterol, 0, timeBetweenUpdates, TimeUnit.SECONDS);
     }
+    private float averageCholestorol() {
+         float total = 0;
+         int patientnum = 0;
+        for (CholesterolPatient patient : patients)
+        {
+            //total += patient.getCholesterol();
+            total += 1;
+            patientnum += 1;
+        }
+    return total/patientnum;
+    }
+
+    public boolean isBelowAverage(CholesterolPatient patient)
+    {
+        //if (patient.getCholesterol() <= averageCholestorol())
+        {
+         //   return true;
+        }
+        return false;
+    }
 
 }

@@ -16,7 +16,6 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
 
     public ActionButtonTableCell(String label, Function< S, S> function) {
         this.getStyleClass().add("action-button-table-cell");
-
         this.actionButton = new Button(label);
         this.actionButton.setOnAction((ActionEvent e) -> {
             function.apply(getCurrentItem());
