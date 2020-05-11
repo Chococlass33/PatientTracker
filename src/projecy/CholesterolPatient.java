@@ -3,16 +3,18 @@ package projecy;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Quantity;
 
 import java.math.BigDecimal;
 
 public class CholesterolPatient {
     private String name;
     private StringProperty cholesterol = new SimpleStringProperty();
+    private StringProperty updateDate = new SimpleStringProperty();
     private String id;
-    public CholesterolPatient(Patient patient, BigDecimal cholesterolLevel) {
+    public CholesterolPatient(Patient patient, Quantity cholesterolLevel) {
         name = patient.getName().get(0).getNameAsSingleString();
-        cholesterol.set(cholesterolLevel.toString());
+        setCholesterol(cholesterolLevel);
         id = patient.getIdElement().getIdPart();
     }
 
@@ -26,8 +28,8 @@ public class CholesterolPatient {
     public String getCholesterol() {
         return cholesterol.get();
     }
-    public void setCholesterol(BigDecimal cholesterolLevel) {
-        cholesterol.set(cholesterolLevel.toString());
+    public void setCholesterol(Quantity cholesterolLevel) {
+        cholesterol.set(cholesterolLevel.getValue().toString() + ' ' + cholesterolLevel.getUnit());
     }
     public String getID() {
         return id;

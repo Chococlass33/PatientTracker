@@ -18,7 +18,7 @@ public class Requests {
         CholesterolPatient cholesterolPatient = new CholesterolPatient(patient, getPatientCholesterol(patient.getIdElement().getIdPart()));
         return cholesterolPatient;
     }
-    public BigDecimal getPatientCholesterol(String patientID){
+    public Quantity getPatientCholesterol(String patientID){
         //Put together search string to query for the data
         String searchString =
                 "Observation?patient=" + patientID + "&code=" + cholesterolCode + "&_sort=date&_count=13";
@@ -27,7 +27,7 @@ public class Requests {
         //Parse relevant data out of bundle result
         Base base = results.getEntry().get(0).getResource().getNamedProperty("valueQuantity").getValues().get(0);
         Quantity cholesterolQuantity = base.castToQuantity(base);
-        return cholesterolQuantity.getValue();
+        return cholesterolQuantity;
     }
 
 }
