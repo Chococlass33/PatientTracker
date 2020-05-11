@@ -1,10 +1,10 @@
 package projecy;
 
 
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
 
 import java.math.BigDecimal;
 
@@ -28,6 +28,10 @@ public class TableBoxView extends VBox {
                 ));
 
         patientTable.getColumns().addAll(nameColumn, cholesterolColumn,removecolumn);
+        //Add column for last updated time
+        TableColumn<CholesterolPatient, String> timeColumn = new TableColumn<CholesterolPatient, String>("Time");
+        timeColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("updateTime"));
+        patientTable.getColumns().addAll(nameColumn, cholesterolColumn, timeColumn, removecolumn);
         this.getChildren().add(patientTable);
     }
 }

@@ -2,8 +2,8 @@ package projecy;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.hl7.fhir.r4.model.Base;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,8 +36,8 @@ public class MonitoredPatients {
         this.patients.add(patient);
     }
     private void updateCholesterol(CholesterolPatient patient) {
-        BigDecimal cholesterolLevel = requests.getPatientCholesterol(patient.getID());
-        patient.setCholesterol(cholesterolLevel);
+        Base cholesterolLevel = requests.getPatientCholesterol(patient.getID());
+        patient.updateCholesterolAndTime(cholesterolLevel);
     }
     public void setUpdateFrequency(int timeBetweenUpdates) {
         this.updateCholesterolService.scheduleWithFixedDelay(updateCholesterol, 0, timeBetweenUpdates, TimeUnit.SECONDS);
