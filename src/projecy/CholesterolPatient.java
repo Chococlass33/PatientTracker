@@ -19,4 +19,8 @@ public class CholesterolPatient {
     public void setName(String name) {
         this.name = name;
     }
+    public BigDecimal getCholesterol() {
+        return cholesterol;
+    }
+
 }
