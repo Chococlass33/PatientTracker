@@ -2,6 +2,7 @@ package projecy;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.Quantity;
 
 import java.math.BigDecimal;
@@ -37,7 +38,7 @@ public class MonitoredPatients {
         this.patients.add(patient);
     }
     private void updateCholesterol(CholesterolPatient patient) {
-        Quantity cholesterolLevel = requests.getPatientCholesterol(patient.getID());
+        Base cholesterolLevel = requests.getPatientCholesterol(patient.getID());
         patient.setCholesterol(cholesterolLevel);
     }
     public void setUpdateFrequency(int timeBetweenUpdates) {
