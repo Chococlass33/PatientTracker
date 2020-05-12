@@ -6,11 +6,11 @@ import org.hl7.fhir.r4.model.Bundle;
 import java.util.ArrayList;
 
 
-public class PractitionerPatientList {
+public class PatientList {
 
     public ObservableList<CholesterolPatient> patients;
     private Requests requests;
-    public PractitionerPatientList(Requests requests) {
+    public PatientList(Requests requests) {
         this.requests = requests;
         this.patients = FXCollections.observableArrayList(new ArrayList());
 

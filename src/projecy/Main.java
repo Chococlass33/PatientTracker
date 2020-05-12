@@ -13,10 +13,9 @@ public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
         Requests requests = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
-        MonitoredPatients monitoredPatients = new MonitoredPatients(requests);
-        PractitionerPatientList practitionerPatients = new PractitionerPatientList(requests);
+        PatientList practitionerPatients = new PatientList(requests);
+        MonitoredPatientList monitoredPatients = new MonitoredPatientList(requests);
         primaryStage.setTitle("Projecty");
-
         HBox monitorView = new MonitorPatientsTableView(monitoredPatients);
         VBox patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
         Scene primaryScene = new Scene(new HBox(patientListView, monitorView));

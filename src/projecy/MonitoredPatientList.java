@@ -10,14 +10,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MonitoredPatients {
+public class MonitoredPatientList extends PatientList {
     public ObservableList<CholesterolPatient> patients;
     private Requests requests;
     private ScheduledExecutorService updateCholesterolService;
     private Runnable updateCholesterol;
-    public MonitoredPatients(Requests requests) {
-        this.requests = requests;
-        this.patients = FXCollections.observableArrayList(new ArrayList());
+    public MonitoredPatientList(Requests requests) {
+        super(requests);
         this.updateCholesterol = new Runnable() {
             public void run() {
                 for (CholesterolPatient patient : patients){

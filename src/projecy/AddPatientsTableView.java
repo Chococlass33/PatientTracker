@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class AddPatientsTableView extends VBox {
-    public AddPatientsTableView(PractitionerPatientList patientList, MonitoredPatients monitoredList) {
+    public AddPatientsTableView(PatientList patientList, MonitoredPatientList monitoredList) {
         final TextField enterIdentiferTextField = new TextField("PractitionerIdentifier");
         Button button = new Button("Find Patients");
         button.setOnAction(new EventHandler<ActionEvent>() {

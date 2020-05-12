@@ -14,13 +14,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-import java.math.BigDecimal;
-
 public class MonitorPatientsTableView extends HBox {
     private javafx.scene.control.TableView<CholesterolPatient> patientTable;
     private DetailsView detailsView = new DetailsView();
-    private MonitoredPatients patients;
-    public MonitorPatientsTableView(MonitoredPatients patients) {
+    private MonitoredPatientList patients;
+    public MonitorPatientsTableView(MonitoredPatientList patients) {
         this.patients = patients;
         patientTable = new javafx.scene.control.TableView<CholesterolPatient>(patients.patients);
         TableColumn<CholesterolPatient,String> nameColumn = new TableColumn<CholesterolPatient,String>("First Name");
