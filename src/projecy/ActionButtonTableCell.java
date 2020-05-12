@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
-
 import java.util.function.Function;
 
 //Code Imported from https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view

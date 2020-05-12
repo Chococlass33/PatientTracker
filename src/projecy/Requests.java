@@ -3,10 +3,8 @@ package projecy;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import org.hl7.fhir.r4.model.*;
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Requests {
     private IGenericClient client;
@@ -32,7 +30,21 @@ public class Requests {
         //Quantity cholesterolQuantity = base.castToQuantity(base);
         return cholesterolResource;
     }
-    public ArrayList<Bundle.BundleEntryComponent> getPatientsForPractitioner(String practitionerIdentifier) {
+    public ArrayList<CholesterolPatient> getPatientsForPractitioner(String practitionerIdentifier) {
+        ArrayList<Bundle.BundleEntryComponent> encounters = this.getAllEncounters(practitionerIdentifier);
+        ArrayList<CholesterolPatient> cholesterolPatients = new ArrayList<>();
+        for (int i = 0; i < encounters.size(); i++) {
+            String name = encounters.get(i).getResource().getNamedProperty("subject").getValues().get(0).getNamedProperty("display").getValues().get(0).toString();
+            String id = encounters.get(i).getResource().getNamedProperty("subject").getValues().get(0).getNamedProperty("reference").getValues().get(0).toString();
+            id = id.replace("Patient/", "");
+            CholesterolPatient newPatient = new CholesterolPatient(name, id);
+            if (!cholesterolPatients.contains(newPatient)){
+                cholesterolPatients.add(new CholesterolPatient(name, id));
+            }
+        }
+        return cholesterolPatients;
+    }
+    private ArrayList<Bundle.BundleEntryComponent> getAllEncounters(String practitionerIdentifier) {
         ArrayList<Bundle.BundleEntryComponent> allEncounters = new ArrayList<Bundle.BundleEntryComponent>();
         String searchUrl = "Encounter?participant.identifier=http://hl7.org/fhir/sid/us-npi|" + practitionerIdentifier
                 + "&_include=Encounter.participant.individual&_include=Encounter.patient";
@@ -54,7 +66,6 @@ public class Requests {
                     }
                 }catch (IndexOutOfBoundsException e) {
                     return allEncounters;
-
                 }
                 linkTraversal++;
             } while (true);

@@ -1,12 +1,9 @@
 package projecy;
 
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.SimpleFloatProperty;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.hl7.fhir.r4.model.*;
-import org.hl7.fhir.r4.model.codesystems.AdministrativeGender;
-import org.hl7.fhir.r4.model.codesystems.GenderIdentity;
 
 import java.math.BigDecimal;
 
