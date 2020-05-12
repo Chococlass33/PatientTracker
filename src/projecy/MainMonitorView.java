@@ -8,27 +8,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class MainView extends VBox{
-    private Button button;
-    private TableBoxView tableBox;
+public class MainMonitorView extends VBox{
+
+    private MonitorPatientsTableView tableBox;
 
 
-    public MainView(final MonitoredPatients patients) {
-        final TextField enterIDTextField = new TextField("PatientID...");
-        this.button = new Button("Add new Patient");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                try {
-                    patients.addPatient(enterIDTextField.getText());
-                    enterIDTextField.setText("Success!");
-                } catch (ResourceNotFoundException exception) {
-                    enterIDTextField.setText("Error, invalid ID");
-                    System.out.println(exception);
-                }
-            }
-        });
-        HBox addPatient = new HBox(this.button, enterIDTextField);
-        this.tableBox = new TableBoxView(patients);
+    public MainMonitorView(final MonitoredPatients patients) {
+
+        this.tableBox = new MonitorPatientsTableView(patients);
 
         final TextField setUpdateFrequencyField = new TextField("(Seconds, as int)");
         Button setUpdateFrequencyButton = new Button("Set Update Frequency");
@@ -44,7 +31,7 @@ public class MainView extends VBox{
         });
 
         HBox setUpdateFrequency = new HBox(setUpdateFrequencyButton, setUpdateFrequencyField);
-        this.getChildren().addAll(addPatient, this.tableBox, setUpdateFrequency);
+        this.getChildren().addAll(this.tableBox, setUpdateFrequency);
     }
 
 }

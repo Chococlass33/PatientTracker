@@ -12,9 +12,9 @@ import javafx.util.Callback;
 
 import java.math.BigDecimal;
 
-public class TableBoxView extends VBox {
+public class MonitorPatientsTableView extends VBox {
     private javafx.scene.control.TableView<CholesterolPatient> patientTable;
-    public TableBoxView(MonitoredPatients patients) {
+    public MonitorPatientsTableView(MonitoredPatients patients) {
         patientTable = new javafx.scene.control.TableView<CholesterolPatient>(patients.patients);
 
         TableColumn<CholesterolPatient,String> nameColumn = new TableColumn<CholesterolPatient,String>("First Name");

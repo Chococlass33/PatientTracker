@@ -5,6 +5,8 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 import org.hl7.fhir.r4.model.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Requests {
     private IGenericClient client;
@@ -18,7 +20,7 @@ public class Requests {
         CholesterolPatient cholesterolPatient = new CholesterolPatient(patient, getPatientCholesterol(patient.getIdElement().getIdPart()));
         return cholesterolPatient;
     }
-    public Base getPatientCholesterol(String patientID){
+    public Base getPatientCholesterol(String patientID) {
         //Put together search string to query for the data
         String searchString =
                 "Observation?patient=" + patientID + "&code=" + cholesterolCode + "&_sort=date&_count=13";
@@ -26,9 +28,38 @@ public class Requests {
         Bundle results = client.search().byUrl(searchString).returnBundle(Bundle.class).execute();
         //Parse relevant data out of bundle result
         Base cholesterolResource = results.getEntry().get(0).getResource();
-                //.getNamedProperty("valueQuantity").getValues().get(0);
+        //.getNamedProperty("valueQuantity").getValues().get(0);
         //Quantity cholesterolQuantity = base.castToQuantity(base);
         return cholesterolResource;
+    }
+    public ArrayList<Bundle.BundleEntryComponent> getPatientsForPractitioner(String practitionerIdentifier) {
+        ArrayList<Bundle.BundleEntryComponent> allEncounters = new ArrayList<Bundle.BundleEntryComponent>();
+        String searchUrl = "Encounter?participant.identifier=http://hl7.org/fhir/sid/us-npi|" + practitionerIdentifier
+                + "&_include=Encounter.participant.individual&_include=Encounter.patient";
+        int pageCount = 0;
+        do {
+            Bundle encounters = client.search()
+                    .byUrl(searchUrl)
+                    .returnBundle(Bundle.class)
+                    .execute();
+            allEncounters.addAll(encounters.getEntry());
+            System.out.println(pageCount);
+            int linkTraversal = 0;
+            do {
+                try {
+                    if (encounters.getLink().get(linkTraversal).getRelation().toString().compareTo("next") == 0) {
+                        searchUrl = encounters.getLink().get(linkTraversal).getUrl();
+                        pageCount++;
+                        break;
+                    }
+                }catch (IndexOutOfBoundsException e) {
+                    return allEncounters;
+
+                }
+                linkTraversal++;
+            } while (true);
+        } while(pageCount < 5);
+        return allEncounters;
     }
 
 }
