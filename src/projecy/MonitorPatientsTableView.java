@@ -3,20 +3,26 @@ package projecy;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.math.BigDecimal;
 
-public class MonitorPatientsTableView extends VBox {
+public class MonitorPatientsTableView extends HBox {
     private javafx.scene.control.TableView<CholesterolPatient> patientTable;
+    private DetailsView detailsView = new DetailsView();
+    private MonitoredPatients patients;
     public MonitorPatientsTableView(MonitoredPatients patients) {
+        this.patients = patients;
         patientTable = new javafx.scene.control.TableView<CholesterolPatient>(patients.patients);
-
         TableColumn<CholesterolPatient,String> nameColumn = new TableColumn<CholesterolPatient,String>("First Name");
         nameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CholesterolPatient, String>, ObservableValue<String>>() {
             @Override
@@ -37,7 +43,6 @@ public class MonitorPatientsTableView extends VBox {
                 });
                 return new ReadOnlyStringWrapper(p.getValue().getName());
             }
-
         });
 
         //Add column for name
@@ -53,17 +58,41 @@ public class MonitorPatientsTableView extends VBox {
         timeColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("updateTime"));
 
         //Add column for remove button
-        TableColumn<CholesterolPatient, Button> removecolumn = new TableColumn<>("Remove Patient");
-        removecolumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Remove", (patient) ->
+        TableColumn<CholesterolPatient, Button> removeColumn = new TableColumn<>("Remove Patient");
+        removeColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Remove", (patient) ->
                 {
                     patients.removePatient(patient);
                     return patient;
                 }
         ));
+        //Add column for details button
+        TableColumn<CholesterolPatient, Button> detailsColumn = new TableColumn<>("Show Patient Details");
+        removeColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Details", (patient) ->
+                {
+                    detailsView.setDetails(patient);
+                    return patient;
+                }
+                ));
 
         //Put together into one table
-        patientTable.getColumns().addAll(nameColumn, cholesterolColumn,timeColumn,removecolumn);
-
-        this.getChildren().add(patientTable);
+        patientTable.getColumns().addAll(nameColumn, cholesterolColumn,timeColumn,removeColumn);
+        //Organise view
+        VBox vBox = new VBox(generateUpdatesView(), patientTable);
+        this.getChildren().addAll(vBox, detailsView);
+    }
+    private HBox generateUpdatesView() {
+        final TextField setUpdateFrequencyField = new TextField("(Seconds, as int)");
+        Button setUpdateFrequencyButton = new Button("Set Update Frequency");
+        setUpdateFrequencyButton.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                try {
+                    patients.setUpdateFrequency(Integer.parseInt(setUpdateFrequencyField.getText()));
+                    setUpdateFrequencyField.setText("Success!");
+                } catch (NumberFormatException exception) {
+                    setUpdateFrequencyField.setText("Error, enter valid int");
+                }
+            }
+        });
+        return new HBox(setUpdateFrequencyButton, setUpdateFrequencyField);
     }
 }

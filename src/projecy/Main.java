@@ -16,7 +16,8 @@ public class Main extends Application {
         MonitoredPatients monitoredPatients = new MonitoredPatients(requests);
         PractitionerPatientList practitionerPatients = new PractitionerPatientList(requests);
         primaryStage.setTitle("Projecty");
-        VBox monitorView = new MainMonitorView(monitoredPatients);
+
+        HBox monitorView = new MonitorPatientsTableView(monitoredPatients);
         VBox patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
         Scene primaryScene = new Scene(new HBox(patientListView, monitorView));
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
