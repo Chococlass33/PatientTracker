@@ -45,8 +45,8 @@ public class TableBoxView extends VBox {
         nameColumn2.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("name"));
 
         //Add column for cholesterol
-        TableColumn<CholesterolPatient, BigDecimal> cholesterolColumn = new TableColumn<CholesterolPatient, BigDecimal>("Total Cholesterol (mg/dL)");
-        cholesterolColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, BigDecimal>("cholesterol"));
+        TableColumn<CholesterolPatient, String> cholesterolColumn = new TableColumn<CholesterolPatient, String>("Total Cholesterol (mg/dL)");
+        cholesterolColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("cholesterolString"));
 
         //Add column for last updated time
         TableColumn<CholesterolPatient, String> timeColumn = new TableColumn<CholesterolPatient, String>("Time");

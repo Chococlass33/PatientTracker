@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.hl7.fhir.r4.model.Base;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,23 +43,25 @@ public class MonitoredPatients {
     public void setUpdateFrequency(int timeBetweenUpdates) {
         this.updateCholesterolService.scheduleWithFixedDelay(updateCholesterol, 0, timeBetweenUpdates, TimeUnit.SECONDS);
     }
-    private float averageCholestorol() {
+    private BigDecimal averageCholestorol() {
+        //Use floating point maths for this calculation as it works better for arithmatics
          float total = 0;
          int patientnum = 0;
         for (CholesterolPatient patient : patients)
         {
-            //total += patient.getCholesterol();
+            total += patient.getCholesterolValue().floatValue();
             total += 1;
             patientnum += 1;
         }
-    return total/patientnum;
+        //Cast result back to BigDecimal
+        BigDecimal returnDecimal = new BigDecimal(total/patientnum);
+    return returnDecimal;
     }
 
     public boolean isBelowAverage(CholesterolPatient patient)
     {
-        //if (patient.getCholesterol() <= averageCholestorol())
-        {
-         //   return true;
+        if (patient.getCholesterolValue().compareTo(averageCholestorol()) == 1) {
+         return true;
         }
         return false;
     }
