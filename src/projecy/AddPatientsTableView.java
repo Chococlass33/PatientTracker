@@ -49,7 +49,7 @@ public class AddPatientsTableView extends VBox {
                 }
         ));
 
-        availablePatients.getColumns().addAll(nameColumn);
+        availablePatients.getColumns().addAll(nameColumn, addPatientColumn);
         this.getChildren().addAll(addPatients, availablePatients);
 
     }

@@ -7,8 +7,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MonitoredPatientList extends PatientList {
-    public ObservableList<CholesterolPatient> patients;
-    private Requests requests;
     private ScheduledExecutorService updateCholesterolService;
     private Runnable updateCholesterol;
     public MonitoredPatientList(Requests requests) {
