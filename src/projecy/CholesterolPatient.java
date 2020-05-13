@@ -28,6 +28,7 @@ public class CholesterolPatient {
         gender = patient.getGender();
         address = patient.getAddress().get(0);
         id = patient.getIdElement().getIdPart();
+        birthDate = patient.getBirthDateElement();
     }
     public void updateCholesterolAndTime(Base cholesterolBase) {
         Base valueQuantity = cholesterolBase.getNamedProperty("valueQuantity").getValues().get(0);
@@ -60,10 +61,10 @@ public class CholesterolPatient {
         return false;
     }
     public String getGenderString() {
-        return gender.toString();
+        return "Gender: " + gender.toString() + "\n";
     }
     public String getBirthdateString() {
-        return birthDate.toString();
+        return "Birthdate: " + birthDate.getValueAsString() + "\n";
     }
     public StringProperty cholesterolStringProperty() {return cholesterolString;};
     public StringProperty timeProperty() {return updateTime;};
