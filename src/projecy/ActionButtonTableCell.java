@@ -10,7 +10,6 @@ import java.util.function.Function;
 //Code Imported from https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view
 
 public class ActionButtonTableCell<S> extends TableCell<S, Button> {
-
     private final Button actionButton;
 
     public ActionButtonTableCell(String label, Function< S, S> function) {

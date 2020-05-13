@@ -65,7 +65,7 @@ public class MonitorPatientsTableView extends HBox {
         ));
         //Add column for details button
         TableColumn<CholesterolPatient, Button> detailsColumn = new TableColumn<>("Show Patient Details");
-        removeColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Details", (patient) ->
+        detailsColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Details", (patient) ->
                 {
                     detailsView.setDetails(patient);
                     return patient;
@@ -73,7 +73,7 @@ public class MonitorPatientsTableView extends HBox {
                 ));
 
         //Put together into one table
-        patientTable.getColumns().addAll(nameColumn, cholesterolColumn,timeColumn,removeColumn);
+        patientTable.getColumns().addAll(nameColumn, cholesterolColumn,timeColumn,removeColumn, detailsColumn);
         //Organise view
         VBox vBox = new VBox(generateUpdatesView(), patientTable);
         this.getChildren().addAll(vBox, detailsView);
