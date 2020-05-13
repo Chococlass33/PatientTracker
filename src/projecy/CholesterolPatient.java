@@ -46,6 +46,19 @@ public class CholesterolPatient {
         returnString += "Country: " + address.getCountry() + "\n";
         return returnString;
     }
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (o.getClass() == getClass()) {
+            CholesterolPatient patient = (CholesterolPatient) o;
+            if (patient.id.compareTo(this.id) == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
     public String getGenderString() {
         return gender.toString();
     }
