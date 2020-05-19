@@ -1,5 +1,4 @@
 package projecy;
-import javafx.collections.ObservableList;
 import org.hl7.fhir.r4.model.Base;
 import java.math.BigDecimal;
 import java.util.concurrent.Executors;
@@ -9,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 public class MonitoredPatientList extends PatientList {
     private ScheduledExecutorService updateCholesterolService;
     private Runnable updateCholesterol;
-    public MonitoredPatientList(Requests requests) {
+    public MonitoredPatientList(GetPatients requests) {
         super(requests);
         this.updateCholesterol = new Runnable() {
             public void run() {
@@ -26,11 +25,11 @@ public class MonitoredPatientList extends PatientList {
         this.patients.remove(patient);
     }
     public void addPatient(String patientID) {
-        CholesterolPatient patient = requests.getPatient(patientID);
+        CholesterolPatient patient = patientGetter.getPatient(patientID);
         this.patients.add(patient);
     }
     private void updateCholesterol(CholesterolPatient patient) {
-        Base cholesterolLevel = requests.getPatientCholesterol(patient.getID());
+        Base cholesterolLevel = patientGetter.getPatientCholesterol(patient.getID());
         patient.updateCholesterolAndTime(cholesterolLevel);
     }
     public void setUpdateFrequency(int timeBetweenUpdates) {

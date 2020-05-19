@@ -8,13 +8,13 @@ import java.util.ArrayList;
 public class PatientList {
 
     public ObservableList<CholesterolPatient> patients;
-    protected Requests requests;
-    public PatientList(Requests requests) {
-        this.requests = requests;
+    protected GetPatients patientGetter;
+    public PatientList(GetPatients patientGetter) {
+        this.patientGetter = patientGetter;
         this.patients = FXCollections.observableArrayList(new ArrayList());
 
     }
     public void addPatients(String practitionerIdentifier) {
-            patients.addAll(requests.getPatientsForPractitioner(practitionerIdentifier));
+            patients.addAll(patientGetter.getPatientsForPractitioner(practitionerIdentifier));
     }
 }
