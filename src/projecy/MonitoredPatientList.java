@@ -21,11 +21,6 @@ public class MonitoredPatientList extends PatientList {
         this.updateCholesterolService = Executors.newScheduledThreadPool(1);
         this.updateCholesterolService.scheduleAtFixedRate(updateCholesterol, 0, 60, TimeUnit.SECONDS);
     }
-
-    public void addPatient(String patientID) {
-        CholesterolPatient patient = patientGetter.getPatient(patientID);
-        this.patients.add(patient);
-    }
     private void updateCholesterol(CholesterolPatient patient) {
         Base cholesterolLevel = patientGetter.getPatientCholesterol(patient.getID());
         patient.updateCholesterolAndTime(cholesterolLevel);

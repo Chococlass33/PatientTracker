@@ -14,14 +14,14 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class AddPatientsTableView extends Region {
-    public AddPatientsTableView(PatientList patientList, MonitoredPatientList monitoredList) {
+    public AddPatientsTableView(PatientList sourceList, PatientList destinationList) {
         final TextField enterIdentiferTextField = new TextField("PractitionerIdentifier");
         Button button = new Button("Find Patients");
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 
                 try {
-                    patientList.addPatients(enterIdentiferTextField.getText());
+                    sourceList.addPatients(enterIdentiferTextField.getText());
                     enterIdentiferTextField.setText("Success!");
                 } catch (ResourceNotFoundException exception) {
                     enterIdentiferTextField.setText("Error, invalid Identifier");
@@ -33,7 +33,7 @@ public class AddPatientsTableView extends Region {
             }
         });
         HBox addPatients = new HBox(button, enterIdentiferTextField);
-        TableView availablePatients = new TableView<CholesterolPatient>(patientList.patients);
+        TableView availablePatients = new TableView<CholesterolPatient>(sourceList.patients);
         //Add Column for name
         TableColumn<CholesterolPatient, String> nameColumn = new TableColumn<CholesterolPatient, String>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("name"));
@@ -42,7 +42,7 @@ public class AddPatientsTableView extends Region {
         addPatientColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Add", (patient) ->
                 {
                     try {
-                        monitoredList.addPatient(patient.getID());
+                        destinationList.addPatient(patient.getID());
                     } catch (FhirClientConnectionException e) {
                         button.setText("Error adding patient");
                     }
