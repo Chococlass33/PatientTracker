@@ -21,9 +21,7 @@ public class MonitoredPatientList extends PatientList {
         this.updateCholesterolService = Executors.newScheduledThreadPool(1);
         this.updateCholesterolService.scheduleAtFixedRate(updateCholesterol, 0, 60, TimeUnit.SECONDS);
     }
-    public void removePatient(CholesterolPatient patient) {
-        this.patients.remove(patient);
-    }
+
     public void addPatient(String patientID) {
         CholesterolPatient patient = patientGetter.getPatient(patientID);
         this.patients.add(patient);

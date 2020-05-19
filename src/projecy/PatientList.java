@@ -17,4 +17,7 @@ public class PatientList {
     public void addPatients(String practitionerIdentifier) {
             patients.addAll(patientGetter.getPatientsForPractitioner(practitionerIdentifier));
     }
+    public void removePatient(CholesterolPatient patient) {
+        this.patients.remove(patient);
+    }
 }
