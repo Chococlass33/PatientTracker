@@ -5,7 +5,7 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -16,8 +16,8 @@ public class Main extends Application {
         PatientList practitionerPatients = new PatientList(patientGetter);
         MonitoredPatientList monitoredPatients = new MonitoredPatientList(patientGetter);
         primaryStage.setTitle("Projecty");
-        HBox monitorView = new MonitorPatientsTableView(monitoredPatients);
-        VBox patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
+        Region monitorView = new MonitorPatientsTableView(monitoredPatients);
+        Region patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
         Scene primaryScene = new Scene(new HBox(patientListView, monitorView));
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent event) {

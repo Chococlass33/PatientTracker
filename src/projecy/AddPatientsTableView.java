@@ -10,9 +10,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public class AddPatientsTableView extends VBox {
+public class AddPatientsTableView extends Region {
     public AddPatientsTableView(PatientList patientList, MonitoredPatientList monitoredList) {
         final TextField enterIdentiferTextField = new TextField("PractitionerIdentifier");
         Button button = new Button("Find Patients");
@@ -48,9 +49,9 @@ public class AddPatientsTableView extends VBox {
                     return patient;
                 }
         ));
-
         availablePatients.getColumns().addAll(nameColumn, addPatientColumn);
-        this.getChildren().addAll(addPatients, availablePatients);
+        VBox container = new VBox(addPatients, availablePatients);
+        this.getChildren().addAll(container);
 
     }
 }

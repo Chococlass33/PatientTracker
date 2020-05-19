@@ -11,10 +11,11 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-public class MonitorPatientsTableView extends HBox {
+public class MonitorPatientsTableView extends Region {
     private javafx.scene.control.TableView<CholesterolPatient> patientTable;
     private DetailsView detailsView = new DetailsView();
     private MonitoredPatientList patients;
