@@ -39,6 +39,12 @@ public class AddPatientsTableView extends Region {
 
     }
     private Region createPractitionerIdentifierSearch(PatientList sourceList) {
+        /**
+         * this method takes the patient source list, and creates a region containing a text box for the practitioner ID
+         * input, and a button to add the practitioner's patients to the list.
+         * @param sourceList: the PatientList to add the patients too
+         * @return: the region containing the button and text box to add a practitioner's patients.
+         */
         final TextField enterIdentiferTextField = new TextField("PractitionerIdentifier");
         Button button = new Button("Find Patients");
         button.setOnAction(new EventHandler<ActionEvent>() {

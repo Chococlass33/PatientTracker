@@ -12,19 +12,24 @@ import javafx.stage.WindowEvent;
 public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
+        //Initialize data and request classes
         GetPatientsCholesterol patientGetter = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
         PatientList practitionerPatients = new PatientList(patientGetter);
         MonitoredPatientList monitoredPatients = new MonitoredPatientList(patientGetter);
-        primaryStage.setTitle("Projecy");
+        //Initialize view classes
         Region monitorView = new MonitorPatientsTableView(monitoredPatients);
         Region patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
+        //Add view classes to scene
         Scene primaryScene = new Scene(new HBox(patientListView, monitorView));
+        //Shut down application properly upon close of window
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent event) {
                 Platform.exit();
                 System.exit(0);
             }
         });
+        //Organise primary stage and show
+        primaryStage.setTitle("Projecy");
         primaryStage.setScene(primaryScene);
         primaryStage.show();
 
