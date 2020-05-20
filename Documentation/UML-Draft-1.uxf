@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>216</x>
-      <y>810</y>
+      <x>333</x>
+      <y>855</y>
       <w>216</w>
       <h>27</h>
     </coordinates>
@@ -19,26 +19,28 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>126</x>
-      <y>153</y>
+      <x>216</x>
+      <y>63</y>
       <w>342</w>
-      <h>99</h>
+      <h>135</h>
     </coordinates>
     <panel_attributes>MonitoredPatientsList
 --
 -updateCholesterol: Runnable
 -updateCholesterolService: ScheduledExecutorService
+-cholesterolGetter: GetPatientsCholesterol
 --
-+addPatient(Patient: patient)
-+removePatient(Patient: patient)
-+setUpdateFrequency(int: timeBetweenUpdates)</panel_attributes>
+-updateCholesterol(CholesterolPatient: patient)
+-averageCholesterol(): BigDecimal
++setUpdateFrequency(int: timeBetweenUpdates)
++isBelowAverage(CholesterolPatient: patient):boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>81</x>
-      <y>702</y>
+      <x>198</x>
+      <y>756</y>
       <w>657</w>
       <h>180</h>
     </coordinates>
@@ -48,9 +50,9 @@
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>846</x>
-      <y>126</y>
-      <w>846</w>
+      <x>990</x>
+      <y>81</y>
+      <w>243</w>
       <h>567</h>
     </coordinates>
     <panel_attributes>JavaFX</panel_attributes>
@@ -59,8 +61,8 @@
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>855</x>
-      <y>720</y>
+      <x>972</x>
+      <y>675</y>
       <w>459</w>
       <h>198</h>
     </coordinates>
@@ -70,8 +72,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>882</x>
-      <y>189</y>
+      <x>999</x>
+      <y>144</y>
       <w>153</w>
       <h>27</h>
     </coordinates>
@@ -81,45 +83,45 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>459</x>
-      <y>198</y>
-      <w>144</w>
-      <h>117</h>
+      <x>549</x>
+      <y>108</y>
+      <w>171</w>
+      <h>162</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;140.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;170.0;160.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>738</x>
-      <y>288</y>
-      <w>126</w>
+      <x>909</x>
+      <y>243</y>
+      <w>99</w>
       <h>36</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>120.0;20.0;10.0;10.0</additional_attributes>
+    <additional_attributes>90.0;20.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>144</x>
-      <y>603</y>
-      <w>216</w>
-      <h>81</h>
+      <x>162</x>
+      <y>594</y>
+      <w>315</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>Requests
-
 --
-+getPatient(String patientID)
-+getPatientCholesterol(Patient)</panel_attributes>
+-client: IGenericClient
+_-CHOELSTEROL_CODE: String_
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>171</x>
-      <y>738</y>
+      <x>288</x>
+      <y>783</y>
       <w>90</w>
       <h>27</h>
     </coordinates>
@@ -129,8 +131,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>612</x>
-      <y>549</y>
+      <x>729</x>
+      <y>504</y>
       <w>171</w>
       <h>54</h>
     </coordinates>
@@ -143,19 +145,19 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>216</x>
-      <y>675</y>
+      <x>333</x>
+      <y>657</y>
       <w>27</w>
-      <h>81</h>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>693</x>
-      <y>396</y>
+      <x>810</x>
+      <y>351</y>
       <w>261</w>
       <h>171</h>
     </coordinates>
@@ -165,19 +167,19 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>459</x>
-      <y>243</y>
-      <w>207</w>
-      <h>324</h>
+      <x>549</x>
+      <y>153</y>
+      <w>234</w>
+      <h>369</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;190.0;150.0;210.0;340.0</additional_attributes>
+    <additional_attributes>10.0;10.0;240.0;390.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>279</x>
-      <y>738</y>
+      <x>396</x>
+      <y>783</y>
       <w>108</w>
       <h>27</h>
     </coordinates>
@@ -187,118 +189,128 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>252</x>
-      <y>675</y>
-      <w>81</w>
-      <h>81</h>
+      <x>423</x>
+      <y>657</y>
+      <w>27</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>70.0;70.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>585</x>
-      <y>279</y>
-      <w>162</w>
-      <h>45</h>
+      <x>702</x>
+      <y>234</y>
+      <w>216</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>MonitorPatientsTableView
 --
 -patientTable: TableView
-</panel_attributes>
+-detailsView: DetailsView
+-patients: MonitoredPatientsList
+--
+-generateUpdatesView(): Region</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>261</x>
-      <y>369</y>
+      <x>405</x>
+      <y>324</y>
       <w>72</w>
-      <h>90</h>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>60.0;80.0;10.0;80.0;10.0;10.0</additional_attributes>
+    <additional_attributes>60.0;30.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>315</x>
-      <y>432</y>
+      <x>441</x>
+      <y>351</y>
       <w>225</w>
-      <h>117</h>
+      <h>216</h>
     </coordinates>
     <panel_attributes>CholesterolPatient
 --
--String: name
--String: id
--StringProperty cholesterolString
--BigDecimal: cholesterolValue
--StringProperty: updateTime
--Address: address
+&lt;&lt;get/set&gt;&gt;-name: String
+&lt;&lt;get&gt;&gt;-id: String
+&lt;&lt;get&gt;&gt;-cholesterolValue:BigDecimal
+&lt;&lt;get&gt;&gt;-cholesterolString: StringProperty
+&lt;&lt;get&gt;&gt;-updateTime: StringProperty
+-address: Address
+-gender: Enum
+-birthDate: DateType
+--
++getGenderString(): String
++getBirthdateString(): String
++getAddressString(): String
++updateCholesterolAndTime(cholesterolBase: Base)
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>513</x>
-      <y>540</y>
-      <w>27</w>
-      <h>198</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;200.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>315</x>
-      <y>675</y>
-      <w>27</w>
-      <h>45</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;30.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>306</x>
-      <y>486</y>
-      <w>27</w>
-      <h>135</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>189</x>
+      <x>630</x>
       <y>558</y>
-      <w>441</w>
+      <w>36</w>
+      <h>234</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;240.0;20.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>657</y>
+      <w>27</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>423</x>
+      <y>558</y>
+      <w>36</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>20.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>540</y>
+      <w>459</w>
       <h>36</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;220.0;20.0;470.0;20.0</additional_attributes>
+    <additional_attributes>10.0;20.0;490.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>738</x>
-      <y>297</y>
-      <w>189</w>
+      <x>909</x>
+      <y>252</y>
+      <w>135</w>
       <h>108</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>190.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>130.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>909</x>
-      <y>378</y>
+      <x>1026</x>
+      <y>333</y>
       <w>126</w>
       <h>27</h>
     </coordinates>
@@ -308,8 +320,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>891</x>
-      <y>558</y>
+      <x>1008</x>
+      <y>513</y>
       <w>153</w>
       <h>27</h>
     </coordinates>
@@ -319,8 +331,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>774</x>
-      <y>558</y>
+      <x>891</x>
+      <y>513</y>
       <w>135</w>
       <h>27</h>
     </coordinates>
@@ -330,30 +342,30 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>774</x>
-      <y>576</y>
-      <w>90</w>
+      <x>891</x>
+      <y>531</y>
+      <w>117</w>
       <h>27</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>531</x>
+      <x>657</x>
       <y>315</y>
-      <w>90</w>
-      <h>135</h>
+      <w>81</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;130.0;80.0;10.0</additional_attributes>
+    <additional_attributes>10.0;40.0;70.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>603</x>
-      <y>144</y>
+      <x>720</x>
+      <y>99</y>
       <w>153</w>
       <h>27</h>
     </coordinates>
@@ -363,8 +375,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>675</x>
-      <y>387</y>
+      <x>792</x>
+      <y>342</y>
       <w>90</w>
       <h>27</h>
     </coordinates>
@@ -374,68 +386,72 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>666</x>
+      <x>783</x>
       <y>315</y>
       <w>72</w>
-      <h>90</h>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>60.0;80.0;10.0;10.0</additional_attributes>
+    <additional_attributes>60.0;30.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>621</x>
-      <y>216</y>
-      <w>153</w>
-      <h>27</h>
+      <x>576</x>
+      <y>162</y>
+      <w>405</w>
+      <h>54</h>
     </coordinates>
-    <panel_attributes>AddPatientsTableView</panel_attributes>
+    <panel_attributes>AddPatientsTableView
+--
+createPractitionerIdentifierSearch(sourceList: PatientList):Region </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>477</x>
-      <y>216</y>
-      <w>162</w>
-      <h>144</h>
+      <x>558</x>
+      <y>162</y>
+      <w>36</w>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;140.0;160.0;10.0</additional_attributes>
+    <additional_attributes>10.0;120.0;20.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>198</x>
-      <y>306</y>
+      <x>279</x>
+      <y>234</y>
       <w>288</w>
-      <h>72</h>
+      <h>99</h>
     </coordinates>
     <panel_attributes>PatientsList
 --
 -GetPatients: patientGetter
 -patients: ObservableList&lt;CholesterolPatient&gt;
 --
-addPatients(String practitionerIdentifier)</panel_attributes>
++addPatients(String practitionerIdentifier)
++removePatient(Patient: patient)
++addPatient(Patient: patient)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>225</x>
-      <y>243</y>
-      <w>27</w>
-      <h>81</h>
+      <x>306</x>
+      <y>189</y>
+      <w>36</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;50.0;20.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>747</x>
-      <y>153</y>
+      <x>864</x>
+      <y>108</y>
       <w>144</w>
       <h>27</h>
     </coordinates>
@@ -445,27 +461,28 @@ addPatients(String practitionerIdentifier)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>747</x>
-      <y>153</y>
-      <w>117</w>
+      <x>864</x>
+      <y>108</y>
+      <w>144</w>
       <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>110.0;40.0;10.0;10.0</additional_attributes>
+    <additional_attributes>140.0;40.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>27</x>
-      <y>405</y>
-      <w>225</w>
-      <h>81</h>
+      <x>18</x>
+      <y>378</y>
+      <w>414</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Interface&gt;&gt;
 /GetPatients/
 --
-+getPatientsForPractitioner(String)
-+getPatient(String)
++getPatientForPractitioner(practitionerIdentifier: String): ArrayList
++getPatient(patientID:String): CholesterolPatient
+
 
 </panel_attributes>
     <additional_attributes/>
@@ -473,41 +490,30 @@ addPatients(String practitionerIdentifier)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>72</x>
-      <y>477</y>
-      <w>27</w>
-      <h>54</h>
+      <x>108</x>
+      <y>441</y>
+      <w>72</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+    <additional_attributes>10.0;10.0;60.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>207</x>
-      <y>369</y>
-      <w>27</w>
-      <h>54</h>
+      <x>243</x>
+      <y>324</y>
+      <w>72</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>0</x>
-      <y>243</y>
-      <w>144</w>
-      <h>288</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;300.0;10.0;10.0;140.0;10.0</additional_attributes>
+    <additional_attributes>10.0;60.0;60.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>873</x>
-      <y>153</y>
+      <x>990</x>
+      <y>108</y>
       <w>153</w>
       <h>27</h>
     </coordinates>
@@ -517,8 +523,8 @@ addPatients(String practitionerIdentifier)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>756</x>
-      <y>387</y>
+      <x>873</x>
+      <y>342</y>
       <w>171</w>
       <h>27</h>
     </coordinates>
@@ -528,41 +534,41 @@ addPatients(String practitionerIdentifier)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>765</x>
-      <y>216</y>
-      <w>189</w>
-      <h>180</h>
+      <x>972</x>
+      <y>198</y>
+      <w>99</w>
+      <h>153</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>190.0;180.0;10.0;10.0</additional_attributes>
+    <additional_attributes>90.0;150.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>765</x>
-      <y>216</y>
-      <w>99</w>
-      <h>36</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>90.0;20.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>621</x>
-      <y>162</y>
+      <x>972</x>
+      <y>180</y>
       <w>36</w>
-      <h>72</h>
+      <h>27</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>20.0;60.0;10.0;10.0</additional_attributes>
+    <additional_attributes>20.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>603</x>
-      <y>162</y>
+      <x>585</x>
+      <y>117</y>
+      <w>180</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>720</x>
+      <y>117</y>
       <w>27</w>
       <h>135</h>
     </coordinates>
@@ -572,59 +578,71 @@ addPatients(String practitionerIdentifier)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>531</x>
-      <y>387</y>
-      <w>162</w>
-      <h>90</h>
+      <x>657</x>
+      <y>342</y>
+      <w>153</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;80.0;160.0;10.0</additional_attributes>
+    <additional_attributes>10.0;40.0;150.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>513</y>
-      <w>198</w>
+      <y>486</y>
+      <w>297</w>
       <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Interface&gt;&gt;
 /GetPatientsCholesterol/
 --
-+getPatientCholesterol(String)</panel_attributes>
++getPatientCholesterol(patientID: String): Base
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>126</x>
-      <y>576</y>
-      <w>54</w>
-      <h>45</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;40.0;30.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>216</x>
-      <y>477</y>
+      <x>153</x>
+      <y>549</y>
       <w>45</w>
-      <h>144</h>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;30.0;140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;30.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>477</x>
-      <y>351</y>
-      <w>171</w>
-      <h>216</h>
+      <x>252</x>
+      <y>441</y>
+      <w>108</w>
+      <h>171</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>558</x>
+      <y>279</y>
+      <w>207</w>
+      <h>243</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;170.0;220.0</additional_attributes>
+    <additional_attributes>10.0;10.0;210.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>18</x>
+      <y>99</y>
+      <w>216</w>
+      <h>405</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;430.0;220.0;10.0</additional_attributes>
   </element>
 </diagram>

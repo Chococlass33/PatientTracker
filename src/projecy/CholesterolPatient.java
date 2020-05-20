@@ -9,10 +9,10 @@ import java.math.BigDecimal;
 
 public class CholesterolPatient {
     private String name;
+    private String id;
     private BigDecimal cholesterolValue;
     private StringProperty cholesterolString = new SimpleStringProperty();
     private StringProperty updateTime = new SimpleStringProperty();
-    private String id;
     private Address address;
     private Enumerations.AdministrativeGender gender;
     private DateType birthDate;

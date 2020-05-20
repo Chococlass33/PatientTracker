@@ -80,7 +80,7 @@ public class MonitorPatientsTableView extends Region {
         HBox hBox = new HBox(vBox, detailsView);
         this.getChildren().add(hBox);
     }
-    private HBox generateUpdatesView() {
+    private Region generateUpdatesView() {
         final TextField setUpdateFrequencyField = new TextField("(Seconds, as int)");
         Button setUpdateFrequencyButton = new Button("Set Update Frequency");
         setUpdateFrequencyButton.setOnAction(new EventHandler<ActionEvent>() {
