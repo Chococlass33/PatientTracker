@@ -15,7 +15,7 @@ public class Main extends Application {
         GetPatientsCholesterol patientGetter = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
         PatientList practitionerPatients = new PatientList(patientGetter);
         MonitoredPatientList monitoredPatients = new MonitoredPatientList(patientGetter);
-        primaryStage.setTitle("Projecty");
+        primaryStage.setTitle("Projecy");
         Region monitorView = new MonitorPatientsTableView(monitoredPatients);
         Region patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
         Scene primaryScene = new Scene(new HBox(patientListView, monitorView));

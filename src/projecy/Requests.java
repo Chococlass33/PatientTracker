@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Requests implements GetPatients, GetPatientsCholesterol {
     private IGenericClient client;
-    private String cholesterolCode = "2093-3";
+    private static String CHOLESTEROL_CODE = "2093-3";
     public Requests(String baseURL) {
         FhirContext ctx = FhirContext.forR4();
         this.client = ctx.newRestfulGenericClient(baseURL);
@@ -21,7 +21,7 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
     public Base getPatientCholesterol(String patientID) {
         //Put together search string to query for the data
         String searchString =
-                "Observation?patient=" + patientID + "&code=" + cholesterolCode + "&_sort=date&_count=13";
+                "Observation?patient=" + patientID + "&code=" + CHOLESTEROL_CODE + "&_sort=date&_count=13";
         //Call the query through the API
         Bundle results = client.search().byUrl(searchString).returnBundle(Bundle.class).execute();
         //Parse relevant data out of bundle result
