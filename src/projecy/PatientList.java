@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class PatientList {
 
     public ObservableList<CholesterolPatient> patients;
-    protected GetPatients patientGetter;
+    private GetPatients patientGetter;
     public PatientList(GetPatients patientGetter) {
         this.patientGetter = patientGetter;
         this.patients = FXCollections.observableArrayList(new ArrayList());

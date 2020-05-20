@@ -6,7 +6,7 @@ import org.hl7.fhir.r4.model.*;
 import java.util.ArrayList;
 
 
-public class Requests implements GetPatients {
+public class Requests implements GetPatients, GetPatientsCholesterol {
     private IGenericClient client;
     private String cholesterolCode = "2093-3";
     public Requests(String baseURL) {

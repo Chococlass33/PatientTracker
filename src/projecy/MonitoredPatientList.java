@@ -8,8 +8,10 @@ import java.util.concurrent.TimeUnit;
 public class MonitoredPatientList extends PatientList {
     private ScheduledExecutorService updateCholesterolService;
     private Runnable updateCholesterol;
-    public MonitoredPatientList(GetPatients requests) {
+    private GetPatientsCholesterol cholesterolGetter;
+    public MonitoredPatientList(GetPatientsCholesterol requests) {
         super(requests);
+        this.cholesterolGetter = requests;
         this.updateCholesterol = new Runnable() {
             public void run() {
                 for (CholesterolPatient patient : patients){
@@ -22,7 +24,7 @@ public class MonitoredPatientList extends PatientList {
         this.updateCholesterolService.scheduleAtFixedRate(updateCholesterol, 0, 60, TimeUnit.SECONDS);
     }
     private void updateCholesterol(CholesterolPatient patient) {
-        Base cholesterolLevel = patientGetter.getPatientCholesterol(patient.getID());
+        Base cholesterolLevel = cholesterolGetter.getPatientCholesterol(patient.getID());
         patient.updateCholesterolAndTime(cholesterolLevel);
     }
     public void setUpdateFrequency(int timeBetweenUpdates) {

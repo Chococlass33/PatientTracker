@@ -12,7 +12,7 @@ import javafx.stage.WindowEvent;
 public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
-        GetPatients patientGetter = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
+        GetPatientsCholesterol patientGetter = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
         PatientList practitionerPatients = new PatientList(patientGetter);
         MonitoredPatientList monitoredPatients = new MonitoredPatientList(patientGetter);
         primaryStage.setTitle("Projecty");
