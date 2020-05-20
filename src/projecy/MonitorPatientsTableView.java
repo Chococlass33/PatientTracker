@@ -20,6 +20,10 @@ public class MonitorPatientsTableView extends Region {
     private DetailsView detailsView = new DetailsView();
     private MonitoredPatientList patients;
     public MonitorPatientsTableView(MonitoredPatientList patients) {
+        /**
+         * Create new MonitorPatientsTableView
+         * @param patients: The CholesterolPatients to have in the table
+         */
         this.patients = patients;
         patientTable = new javafx.scene.control.TableView<CholesterolPatient>(patients.patients);
         TableColumn<CholesterolPatient,String> nameColumn = new TableColumn<CholesterolPatient,String>("First Name");
@@ -81,6 +85,10 @@ public class MonitorPatientsTableView extends Region {
         this.getChildren().add(hBox);
     }
     private Region generateUpdatesView() {
+        /**
+         * This function generates the updates view containing the update frequency button and the entry text field
+         * @return: the Region containing the newly generated view
+         */
         final TextField setUpdateFrequencyField = new TextField("(Seconds, as int)");
         Button setUpdateFrequencyButton = new Button("Set Update Frequency");
         setUpdateFrequencyButton.setOnAction(new EventHandler<ActionEvent>() {

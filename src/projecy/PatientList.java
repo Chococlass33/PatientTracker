@@ -15,10 +15,18 @@ public class PatientList {
 
     }
     public void addPatient(CholesterolPatient patient) {
+        /**
+         * Add Patient to self.patients
+         * @param patient: The patient to add
+         */
         this.patients.add(patient);
     }
     public void addPatients(String practitionerIdentifier) {
-            patients.addAll(patientGetter.getPatientsForPractitioner(practitionerIdentifier));
+        /**
+         * add all patients of a practitioner
+         * @param practitionerIdentifier: practitioner's identifier of who's patients to add
+         */
+         patients.addAll(patientGetter.getPatientsForPractitioner(practitionerIdentifier));
     }
     public void removePatient(CholesterolPatient patient) {
         this.patients.remove(patient);

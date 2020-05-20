@@ -17,10 +17,18 @@ public class CholesterolPatient {
     private Enumerations.AdministrativeGender gender;
     private DateType birthDate;
     public CholesterolPatient(String name, String id) {
+        /**
+         * Create simple CholesterolPatient with only name and id
+         */
         this.name = name;
         this.id = id;
     }
     public CholesterolPatient(Patient patient, Base cholesterolResource) {
+        /**
+         * create full CholesterolPatient
+         * @param patient: The Patient class to get the patient's details from
+         * @param cholesterolResource: The base class to get the cholesterol details from
+         */
         name = patient.getName().get(0).getNameAsSingleString();
         this.updateCholesterolAndTime(cholesterolResource);
         Base addressBase = patient.getAddress().get(0);
@@ -31,6 +39,10 @@ public class CholesterolPatient {
         birthDate = patient.getBirthDateElement();
     }
     public void updateCholesterolAndTime(Base cholesterolBase) {
+        /**
+         * Updates the patient's cholesteral values and updated time with a new value based on cholesterolBase
+         * @param CholesterolBase: the base class that contains relevant data for cholesterol
+         */
         Base valueQuantity = cholesterolBase.getNamedProperty("valueQuantity").getValues().get(0);
         Quantity cholesterolLevel = valueQuantity.castToQuantity(valueQuantity);
         cholesterolValue = cholesterolLevel.getValue();
@@ -42,6 +54,10 @@ public class CholesterolPatient {
         this.updateTime.set(processedDate);
     }
     public String getAddressString() {
+        /**
+         * returns address as a string for printing/displaying
+         * @return: address in printable string form
+         */
         String returnString = "City: " + address.getCity() + "\n";
         returnString += "State: " + address.getState() + "\n";
         returnString += "Country: " + address.getCountry() + "\n";
@@ -52,6 +68,7 @@ public class CholesterolPatient {
         if (o == null) {
             return false;
         }
+        //Override so that if ID matches, the patients are equal regardless of other attribtues
         if (o.getClass() == getClass()) {
             CholesterolPatient patient = (CholesterolPatient) o;
             if (patient.id.compareTo(this.id) == 0) {
@@ -61,31 +78,26 @@ public class CholesterolPatient {
         return false;
     }
     public String getGenderString() {
+        /**
+         * returns gender as a string for printing/displaying
+         * @return: gender in printable string form
+         */
         return "Gender: " + gender.toString() + "\n";
     }
     public String getBirthdateString() {
+        /**
+         * returns birth date as a string for printing/displaying
+         * @return: birth date in printable string form
+         */
         return "Birthdate: " + birthDate.getValueAsString() + "\n";
     }
     public StringProperty cholesterolStringProperty() {return cholesterolString;};
     public StringProperty timeProperty() {return updateTime;};
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getCholesterolString() {
-        return cholesterolString.get();
-    }
-    public String getUpdateTime() {
-        return updateTime.get();
-    }
-
-    public BigDecimal getCholesterolValue(){
-        return cholesterolValue;
-    }
-    public String getID() {
-        return id;
-    }
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
+    public String getCholesterolString() {return cholesterolString.get();}
+    public String getUpdateTime() {return updateTime.get();}
+    public BigDecimal getCholesterolValue(){return cholesterolValue;}
+    public String getID() {return id;}
 
 }

@@ -14,11 +14,21 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
         this.client = ctx.newRestfulGenericClient(baseURL);
     }
     public CholesterolPatient getPatient(String patientID){
+        /**
+         * generates a CholesterolPatient object from the details of the patient given by patientID
+         * @param patientID: the id of the patient to get
+         * @return: a CholesterolPatient object with the details of the patient from the server
+         */
         Patient patient = client.read().resource(Patient.class).withId(patientID).execute();
         CholesterolPatient cholesterolPatient = new CholesterolPatient(patient, getPatientCholesterol(patient.getIdElement().getIdPart()));
         return cholesterolPatient;
     }
     public Base getPatientCholesterol(String patientID) {
+        /**
+         * gets base structure containing latest cholesterol infornmation for the patient
+         * @param patientID: the id of the patient to get the cholesterol of
+         * @return: the base structure containing cholesterol infornmation
+         */
         //Put together search string to query for the data
         String searchString =
                 "Observation?patient=" + patientID + "&code=" + CHOLESTEROL_CODE + "&_sort=date&_count=13";
@@ -31,6 +41,11 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
         return cholesterolResource;
     }
     public ArrayList<CholesterolPatient> getPatientsForPractitioner(String practitionerIdentifier) {
+        /**
+         * Gets all the patients related to a practitioner given by the practitionerIdentifier.
+         * @param practitionerIdentifier: the identifier of the practitioner to find the patients of
+         * @return: an array of the unique patients found that have cholesterol values associated
+         */
         ArrayList<Bundle.BundleEntryComponent> encounters = this.getAllEncounters(practitionerIdentifier);
         ArrayList<CholesterolPatient> cholesterolPatients = new ArrayList<>();
         //All the patients that don't have a cholesterol value are added to noCholesterolPatients so they arn't requested for again
@@ -52,6 +67,13 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
         return cholesterolPatients;
     }
     private ArrayList<Bundle.BundleEntryComponent> getAllEncounters(String practitionerIdentifier) {
+        /**
+         * Gets all the encounters related to a practitioner given by practitionerIdentifier
+         * Note, this function is limited to MAX_PAGE number of pages of results
+         * @param practitioenrIdentifier: the identifier of the practitioner
+         * @return: an arraylist of a bundle structure containing the encounters of that practitioner
+         */
+        int MAX_PAGE = 5;
         ArrayList<Bundle.BundleEntryComponent> allEncounters = new ArrayList<Bundle.BundleEntryComponent>();
         String searchUrl = "Encounter?participant.identifier=http://hl7.org/fhir/sid/us-npi|" + practitionerIdentifier
                 + "&_include=Encounter.participant.individual&_include=Encounter.patient";
@@ -76,7 +98,7 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
                 }
                 linkTraversal++;
             } while (true);
-        } while(pageCount < 5);
+        } while(pageCount < MAX_PAGE);
         return allEncounters;
     }
 

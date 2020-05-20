@@ -16,6 +16,11 @@ import org.hl7.fhir.r4.model.Patient;
 
 public class AddPatientsTableView extends Region {
     public AddPatientsTableView(PatientList sourceList, PatientList destinationList) {
+        /**
+         * Constructor to create new AddPatientsTableView
+         * @param sourceList: the list to add the patients from
+         * @param destinationList: the list to add the patients too
+         */
         Region practitionerIdentifierSearch = createPractitionerIdentifierSearch(sourceList);
         TableView availablePatients = new TableView<CholesterolPatient>(sourceList.patients);
         //Add Column for name
