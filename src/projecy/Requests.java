@@ -33,13 +33,20 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
     public ArrayList<CholesterolPatient> getPatientsForPractitioner(String practitionerIdentifier) {
         ArrayList<Bundle.BundleEntryComponent> encounters = this.getAllEncounters(practitionerIdentifier);
         ArrayList<CholesterolPatient> cholesterolPatients = new ArrayList<>();
+        //All the patients that don't have a cholesterol value are added to noCholesterolPatients so they arn't requested for again
+        ArrayList<CholesterolPatient> noCholesterolPatients = new ArrayList<>();
         for (int i = 0; i < encounters.size(); i++) {
-            String name = encounters.get(i).getResource().getNamedProperty("subject").getValues().get(0).getNamedProperty("display").getValues().get(0).toString();
             String id = encounters.get(i).getResource().getNamedProperty("subject").getValues().get(0).getNamedProperty("reference").getValues().get(0).toString();
             id = id.replace("Patient/", "");
-            CholesterolPatient newPatient = new CholesterolPatient(name, id);
-            if (!cholesterolPatients.contains(newPatient)){
-                cholesterolPatients.add(new CholesterolPatient(name, id));
+            CholesterolPatient dummyPatient = new CholesterolPatient("", id);
+            if (!cholesterolPatients.contains(dummyPatient)){
+                if (!noCholesterolPatients.contains(dummyPatient)){
+                    try {
+                        cholesterolPatients.add(getPatient(id));
+                    } catch (IndexOutOfBoundsException e) {
+                        noCholesterolPatients.add(dummyPatient);
+                    }
+                }
             }
         }
         return cholesterolPatients;

@@ -14,8 +14,7 @@ public class PatientList {
         this.patients = FXCollections.observableArrayList(new ArrayList());
 
     }
-    public void addPatient(String patientID) {
-        CholesterolPatient patient = patientGetter.getPatient(patientID);
+    public void addPatient(CholesterolPatient patient) {
         this.patients.add(patient);
     }
     public void addPatients(String practitionerIdentifier) {

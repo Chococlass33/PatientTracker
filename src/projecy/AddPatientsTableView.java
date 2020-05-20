@@ -26,7 +26,7 @@ public class AddPatientsTableView extends Region {
         addPatientColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Add", (patient) ->
                 {
                     try {
-                        destinationList.addPatient(patient.getID());
+                        destinationList.addPatient(patient);
                     } catch (FhirClientConnectionException e) {
                         System.out.println("Error, couldn't add patient" + e);
                     }
