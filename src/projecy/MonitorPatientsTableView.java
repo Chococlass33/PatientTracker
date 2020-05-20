@@ -77,7 +77,8 @@ public class MonitorPatientsTableView extends Region {
         patientTable.getColumns().addAll(nameColumn, cholesterolColumn,timeColumn,removeColumn, detailsColumn);
         //Organise view
         VBox vBox = new VBox(generateUpdatesView(), patientTable);
-        this.getChildren().addAll(vBox, detailsView);
+        HBox hBox = new HBox(vBox, detailsView);
+        this.getChildren().add(hBox);
     }
     private HBox generateUpdatesView() {
         final TextField setUpdateFrequencyField = new TextField("(Seconds, as int)");

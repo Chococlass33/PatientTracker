@@ -10,7 +10,8 @@ public class DetailsView extends Region {
         this.getChildren().add(textBox);
     }
     public void setDetails(CholesterolPatient patient) {
-        String displayText = "";
+        String displayText = "\n";
+        displayText += patient.getName() + "\n";
         displayText += patient.getAddressString();
         displayText += patient.getBirthdateString();
         displayText += patient.getGenderString();
