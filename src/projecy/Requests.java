@@ -2,16 +2,26 @@ package projecy;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import org.hl7.fhir.r4.model.*;
+import ca.uhn.fhir.rest.client.exceptions.FhirClientConnectionException;
+import org.hl7.fhir.r4.model.Base;
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Patient;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class Requests implements GetPatients, GetPatientsCholesterol {
+public class Requests implements GetPatients, GetPatientsCholesterol,GetMeka {
     private IGenericClient client;
+    private String baseURL;
     private static String CHOLESTEROL_CODE = "2093-3";
+    private static String BLOODPRESSURE = "55284-4";
+    private static String BMI = "39156-5";
+    private static String SMOKING = "72166-2";
     public Requests(String baseURL) {
         FhirContext ctx = FhirContext.forR4();
         this.client = ctx.newRestfulGenericClient(baseURL);
+        this.baseURL = baseURL;
     }
     public CholesterolPatient getPatient(String patientID){
         /**
@@ -40,6 +50,58 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
         //Quantity cholesterolQuantity = base.castToQuantity(base);
         return cholesterolResource;
     }
+    public List<List<Bundle>> getAllOfObservation(int BundleCount) {
+        //Put together search string to query observations
+        String[] codes = {CHOLESTEROL_CODE,BLOODPRESSURE,BMI,SMOKING};
+        List<List<Bundle>> bundles = new ArrayList<>();
+        for (String code:codes)
+        {
+            List<Bundle> bundle = new ArrayList<>();
+            String searchString =
+                    "Observation?code=" + code + "&_sort=date&_count=200";
+            Bundle results = client.search().byUrl(searchString).returnBundle(Bundle.class).execute();
+            bundle.add(results);
+            Base nextcallbase = results.getNamedProperty("link").getValues().get(1).getNamedProperty("url").getValues().get(0);
+            for(int i = 200; i < BundleCount; i += 200)
+            {
+                try
+                {
+                    Thread.sleep(4000);
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+                try
+                {
+                    String nextcall = nextcallbase.castToString(nextcallbase).toString();
+                    Bundle nextresults = client.search().byUrl(nextcall).returnBundle(Bundle.class).execute();
+                    bundle.add(nextresults);
+                    nextcallbase = nextresults.getNamedProperty("link").getValues().get(1).getNamedProperty("url").getValues().get(0);
+                } catch(FhirClientConnectionException exception)
+                {
+                    i = i - 200;
+                }
+            }
+            System.out.println(bundle.get(1).getEntry());
+            bundles.add(bundle);
+        }
+        return bundles;
+    }
+    public Patient getPatientMeka(String url) {
+        //Put together search string to query observations
+        Patient results = client.read().resource(Patient.class).withId(url.replace("Patient/","")).execute();
+        try
+        {
+            Thread.sleep(1000);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
     public ArrayList<CholesterolPatient> getPatientsForPractitioner(String practitionerIdentifier) {
         /**
          * Gets all the patients related to a practitioner given by the practitionerIdentifier.
