@@ -15,7 +15,7 @@ public class MonitoredPatientList extends PatientList {
          * @param requests: object of type getPatientsCholesterol to get patients from
          */
         super(requests);
-        static final int DEFAULT_UPDATE_PERIOD = 60;
+        final int DEFAULT_UPDATE_PERIOD = 60;
         this.cholesterolGetter = requests;
         this.updateCholesterol = new Runnable() {
             public void run() {

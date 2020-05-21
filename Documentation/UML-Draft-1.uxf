@@ -24,9 +24,9 @@
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>270</x>
+      <x>288</x>
       <y>765</y>
-      <w>477</w>
+      <w>459</w>
       <h>117</h>
     </coordinates>
     <panel_attributes>org.hl7.fhir.r4.model</panel_attributes>

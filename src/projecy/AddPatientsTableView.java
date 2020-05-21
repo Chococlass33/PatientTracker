@@ -40,13 +40,13 @@ public class AddPatientsTableView extends Region {
         ));
         availablePatients.getColumns().addAll(nameColumn, addPatientColumn);
         //Create region for practitioner identifier entry and submission
-        Region practitionerIdentifierSearch = createPractitionerIdentifierSearch(sourceList);
+        Region practitionerIdentifierSearch = createPractitionerIdentifierSearch(sourceList, destinationList);
         //Layout the subregions correctly within self
         VBox container = new VBox(practitionerIdentifierSearch, availablePatients);
         this.getChildren().add(container);
 
     }
-    private Region createPractitionerIdentifierSearch(PatientList sourceList) {
+    private Region createPractitionerIdentifierSearch(PatientList sourceList, PatientList destinationList) {
         /**
          * this method takes the patient source list, and creates a region containing a text box for the practitioner ID
          * input, and a button to add the practitioner's patients to the list.
@@ -61,7 +61,8 @@ public class AddPatientsTableView extends Region {
                  * Method to add patients to sourceList based on the practitioner's ID entered into the textfield
                  *  upon the click of the button
                  */
-
+                sourceList.clearAllPatients();
+                destinationList.clearAllPatients();
                 try {
                     sourceList.addPatients(enterIdentiferTextField.getText());
                     enterIdentiferTextField.setText("Success!");

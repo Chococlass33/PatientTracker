@@ -19,7 +19,9 @@ public class PatientList {
          * Add Patient to self.patients
          * @param patient: The patient to add
          */
-        this.patients.add(patient);
+        if (!patients.contains(patient)) {
+            this.patients.add(patient);
+        }
     }
     public void addPatients(String practitionerIdentifier) {
         /**
@@ -30,5 +32,8 @@ public class PatientList {
     }
     public void removePatient(CholesterolPatient patient) {
         this.patients.remove(patient);
+    }
+    public void clearAllPatients() {
+        this.patients.clear();
     }
 }
