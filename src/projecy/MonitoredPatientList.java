@@ -15,9 +15,13 @@ public class MonitoredPatientList extends PatientList {
          * @param requests: object of type getPatientsCholesterol to get patients from
          */
         super(requests);
+        static final int DEFAULT_UPDATE_PERIOD = 60;
         this.cholesterolGetter = requests;
         this.updateCholesterol = new Runnable() {
             public void run() {
+                /**
+                 * Function that is run asynchronously every DEFAULT_UPDATE_PERIOD seconds
+                 */
                 for (CholesterolPatient patient : patients){
                     updateCholesterol(patient);
                     System.out.println("Updating Cholesterol");
@@ -25,7 +29,7 @@ public class MonitoredPatientList extends PatientList {
             }
         };
         this.updateCholesterolService = Executors.newScheduledThreadPool(1);
-        this.updateCholesterolService.scheduleAtFixedRate(updateCholesterol, 0, 60, TimeUnit.SECONDS);
+        this.updateCholesterolService.scheduleAtFixedRate(updateCholesterol, 0, DEFAULT_UPDATE_PERIOD, TimeUnit.SECONDS);
     }
     private void updateCholesterol(CholesterolPatient patient) {
         /**

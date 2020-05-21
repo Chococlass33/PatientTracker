@@ -31,8 +31,6 @@ public class CholesterolPatient {
          */
         name = patient.getName().get(0).getNameAsSingleString();
         this.updateCholesterolAndTime(cholesterolResource);
-        Base addressBase = patient.getAddress().get(0);
-        address = addressBase.castToAddress(addressBase);
         gender = patient.getGender();
         address = patient.getAddress().get(0);
         id = patient.getIdElement().getIdPart();
@@ -43,10 +41,12 @@ public class CholesterolPatient {
          * Updates the patient's cholesteral values and updated time with a new value based on cholesterolBase
          * @param CholesterolBase: the base class that contains relevant data for cholesterol
          */
+        //Unwrap and set cholesterol value and string
         Base valueQuantity = cholesterolBase.getNamedProperty("valueQuantity").getValues().get(0);
         Quantity cholesterolLevel = valueQuantity.castToQuantity(valueQuantity);
         cholesterolValue = cholesterolLevel.getValue();
         cholesterolString.set(cholesterolValue.toString() + ' ' + cholesterolLevel.getUnit());
+        //Unwrap, process and set date of birth
         String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();
         rawDate = rawDate.replace("DateTimeType[", "");
         rawDate = rawDate.replace("T", " ");

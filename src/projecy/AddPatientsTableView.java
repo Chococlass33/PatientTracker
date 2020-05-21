@@ -21,7 +21,7 @@ public class AddPatientsTableView extends Region {
          * @param sourceList: the list to add the patients from
          * @param destinationList: the list to add the patients too
          */
-        Region practitionerIdentifierSearch = createPractitionerIdentifierSearch(sourceList);
+        //Create table for patients to add
         TableView availablePatients = new TableView<CholesterolPatient>(sourceList.patients);
         //Add Column for name
         TableColumn<CholesterolPatient, String> nameColumn = new TableColumn<CholesterolPatient, String>("Name");
@@ -39,8 +39,11 @@ public class AddPatientsTableView extends Region {
                 }
         ));
         availablePatients.getColumns().addAll(nameColumn, addPatientColumn);
+        //Create region for practitioner identifier entry and submission
+        Region practitionerIdentifierSearch = createPractitionerIdentifierSearch(sourceList);
+        //Layout the subregions correctly within self
         VBox container = new VBox(practitionerIdentifierSearch, availablePatients);
-        this.getChildren().addAll(container);
+        this.getChildren().add(container);
 
     }
     private Region createPractitionerIdentifierSearch(PatientList sourceList) {
@@ -54,6 +57,10 @@ public class AddPatientsTableView extends Region {
         Button button = new Button("Find Patients");
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
+                /**
+                 * Method to add patients to sourceList based on the practitioner's ID entered into the textfield
+                 *  upon the click of the button
+                 */
 
                 try {
                     sourceList.addPatients(enterIdentiferTextField.getText());

@@ -93,6 +93,9 @@ public class MonitorPatientsTableView extends Region {
         Button setUpdateFrequencyButton = new Button("Set Update Frequency");
         setUpdateFrequencyButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
+                /**
+                 * Function to read the text in the textfield and set it as the update frequency when the button is pressed
+                 */
                 try {
                     patients.setUpdateFrequency(Integer.parseInt(setUpdateFrequencyField.getText()));
                     setUpdateFrequencyField.setText("Success!");

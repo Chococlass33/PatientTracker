@@ -54,11 +54,13 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
             String id = encounters.get(i).getResource().getNamedProperty("subject").getValues().get(0).getNamedProperty("reference").getValues().get(0).toString();
             id = id.replace("Patient/", "");
             CholesterolPatient dummyPatient = new CholesterolPatient("", id);
+            //Check that patient has not previously been encountered before waisting a request
             if (!cholesterolPatients.contains(dummyPatient)){
                 if (!noCholesterolPatients.contains(dummyPatient)){
                     try {
                         cholesterolPatients.add(getPatient(id));
                     } catch (IndexOutOfBoundsException e) {
+                        //Patient did not have a cholesterol value
                         noCholesterolPatients.add(dummyPatient);
                     }
                 }
@@ -79,6 +81,7 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
                 + "&_include=Encounter.participant.individual&_include=Encounter.patient";
         int pageCount = 0;
         do {
+            //Loop over pages of results, adding them to allEncounters
             Bundle encounters = client.search()
                     .byUrl(searchUrl)
                     .returnBundle(Bundle.class)
@@ -88,12 +91,14 @@ public class Requests implements GetPatients, GetPatientsCholesterol {
             int linkTraversal = 0;
             do {
                 try {
-                    if (encounters.getLink().get(linkTraversal).getRelation().toString().compareTo("next") == 0) {
+                    //Find the link to the next page of results
+                    if (encounters.getLink().get(linkTraversal).getRelation().compareTo("next") == 0) {
                         searchUrl = encounters.getLink().get(linkTraversal).getUrl();
                         pageCount++;
                         break;
                     }
                 }catch (IndexOutOfBoundsException e) {
+                    //No more pages of results. Return
                     return allEncounters;
                 }
                 linkTraversal++;
