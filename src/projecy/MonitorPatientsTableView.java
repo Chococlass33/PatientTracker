@@ -19,7 +19,7 @@ public class MonitorPatientsTableView extends Region {
     private javafx.scene.control.TableView<CholesterolPatient> patientTable;
     private DetailsView detailsView = new DetailsView();
     private MonitoredPatientList patients;
-    public MonitorPatientsTableView(MonitoredPatientList patients) {
+     public MonitorPatientsTableView(MonitoredPatientList patients) {
         this.patients = patients;
         patientTable = new javafx.scene.control.TableView<CholesterolPatient>(patients.patients);
         TableColumn<CholesterolPatient,String> nameColumn = new TableColumn<CholesterolPatient,String>("First Name");

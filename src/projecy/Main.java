@@ -16,11 +16,14 @@ public class Main extends Application {
         GetPatientsCholesterol patientGetter = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
         PatientList practitionerPatients = new PatientList(patientGetter);
         MonitoredPatientList monitoredPatients = new MonitoredPatientList(patientGetter);
+        GetMeka wekagetter = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
+
         //Initialize view classes
         Region monitorView = new MonitorPatientsTableView(monitoredPatients);
+        Region machineview = new MachineLearningView(wekagetter);
         Region patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
         //Add view classes to scene
-        Scene primaryScene = new Scene(new HBox(patientListView, monitorView));
+        Scene primaryScene = new Scene(new HBox(machineview,patientListView, monitorView));
         //Shut down application properly upon close of window
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent event) {
@@ -35,7 +38,7 @@ public class Main extends Application {
 
     }
 
-    public static void main(String[] args) {
+    public static void Main(String[] args) {
         Application.launch(args);
     }
 

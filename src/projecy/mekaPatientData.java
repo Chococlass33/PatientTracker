@@ -1,9 +1,7 @@
 package projecy;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.DateType;
 
 public class mekaPatientData
 {
@@ -11,7 +9,8 @@ public class mekaPatientData
     private Boolean sex = null;
     private float bmi = -1;
     private float bloodpressure = -1;
-    private Date birthdate = null;
+    private DateType birthdate = null;
+    private DateTimeType testdate = null;
     private Boolean smoking = null;
     private float cholesterol = -1;
 
@@ -70,45 +69,64 @@ public class mekaPatientData
         return cholesterol;
     }
     public Boolean getHighRisk()
-            // https://www.medicalnewstoday.com/articles/315900#recommended-levels states 240 mg/dL to be high for adults, 200 high for children.
+            // https://www.betterhealth.vic.gov.au/health/conditionsandtreatments/cholesterol#lp-h-2 states 5.5 mmol/L or 212.7 mg/dL to be high
     {
         if (cholesterol == -1) return null;
-        if (this.getAge() > 18)
-        {
-            if (cholesterol >= 240)  return true;
-            else return false;
-        }
-        else
-        {
-
-            if (cholesterol >= 200)  return true;
-            else return false;
-        }
+        if (cholesterol >= 212.7)  return true;
+        else return false;
     }
 
-    public void setBirthdate(String date) throws ParseException
-    {
-        this.birthdate = new SimpleDateFormat("yyyy/MM/dd").parse(date);
-    }
 
-    public Date getBirthdate()
+    public DateType getBirthdate()
     {
         return birthdate;
     }
 
     public int getAge()
     {
-        Date currentday = new Date();
+        int difference = testdate.getYear() - birthdate.getYear();
+        return difference;
 
-        long difference = currentday.getTime() - birthdate.getTime();
-        long days = TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
-        int years = (int)(days/365.25);
-        return years;
+    }
 
+    public void setTestdate(DateTimeType testdate)
+    {
+        this.testdate = testdate;
+    }
+
+    public void setBirthdate(DateType birthdate)
+    {
+        this.birthdate = birthdate;
+    }
+
+    public DateTimeType getTestdate()
+    {
+        return testdate;
     }
 
     public String getName()
     {
         return name;
+    }
+    public boolean full()
+    {
+        if (bmi != -1 && bloodpressure != -1 && smoking != null && cholesterol != -1)
+        {
+            return true;
+        }
+        return false;
+    }
+    public String getData()
+    {
+        String data = "";
+        if (this.getSex()) data += "0,"; else data +="1,";
+        data += getAge() + ",";
+        if (this.getBmi() == -1) data += "?,";else data += getBmi() + ",";
+        if (this.getBloodpressure() == -1) data += "?,";else data += getBloodpressure() + ",";
+        if (this.getSmoking() == null) data += "?,";
+        else if (this.getSmoking()) data +="1,"; else data += "0,";
+        if (this.getHighRisk()) data += "1"; else data += "0";
+        data += "\n";
+        return data;
     }
 }
