@@ -5,11 +5,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class DetailsView extends Region {
+    /**
+     * Class to generate a region displaying all of a CholesterolPatient's nessesary details
+     */
     private Text textBox = new Text();
     public DetailsView() {
         this.getChildren().add(textBox);
     }
     public void setDetails(CholesterolPatient patient) {
+        /**
+         * Method to set the data to display
+         * @param patient: The patient of which to display the data of
+         */
         String displayText = "\n";
         displayText += patient.getName() + "\n";
         displayText += patient.getAddressString();

@@ -41,5 +41,4 @@ public class Main extends Application {
     public static void Main(String[] args) {
         Application.launch(args);
     }
-
 }

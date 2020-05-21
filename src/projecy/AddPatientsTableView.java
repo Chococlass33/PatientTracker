@@ -16,7 +16,12 @@ import org.hl7.fhir.r4.model.Patient;
 
 public class AddPatientsTableView extends Region {
     public AddPatientsTableView(PatientList sourceList, PatientList destinationList) {
-        Region practitionerIdentifierSearch = createPractitionerIdentifierSearch(sourceList);
+        /**
+         * Constructor to create new AddPatientsTableView
+         * @param sourceList: the list to add the patients from
+         * @param destinationList: the list to add the patients too
+         */
+        //Create table for patients to add
         TableView availablePatients = new TableView<CholesterolPatient>(sourceList.patients);
         //Add Column for name
         TableColumn<CholesterolPatient, String> nameColumn = new TableColumn<CholesterolPatient, String>("Name");
@@ -26,7 +31,7 @@ public class AddPatientsTableView extends Region {
         addPatientColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Add", (patient) ->
                 {
                     try {
-                        destinationList.addPatient(patient.getID());
+                        destinationList.addPatient(patient);
                     } catch (FhirClientConnectionException e) {
                         System.out.println("Error, couldn't add patient" + e);
                     }
@@ -34,11 +39,14 @@ public class AddPatientsTableView extends Region {
                 }
         ));
         availablePatients.getColumns().addAll(nameColumn, addPatientColumn);
+        //Create region for practitioner identifier entry and submission
+        Region practitionerIdentifierSearch = createPractitionerIdentifierSearch(sourceList, destinationList);
+        //Layout the subregions correctly within self
         VBox container = new VBox(practitionerIdentifierSearch, availablePatients);
-        this.getChildren().addAll(container);
+        this.getChildren().add(container);
 
     }
-    private Region createPractitionerIdentifierSearch(PatientList sourceList) {
+    private Region createPractitionerIdentifierSearch(PatientList sourceList, PatientList destinationList) {
         /**
          * this method takes the patient source list, and creates a region containing a text box for the practitioner ID
          * input, and a button to add the practitioner's patients to the list.
@@ -49,7 +57,12 @@ public class AddPatientsTableView extends Region {
         Button button = new Button("Find Patients");
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-
+                /**
+                 * Method to add patients to sourceList based on the practitioner's ID entered into the textfield
+                 *  upon the click of the button
+                 */
+                sourceList.clearAllPatients();
+                destinationList.clearAllPatients();
                 try {
                     sourceList.addPatients(enterIdentiferTextField.getText());
                     enterIdentiferTextField.setText("Success!");
