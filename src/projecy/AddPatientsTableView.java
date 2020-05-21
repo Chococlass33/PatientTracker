@@ -12,7 +12,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import org.hl7.fhir.r4.model.Patient;
 
 public class AddPatientsTableView extends Region {
     public AddPatientsTableView(PatientList sourceList, PatientList destinationList) {
@@ -26,6 +25,7 @@ public class AddPatientsTableView extends Region {
         //Add Column for name
         TableColumn<CholesterolPatient, String> nameColumn = new TableColumn<CholesterolPatient, String>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("name"));
+        nameColumn.setPrefWidth(175);
         //Add Column for add button
         TableColumn<CholesterolPatient, Button> addPatientColumn = new TableColumn<>("Monitor Patient");
         addPatientColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Add", (patient) ->
@@ -38,6 +38,7 @@ public class AddPatientsTableView extends Region {
                     return patient;
                 }
         ));
+        addPatientColumn.setPrefWidth(110);
         availablePatients.getColumns().addAll(nameColumn, addPatientColumn);
         //Create region for practitioner identifier entry and submission
         Region practitionerIdentifierSearch = createPractitionerIdentifierSearch(sourceList, destinationList);

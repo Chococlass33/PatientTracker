@@ -4,7 +4,6 @@ package projecy;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.hl7.fhir.r4.model.*;
-
 import java.math.BigDecimal;
 
 public class CholesterolPatient {
