@@ -70,7 +70,19 @@
             <artifactId>hapi-fhir-client</artifactId>
             <version>4.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>SMOTE</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-stable</artifactId>
+            <version>3.8.4</version>
+        </dependency>
+
     </dependencies>
+
 
 
 </project>
