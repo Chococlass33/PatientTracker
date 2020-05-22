@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
 public class MachineLearningView extends Region
@@ -16,9 +15,9 @@ public class MachineLearningView extends Region
 
     GridPane grid = new GridPane();
     MachineLearning ml;
-    public MachineLearningView(GetMeka request)
+    public MachineLearningView(MachineLearning ml)
     {
-        ml = new MachineLearning(request);
+        this.ml = ml;
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
         grid.setVgap(5);
@@ -77,8 +76,7 @@ public class MachineLearningView extends Region
             }
         });
         grid.add(analyse, 1, 3);
-        HBox hBox = new HBox(grid);
-        this.getChildren().add(hBox);
+        this.getChildren().add(grid);
     }
 
 }
