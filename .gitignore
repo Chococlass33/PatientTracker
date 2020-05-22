@@ -1,0 +1,11 @@
+.idea/
+projecy.iml
+.DS_Store
+out/
+*.class
+src/Examples/sample.fxml
+Documentation/~$sign Rationale.docx
+
+target/
+Documentation/Design Rationale.pdf
+Documentation/UML_ClassDiagram.pdf
