@@ -1,7 +1,5 @@
 package projecy;
 
-import org.hl7.fhir.r4.model.Base;
-
 import java.util.ArrayList;
 
 public interface GetPatients {
