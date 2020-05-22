@@ -254,7 +254,7 @@ _-CHOELSTEROL_CODE: String_
       <h>56</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>60.0;10.0;10.0;60.0</additional_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -265,7 +265,7 @@ _-CHOELSTEROL_CODE: String_
       <h>224</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;300.0;300.0;280.0;350.0;10.0</additional_attributes>
+    <additional_attributes>10.0;300.0;350.0;300.0;350.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -674,7 +674,7 @@ GetMeka
       <h>112</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;120.0;360.0;140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0;360.0;140.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -781,7 +781,7 @@ GetMeka
       <h>119</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>50.0;10.0;10.0;150.0</additional_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0;10.0;150.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>

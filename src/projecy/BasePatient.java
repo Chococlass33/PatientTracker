@@ -22,7 +22,7 @@ public class BasePatient {
     @Override
     public boolean equals(Object o) {
         /**
-         * Override so that if ID matches, the patients are equal regardless of other attribtues
+         * Override so that if ID matches, the patients are equal regardless of other attributes
          */
         if (o == null) {
             return false;
