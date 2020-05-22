@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class MachineLearning
 {
-    GetMeka request;
+    private GetMeka request;
     public MachineLearning(GetMeka request)
     {
         this.request = request;
