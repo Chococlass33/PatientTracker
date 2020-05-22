@@ -6,7 +6,6 @@ import weka.classifiers.trees.RandomTree;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 import weka.filters.supervised.instance.SMOTE;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

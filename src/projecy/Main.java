@@ -19,7 +19,7 @@ public class Main extends Application {
         //Initialize view classes
         Region monitorView = new MonitorPatientsTableView(monitoredPatients);
         MachineLearning machineLearning = new MachineLearning(baseRequests);
-        Region machineview = new MachineLearningView(machineLearning);
+        Region machineview = new MachineLearningView(baseRequests);
         Region patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
         //Add view classes to scene
         Scene primaryScene = new Scene(new HBox(machineview,patientListView, monitorView));
