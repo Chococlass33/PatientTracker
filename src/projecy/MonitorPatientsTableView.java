@@ -47,19 +47,15 @@ public class MonitorPatientsTableView extends Region {
                 return new ReadOnlyStringWrapper(p.getValue().getName());
             }
         });
-
-        //Add column for name
-        TableColumn<CholesterolPatient, String> nameColumn2 = new TableColumn<CholesterolPatient, String>("Name");
-        nameColumn2.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("name"));
-
+        nameColumn.setPrefWidth(175);
         //Add column for cholesterol
         TableColumn<CholesterolPatient, String> cholesterolColumn = new TableColumn<CholesterolPatient, String>("Total Cholesterol (mg/dL)");
         cholesterolColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("cholesterolString"));
-
+        cholesterolColumn.setPrefWidth(100);
         //Add column for last updated time
         TableColumn<CholesterolPatient, String> timeColumn = new TableColumn<CholesterolPatient, String>("Time");
         timeColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("updateTime"));
-
+        timeColumn.setPrefWidth(100);
         //Add column for remove button
         TableColumn<CholesterolPatient, Button> removeColumn = new TableColumn<>("Remove Patient");
         removeColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Remove", (patient) ->
@@ -68,8 +64,9 @@ public class MonitorPatientsTableView extends Region {
                     return patient;
                 }
         ));
+        removeColumn.setPrefWidth(110);
         //Add column for details button
-        TableColumn<CholesterolPatient, Button> detailsColumn = new TableColumn<>("Show Patient Details");
+        TableColumn<CholesterolPatient, Button> detailsColumn = new TableColumn<>("Patient Details");
         detailsColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Details", (patient) ->
                 {
                     detailsView.setDetails(patient);
@@ -79,6 +76,7 @@ public class MonitorPatientsTableView extends Region {
 
         //Put together into one table
         patientTable.getColumns().addAll(nameColumn, cholesterolColumn,timeColumn,removeColumn, detailsColumn);
+        detailsColumn.setPrefWidth(100);
         //Organise view
         VBox vBox = new VBox(generateUpdatesView(), patientTable);
         HBox hBox = new HBox(vBox, detailsView);
