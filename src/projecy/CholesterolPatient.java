@@ -6,33 +6,26 @@ import javafx.beans.property.StringProperty;
 import org.hl7.fhir.r4.model.*;
 import java.math.BigDecimal;
 
-public class CholesterolPatient {
-    private String name;
-    private String id;
+public class CholesterolPatient extends BasePatient {
+    /**
+     * More complex extention of BasePatients, holding more data such as cholesterol, address, gender, etc
+     */
     private BigDecimal cholesterolValue;
     private StringProperty cholesterolString = new SimpleStringProperty();
     private StringProperty updateTime = new SimpleStringProperty();
     private Address address;
     private Enumerations.AdministrativeGender gender;
     private DateType birthDate;
-    public CholesterolPatient(String name, String id) {
-        /**
-         * Create simple CholesterolPatient with only name and id
-         */
-        this.name = name;
-        this.id = id;
-    }
     public CholesterolPatient(Patient patient, Base cholesterolResource) {
         /**
          * create full CholesterolPatient
          * @param patient: The Patient class to get the patient's details from
          * @param cholesterolResource: The base class to get the cholesterol details from
          */
-        name = patient.getName().get(0).getNameAsSingleString();
+        super(patient.getName().get(0).getNameAsSingleString(),patient.getIdElement().getIdPart());
         this.updateCholesterolAndTime(cholesterolResource);
         gender = patient.getGender();
         address = patient.getAddress().get(0);
-        id = patient.getIdElement().getIdPart();
         birthDate = patient.getBirthDateElement();
     }
     public void updateCholesterolAndTime(Base cholesterolBase) {
@@ -62,20 +55,7 @@ public class CholesterolPatient {
         returnString += "Country: " + address.getCountry() + "\n";
         return returnString;
     }
-    @Override
-    public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        }
-        //Override so that if ID matches, the patients are equal regardless of other attribtues
-        if (o.getClass() == getClass()) {
-            CholesterolPatient patient = (CholesterolPatient) o;
-            if (patient.id.compareTo(this.id) == 0) {
-                return true;
-            }
-        }
-        return false;
-    }
+
     public String getGenderString() {
         /**
          * returns gender as a string for printing/displaying
@@ -92,11 +72,9 @@ public class CholesterolPatient {
     }
     public StringProperty cholesterolStringProperty() {return cholesterolString;};
     public StringProperty timeProperty() {return updateTime;};
-    public String getName() {return name;}
-    public void setName(String name) {this.name = name;}
+
     public String getCholesterolString() {return cholesterolString.get();}
     public String getUpdateTime() {return updateTime.get();}
     public BigDecimal getCholesterolValue(){return cholesterolValue;}
-    public String getID() {return id;}
 
 }
