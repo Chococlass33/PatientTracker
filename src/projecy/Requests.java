@@ -145,11 +145,11 @@ public class Requests implements GetPatients, GetPatientsCholesterol, GetWeka
         ArrayList<Bundle.BundleEntryComponent> encounters = this.getAllEncounters(practitionerIdentifier);
         ArrayList<CholesterolPatient> cholesterolPatients = new ArrayList<>();
         //All the patients that don't have a cholesterol value are added to noCholesterolPatients so they arn't requested for again
-        ArrayList<CholesterolPatient> noCholesterolPatients = new ArrayList<>();
+        ArrayList<BasePatient> noCholesterolPatients = new ArrayList<>();
         for (int i = 0; i < encounters.size(); i++) {
             String id = encounters.get(i).getResource().getNamedProperty("subject").getValues().get(0).getNamedProperty("reference").getValues().get(0).toString();
             id = id.replace("Patient/", "");
-            CholesterolPatient dummyPatient = new CholesterolPatient("", id);
+            BasePatient dummyPatient = new BasePatient("", id);
             //Check that patient has not previously been encountered before waisting a request
             if (!cholesterolPatients.contains(dummyPatient)){
                 if (!noCholesterolPatients.contains(dummyPatient)){
