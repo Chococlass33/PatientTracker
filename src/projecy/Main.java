@@ -13,14 +13,12 @@ public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
         //Initialize data and request classes
-        GetPatientsCholesterol patientGetter = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
-        PatientList practitionerPatients = new PatientList(patientGetter);
-        MonitoredPatientList monitoredPatients = new MonitoredPatientList(patientGetter);
-        GetMeka wekagetter = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
-
+        Requests baseRequests = new Requests("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir");
+        PatientList practitionerPatients = new PatientList(baseRequests);
+        MonitoredPatientList monitoredPatients = new MonitoredPatientList(baseRequests);
         //Initialize view classes
         Region monitorView = new MonitorPatientsTableView(monitoredPatients);
-        Region machineview = new MachineLearningView(wekagetter);
+        Region machineview = new MachineLearningView(baseRequests);
         Region patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
         //Add view classes to scene
         Scene primaryScene = new Scene(new HBox(machineview,patientListView, monitorView));
