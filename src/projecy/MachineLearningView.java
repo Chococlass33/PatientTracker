@@ -59,6 +59,7 @@ public class MachineLearningView extends Region
             }
             catch (Exception e)
             {
+                e.printStackTrace();
                 System.out.println("An Error Occurred");
                 grab.setText("error");
             }
@@ -73,10 +74,25 @@ public class MachineLearningView extends Region
             }
             catch (Exception e)
             {
+                e.printStackTrace();
                 System.out.println("An Error Occurred");
             }
         });
         grid.add(analyse, 1, 3);
+        Button predict = new Button("Predict Data");
+        predict.setOnAction((action) ->
+        {
+            try
+            {
+                ml.predictData(fileTextField.getText());
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                System.out.println("An Error Occurred");
+            }
+        });
+        grid.add(predict, 2, 3);
         HBox hBox = new HBox(grid);
         this.getChildren().add(hBox);
     }

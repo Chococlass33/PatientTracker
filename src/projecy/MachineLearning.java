@@ -1,8 +1,8 @@
 package projecy;
 
 import org.hl7.fhir.r4.model.*;
-import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.evaluation.Evaluation;
+import weka.classifiers.trees.RandomTree;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 import weka.filters.supervised.instance.SMOTE;
@@ -19,28 +19,67 @@ import java.util.Random;
 public class MachineLearning
 {
     GetMeka request;
+    RandomTree bn;
     public MachineLearning(GetMeka request)
     {
         this.request = request;
     }
 
+
+    public void predictData(String text) throws Exception
+    {
+        ConverterUtils.DataSource source = new ConverterUtils.DataSource(text);
+        Instances test = source.getDataSet();
+        if (test.classIndex() == -1)
+            test.setClassIndex(test.numAttributes() - 1);
+        Instances prediction = new Instances(test);
+        for (int i = 0; i < prediction.numInstances(); i++)
+        {
+            System.out.println(test.instance(i));
+            double Label = this.bn.classifyInstance(test.instance(i));
+            prediction.instance(i).setClassValue(Label);
+        }
+        try
+        {
+            File datafile = new File("prediction.arff");
+            if(datafile.createNewFile())
+            {
+            }
+            else
+            {
+                datafile.delete();
+                datafile.createNewFile();
+            }
+            FileWriter datawriter = new FileWriter("prediction.arff");
+            datawriter.write(prediction.toString());
+            datawriter.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
+    }
     public void testData(String test) throws Exception
     {
-        String[] bnoptions = weka.core.Utils.splitOptions("-D -Q weka.classifiers.bayes.net.search.local.K2 -- -P 1 -S BAYES -E weka.classifiers.bayes.net.estimate.SimpleEstimator -- -A 0.5");
-        String[] smoteoptions = weka.core.Utils.splitOptions("-C 0 -K 5 -P 6600.0 -S 1");
+        String[] bnoptions = weka.core.Utils.splitOptions("-K 0 -M 1.0 -V 0.001 -S 1" );
+        String[] smoteoptions = weka.core.Utils.splitOptions("-C 0 -K 5 -P 6650.0 -S 1");
         ConverterUtils.DataSource source = new ConverterUtils.DataSource(test);
-        Instances train = source.getDataSet();
-        if (train.classIndex() == -1)
-            train.setClassIndex(train.numAttributes() - 1);
+        Instances data = source.getDataSet();
+        if (data.classIndex() == -1)
+            data.setClassIndex(data.numAttributes() - 1);
+        data.randomize(new Random(1));
         SMOTE smote = new SMOTE();
         smote.setOptions(smoteoptions);
-        smote.setInputFormat(train);
-        Instances upsampledtrain = SMOTE.useFilter(train, smote);
-        BayesNet bn = new BayesNet();
-        bn.setOptions(bnoptions);
-        Evaluation eval = new Evaluation(upsampledtrain);
-        eval.crossValidateModel(bn,upsampledtrain,10,new Random());
-
+        smote.setInputFormat(data);
+        Instances upsampleddata = SMOTE.useFilter(data, smote);
+        upsampleddata.randomize(new Random(1));
+        this.bn = new RandomTree();
+        this.bn.setOptions(bnoptions);
+        this.bn.buildClassifier(upsampleddata);
+        Evaluation eval = new Evaluation(data);
+        eval.evaluateModel(this.bn,data);
         try
         {
             File datafile = new File("results.txt");
@@ -107,7 +146,10 @@ public class MachineLearning
             float bloodpressure = bloodpressurebase.castToQuantity(bloodpressurebase).getValue().floatValue();
             if (patientDictionary.get(patient) != null)
             {
-                patientDictionary.get(patient).setBloodpressure(bloodpressure);
+                if(patientDictionary.get(patient).getBloodpressure() == -1)
+                {
+                    patientDictionary.get(patient).setBloodpressure(bloodpressure);
+                }
             }
         }
         List<Bundle.BundleEntryComponent> bmibundles = new ArrayList<>();
@@ -123,6 +165,10 @@ public class MachineLearning
             float bmi = bmibase.castToQuantity(bmibase).getValue().floatValue();
             if (patientDictionary.get(patient) != null)
             {
+                if (patientDictionary.get(patient).getBmi() != -1)
+                {
+                    patientDictionary.get(patient).setBmi(bmi);
+                }
                 patientDictionary.get(patient).setBmi(bmi);
             }
         }
@@ -144,7 +190,11 @@ public class MachineLearning
             }
             if (patientDictionary.get(patient) != null)
             {
-                patientDictionary.get(patient).setSmoking(smoked);
+
+                if (patientDictionary.get(patient).getSmoking() == null)
+                {
+                    patientDictionary.get(patient).setSmoking(smoked);
+                }
             }
         }
 
