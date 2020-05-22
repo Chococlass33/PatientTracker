@@ -18,7 +18,6 @@ public class Main extends Application {
         MonitoredPatientList monitoredPatients = new MonitoredPatientList(baseRequests);
         //Initialize view classes
         Region monitorView = new MonitorPatientsTableView(monitoredPatients);
-        MachineLearning machineLearning = new MachineLearning(baseRequests);
         Region machineview = new MachineLearningView(baseRequests);
         Region patientListView = new AddPatientsTableView(practitionerPatients, monitoredPatients);
         //Add view classes to scene

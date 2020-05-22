@@ -20,8 +20,9 @@ public class Requests implements GetPatients, GetPatientsCholesterol, GetWeka
     private static String SMOKING = "72166-2";
     public Requests(String baseURL) {
         FhirContext ctx = FhirContext.forR4();
-        ctx.getRestfulClientFactory().setConnectTimeout(20000);
-        ctx.getRestfulClientFactory().setConnectionRequestTimeout(20000);
+        ctx.getRestfulClientFactory().setConnectTimeout(0);
+        ctx.getRestfulClientFactory().setConnectionRequestTimeout(0);
+        ctx.getRestfulClientFactory().setSocketTimeout(0);
         this.client = ctx.newRestfulGenericClient(baseURL);
         this.baseURL = baseURL;
     }
