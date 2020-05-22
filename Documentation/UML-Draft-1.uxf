@@ -46,8 +46,8 @@
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>175</x>
-      <y>0</y>
+      <x>28</x>
+      <y>105</y>
       <w>84</w>
       <h>70</h>
     </coordinates>
@@ -659,10 +659,10 @@ createPractitionerIdentifierSearch(sourceList: PatientList):Region </panel_attri
       <h>63</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
-GetMeka
+GetWeka
 --
 +getAllOfObservation(BundleCount: int): List
-+getPatientMeka(url: String): Patient</panel_attributes>
++getPatientWeka(url: String): Patient</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -686,7 +686,7 @@ GetMeka
     </coordinates>
     <panel_attributes>MachineLearning
 --
--request: GetMeka
+-request: GetWeka
 --
 +grabData(filename: String, bundleCount: int)
 +testData(test: String)</panel_attributes>
@@ -739,13 +739,13 @@ GetMeka
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>210</x>
-      <y>63</y>
-      <w>21</w>
-      <h>70</h>
+      <x>105</x>
+      <y>133</y>
+      <w>70</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
