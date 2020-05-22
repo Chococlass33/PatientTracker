@@ -2,7 +2,6 @@ package projecy;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.client.exceptions.FhirClientConnectionException;
 import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Patient;
@@ -11,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Requests implements GetPatients, GetPatientsCholesterol,GetMeka {
+public class Requests implements GetPatients, GetPatientsCholesterol, GetWeka
+{
     private IGenericClient client;
     private String baseURL;
     private static String CHOLESTEROL_CODE = "2093-3";
@@ -20,6 +20,8 @@ public class Requests implements GetPatients, GetPatientsCholesterol,GetMeka {
     private static String SMOKING = "72166-2";
     public Requests(String baseURL) {
         FhirContext ctx = FhirContext.forR4();
+        ctx.getRestfulClientFactory().setConnectTimeout(20000);
+        ctx.getRestfulClientFactory().setConnectionRequestTimeout(20000);
         this.client = ctx.newRestfulGenericClient(baseURL);
         this.baseURL = baseURL;
     }
@@ -50,20 +52,35 @@ public class Requests implements GetPatients, GetPatientsCholesterol,GetMeka {
         //Quantity cholesterolQuantity = base.castToQuantity(base);
         return cholesterolResource;
     }
+
+    /**
+     * Grabs all the codes above, and grabs the latest BundleCount number of them from the server.
+     * @param BundleCount Number of each observation to grab
+     * @return a list of lists containing the bundles of each code type.
+     */
     public List<List<Bundle>> getAllOfObservation(int BundleCount) {
         //Put together search string to query observations
         String[] codes = {CHOLESTEROL_CODE,BLOODPRESSURE,BMI,SMOKING};
         List<List<Bundle>> bundles = new ArrayList<>();
+
+        //For each code, create a new list and start requesting bundles of that code
         for (String code:codes)
         {
             List<Bundle> bundle = new ArrayList<>();
+
+            //grab from the initial URL
             String searchString =
                     "Observation?code=" + code + "&_sort=date&_count=200";
             Bundle results = client.search().byUrl(searchString).returnBundle(Bundle.class).execute();
             bundle.add(results);
+
+            //get the next relation URL
             Base nextcallbase = results.getNamedProperty("link").getValues().get(1).getNamedProperty("url").getValues().get(0);
+
+            //Keep calling the next relation until bundlecount
             for(int i = 200; i < BundleCount; i += 200)
             {
+                //Added a sleep of 4 seconds to reduce strain to server
                 try
                 {
                     Thread.sleep(4000);
@@ -72,34 +89,51 @@ public class Requests implements GetPatients, GetPatientsCholesterol,GetMeka {
                 {
                     e.printStackTrace();
                 }
+
                 try
                 {
                     String nextcall = nextcallbase.castToString(nextcallbase).toString();
                     Bundle nextresults = client.search().byUrl(nextcall).returnBundle(Bundle.class).execute();
                     bundle.add(nextresults);
                     nextcallbase = nextresults.getNamedProperty("link").getValues().get(1).getNamedProperty("url").getValues().get(0);
-                } catch(FhirClientConnectionException exception)
+                } catch(Exception exception)
                 {
+                    //if failed, try again
+                    exception.printStackTrace();
                     i = i - 200;
                 }
             }
-            System.out.println(bundle.get(1).getEntry());
             bundles.add(bundle);
         }
         return bundles;
     }
-    public Patient getPatientMeka(String url) {
-        //Put together search string to query observations
-        Patient results = client.read().resource(Patient.class).withId(url.replace("Patient/","")).execute();
+
+    /**
+     * Takes in a patient URL and returns the patient
+     * @param url URL of patient
+     * @return Patient object
+     */
+    public Patient getPatientWeka(String url) {
+        //Add a pause to reduce server load
         try
         {
-            Thread.sleep(1000);
+            Thread.sleep(100);
         }
         catch (InterruptedException e)
         {
             e.printStackTrace();
         }
-        return results;
+        try
+        {
+            Patient results = client.read().resource(Patient.class).withId(url.replace("Patient/", "")).execute();
+            return results;
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+            return getPatientWeka(url);
+        }
+
     }
 
     public ArrayList<CholesterolPatient> getPatientsForPractitioner(String practitionerIdentifier) {

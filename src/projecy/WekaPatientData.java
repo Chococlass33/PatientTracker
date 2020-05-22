@@ -3,9 +3,8 @@ package projecy;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DateType;
 
-public class mekaPatientData
+public class WekaPatientData
 {
-    private String name = "";
     private Boolean sex = null;
     private float bmi = -1;
     private float bloodpressure = -1;
@@ -27,11 +26,6 @@ public class mekaPatientData
     public void setCholesterol(float cholesterol)
     {
         this.cholesterol = cholesterol;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
     }
 
     public void setSex(Boolean sex)
@@ -68,6 +62,7 @@ public class mekaPatientData
     {
         return cholesterol;
     }
+
     public Boolean getHighRisk()
             // https://www.betterhealth.vic.gov.au/health/conditionsandtreatments/cholesterol#lp-h-2 states 5.5 mmol/L or 212.7 mg/dL to be high
     {
@@ -104,10 +99,6 @@ public class mekaPatientData
         return testdate;
     }
 
-    public String getName()
-    {
-        return name;
-    }
     public boolean full()
     {
         if (bmi != -1 && bloodpressure != -1 && smoking != null && cholesterol != -1)
@@ -116,6 +107,11 @@ public class mekaPatientData
         }
         return false;
     }
+
+    /**
+     * Generates an ARFF compliant string
+     * @return data as string
+     */
     public String getData()
     {
         String data = "";
