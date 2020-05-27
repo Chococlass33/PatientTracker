@@ -42,16 +42,34 @@ public class Requests implements GetPatients, GetPatientsCholesterol, GetWeka
          * @param patientID: the id of the patient to get the cholesterol of
          * @return: the base structure containing cholesterol infornmation
          */
-        //Put together search string to query for the data
-        String searchString =
-                "Observation?patient=" + patientID + "&code=" + CHOLESTEROL_CODE + "&_sort=date&_count=13";
-        //Call the query through the API
-        Bundle results = client.search().byUrl(searchString).returnBundle(Bundle.class).execute();
+        return getPatientResourceBase(patientID, CHOLESTEROL_CODE);
+    }
+    public Base getPatientBloodPressure(String patientID) {
+        /**
+         * gets base structure containing latest cholesterol infornmation for the patient
+         * @param patientID: the id of the patient to get the cholesterol of
+         * @return: the base structure containing cholesterol infornmation
+         */
+
+        return getPatientResourceBase(patientID, BLOODPRESSURE);
+    }
+    private Base getPatientResourceBase(String patientID, String resourceCode) {
+        Bundle results = getPatientResourceBundle(patientID, resourceCode, "13");
         //Parse relevant data out of bundle result
-        Base cholesterolResource = results.getEntry().get(0).getResource();
-        //.getNamedProperty("valueQuantity").getValues().get(0);
-        //Quantity cholesterolQuantity = base.castToQuantity(base);
-        return cholesterolResource;
+        return results.getEntry().get(0).getResource();
+    }
+    private Bundle getPatientResourceBundle(String patientID, String resourceCode, String count) {
+        //Put together search string to query for the data
+        String searchString;
+        if (patientID == null) {
+            searchString =
+                    "Observation?code=" + resourceCode + "&_sort=date&_count=" + count;
+        } else {
+            searchString =
+                    "Observation?patient=" + patientID + "&code=" + resourceCode + "&_sort=date&_count=" + count;
+        }
+        //Call the query through the API
+        return client.search().byUrl(searchString).returnBundle(Bundle.class).execute();
     }
 
     /**
@@ -69,11 +87,8 @@ public class Requests implements GetPatients, GetPatientsCholesterol, GetWeka
         {
             List<Bundle> bundle = new ArrayList<>();
 
-            //grab from the initial URL
-            String searchString =
-                    "Observation?code=" + code + "&_sort=date&_count=200";
-            Bundle results = client.search().byUrl(searchString).returnBundle(Bundle.class).execute();
-            bundle.add(results);
+            //grab data
+            bundle.add(getPatientResourceBundle(null, code, "200"));
 
             //get the next relation URL
             Base nextcallbase = results.getNamedProperty("link").getValues().get(1).getNamedProperty("url").getValues().get(0);
