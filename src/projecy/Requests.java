@@ -88,7 +88,8 @@ public class Requests implements GetPatients, GetPatientsCholesterol, GetWeka
             List<Bundle> bundle = new ArrayList<>();
 
             //grab data
-            bundle.add(getPatientResourceBundle(null, code, "200"));
+            Bundle results =getPatientResourceBundle(null, code, "200");
+            bundle.add(results);
 
             //get the next relation URL
             Base nextcallbase = results.getNamedProperty("link").getValues().get(1).getNamedProperty("url").getValues().get(0);
