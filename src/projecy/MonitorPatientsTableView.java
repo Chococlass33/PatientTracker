@@ -16,28 +16,29 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 public class MonitorPatientsTableView extends Region {
-    private javafx.scene.control.TableView<CholesterolPatient> patientTable;
+    private javafx.scene.control.TableView<DataPatient> patientTable;
     private DetailsView detailsView = new DetailsView();
     private MonitoredPatientList patients;
+    private static String CHOLESTEROL_DATA = "Cholesterol";
     public MonitorPatientsTableView(MonitoredPatientList patients) {
         /**
          * Create new MonitorPatientsTableView
-         * @param patients: The CholesterolPatients to have in the table
+         * @param patients: The DataPatients to have in the table
          */
         this.patients = patients;
-        patientTable = new javafx.scene.control.TableView<CholesterolPatient>(patients.patients);
-        TableColumn<CholesterolPatient,String> nameColumn = new TableColumn<CholesterolPatient,String>("First Name");
-        nameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CholesterolPatient, String>, ObservableValue<String>>() {
+        patientTable = new javafx.scene.control.TableView<DataPatient>(patients.patients);
+        TableColumn<DataPatient,String> nameColumn = new TableColumn<DataPatient,String>("First Name");
+        nameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<CholesterolPatient, String> p)
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> p)
             {
-                p.getTableView().setRowFactory(q -> new TableRow<CholesterolPatient>()
+                p.getTableView().setRowFactory(q -> new TableRow<DataPatient>()
                 {
-                    public void updateItem(CholesterolPatient patient, boolean empty) {
+                    public void updateItem(DataPatient patient, boolean empty) {
                     super.updateItem(patient, empty) ;
                     if (patient == null) {
                         setStyle("");
-                    } else if (patients.isBelowAverage(patient)) {
+                    } else if (patients.isBelowAverage(patient, CHOLESTEROL_DATA)) {
                         setStyle("-fx-background-color: tomato;");
                     } else {
                         setStyle("-fx-background-color: green;");
@@ -49,16 +50,28 @@ public class MonitorPatientsTableView extends Region {
         });
         nameColumn.setPrefWidth(175);
         //Add column for cholesterol
-        TableColumn<CholesterolPatient, String> cholesterolColumn = new TableColumn<CholesterolPatient, String>("Total Cholesterol (mg/dL)");
-        cholesterolColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("cholesterolString"));
+        TableColumn<DataPatient, String> cholesterolColumn = new TableColumn<DataPatient, String>("Total Cholesterol (mg/dL)");
+        cholesterolColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+
+                return param.getValue().findData(CHOLESTEROL_DATA).StringProperty();
+            }
+        });
         cholesterolColumn.setPrefWidth(100);
         //Add column for last updated time
-        TableColumn<CholesterolPatient, String> timeColumn = new TableColumn<CholesterolPatient, String>("Time");
-        timeColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("updateTime"));
+        TableColumn<DataPatient, String> timeColumn = new TableColumn<DataPatient, String>("Time");
+        timeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+
+                return param.getValue().findData(CHOLESTEROL_DATA).timeProperty();
+            }
+        });
         timeColumn.setPrefWidth(100);
         //Add column for remove button
-        TableColumn<CholesterolPatient, Button> removeColumn = new TableColumn<>("Remove Patient");
-        removeColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Remove", (patient) ->
+        TableColumn<DataPatient, Button> removeColumn = new TableColumn<>("Remove Patient");
+        removeColumn.setCellFactory(ActionButtonTableCell.<DataPatient>forTableColumn("Remove", (patient) ->
                 {
                     patients.removePatient(patient);
                     return patient;
@@ -66,8 +79,8 @@ public class MonitorPatientsTableView extends Region {
         ));
         removeColumn.setPrefWidth(110);
         //Add column for details button
-        TableColumn<CholesterolPatient, Button> detailsColumn = new TableColumn<>("Patient Details");
-        detailsColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Details", (patient) ->
+        TableColumn<DataPatient, Button> detailsColumn = new TableColumn<>("Patient Details");
+        detailsColumn.setCellFactory(ActionButtonTableCell.<DataPatient>forTableColumn("Details", (patient) ->
                 {
                     detailsView.setDetails(patient);
                     return patient;

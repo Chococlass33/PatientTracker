@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Requests implements GetPatients, GetPatientsCholesterol, GetWeka
+public class Requests implements GetPatients, GetCholesterol, GetWeka
 {
     private IGenericClient client;
     private String baseURL;
@@ -26,17 +26,19 @@ public class Requests implements GetPatients, GetPatientsCholesterol, GetWeka
         this.client = ctx.newRestfulGenericClient(baseURL);
         this.baseURL = baseURL;
     }
-    public CholesterolPatient getPatient(String patientID){
+    public DataPatient getPatient(String patientID){
         /**
-         * generates a CholesterolPatient object from the details of the patient given by patientID
+         * generates a DataPatient object from the details of the patient given by patientID
          * @param patientID: the id of the patient to get
-         * @return: a CholesterolPatient object with the details of the patient from the server
+         * @return: a DataPatient object with the details of the patient from the server
          */
         Patient patient = client.read().resource(Patient.class).withId(patientID).execute();
-        CholesterolPatient cholesterolPatient = new CholesterolPatient(patient, getPatientCholesterol(patient.getIdElement().getIdPart()));
-        return cholesterolPatient;
+        DataPatient dataPatient = new DataPatient(patient);
+        PatientData cholesterolData = new CholesterolData(this, dataPatient.id);
+        dataPatient.addPatientData(cholesterolData);
+        return dataPatient;
     }
-    public Base getPatientCholesterol(String patientID) {
+    public Base getCholesterol(String patientID) {
         /**
          * gets base structure containing latest cholesterol infornmation for the patient
          * @param patientID: the id of the patient to get the cholesterol of
@@ -153,33 +155,33 @@ public class Requests implements GetPatients, GetPatientsCholesterol, GetWeka
 
     }
 
-    public ArrayList<CholesterolPatient> getPatientsForPractitioner(String practitionerIdentifier) {
+    public ArrayList<DataPatient> getPatientsForPractitioner(String practitionerIdentifier) {
         /**
          * Gets all the patients related to a practitioner given by the practitionerIdentifier.
          * @param practitionerIdentifier: the identifier of the practitioner to find the patients of
          * @return: an array of the unique patients found that have cholesterol values associated
          */
         ArrayList<Bundle.BundleEntryComponent> encounters = this.getAllEncounters(practitionerIdentifier);
-        ArrayList<CholesterolPatient> cholesterolPatients = new ArrayList<>();
-        //All the patients that don't have a cholesterol value are added to noCholesterolPatients so they arn't requested for again
-        ArrayList<BasePatient> noCholesterolPatients = new ArrayList<>();
+        ArrayList<DataPatient> patients = new ArrayList<>();
+        //All the patients that don't have a cholesterol value are added to noDataPatients so they arn't requested for again
+        ArrayList<BasePatient> noDataPatients = new ArrayList<>();
         for (int i = 0; i < encounters.size(); i++) {
             String id = encounters.get(i).getResource().getNamedProperty("subject").getValues().get(0).getNamedProperty("reference").getValues().get(0).toString();
             id = id.replace("Patient/", "");
             BasePatient dummyPatient = new BasePatient("", id);
             //Check that patient has not previously been encountered before waisting a request
-            if (!cholesterolPatients.contains(dummyPatient)){
-                if (!noCholesterolPatients.contains(dummyPatient)){
+            if (!patients.contains(dummyPatient)){
+                if (!noDataPatients.contains(dummyPatient)){
                     try {
-                        cholesterolPatients.add(getPatient(id));
+                        patients.add(getPatient(id));
                     } catch (IndexOutOfBoundsException e) {
                         //Patient did not have a cholesterol value
-                        noCholesterolPatients.add(dummyPatient);
+                        noDataPatients.add(dummyPatient);
                     }
                 }
             }
         }
-        return cholesterolPatients;
+        return patients;
     }
     private ArrayList<Bundle.BundleEntryComponent> getAllEncounters(String practitionerIdentifier) {
         /**

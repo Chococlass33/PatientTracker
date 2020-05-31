@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 public class PatientList {
 
-    public ObservableList<CholesterolPatient> patients;
+    public ObservableList<DataPatient> patients;
     private GetPatients patientGetter;
     public PatientList(GetPatients patientGetter) {
         this.patientGetter = patientGetter;
         this.patients = FXCollections.observableArrayList(new ArrayList());
 
     }
-    public void addPatient(CholesterolPatient patient) {
+    public void addPatient(DataPatient patient) {
         /**
          * Add Patient to self.patients
          * @param patient: The patient to add
@@ -30,7 +30,7 @@ public class PatientList {
          */
          patients.addAll(patientGetter.getPatientsForPractitioner(practitionerIdentifier));
     }
-    public void removePatient(CholesterolPatient patient) {
+    public void removePatient(DataPatient patient) {
         this.patients.remove(patient);
     }
     public void clearAllPatients() {

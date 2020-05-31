@@ -21,14 +21,14 @@ public class AddPatientsTableView extends Region {
          * @param destinationList: the list to add the patients too
          */
         //Create table for patients to add
-        TableView availablePatients = new TableView<CholesterolPatient>(sourceList.patients);
+        TableView availablePatients = new TableView<DataPatient>(sourceList.patients);
         //Add Column for name
-        TableColumn<CholesterolPatient, String> nameColumn = new TableColumn<CholesterolPatient, String>("Name");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("name"));
+        TableColumn<DataPatient, String> nameColumn = new TableColumn<DataPatient, String>("Name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<DataPatient, String>("name"));
         nameColumn.setPrefWidth(175);
         //Add Column for add button
-        TableColumn<CholesterolPatient, Button> addPatientColumn = new TableColumn<>("Monitor Patient");
-        addPatientColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Add", (patient) ->
+        TableColumn<DataPatient, Button> addPatientColumn = new TableColumn<>("Monitor Patient");
+        addPatientColumn.setCellFactory(ActionButtonTableCell.<DataPatient>forTableColumn("Add", (patient) ->
                 {
                     try {
                         destinationList.addPatient(patient);

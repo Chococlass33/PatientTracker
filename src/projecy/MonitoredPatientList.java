@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 public class MonitoredPatientList extends PatientList {
     private ScheduledExecutorService updateCholesterolService;
     private Runnable updateCholesterol;
-    private GetPatientsCholesterol cholesterolGetter;
-    public MonitoredPatientList(GetPatientsCholesterol requests) {
+    private GetCholesterol cholesterolGetter;
+    public MonitoredPatientList(GetCholesterol requests) {
         /**
          * Creates new MonitoredPatientList
          * @param requests: object of type getPatientsCholesterol to get patients from
@@ -22,8 +22,8 @@ public class MonitoredPatientList extends PatientList {
                 /**
                  * Function that is run asynchronously every DEFAULT_UPDATE_PERIOD seconds
                  */
-                for (CholesterolPatient patient : patients){
-                    updateCholesterol(patient);
+                for (DataPatient patient : patients){
+                    updateValues(patient);
                     System.out.println("Updating Cholesterol");
                 }
             }
@@ -31,13 +31,12 @@ public class MonitoredPatientList extends PatientList {
         this.updateCholesterolService = Executors.newScheduledThreadPool(1);
         this.updateCholesterolService.scheduleAtFixedRate(updateCholesterol, 0, DEFAULT_UPDATE_PERIOD, TimeUnit.SECONDS);
     }
-    private void updateCholesterol(CholesterolPatient patient) {
+    private void updateValues(DataPatient patient) {
         /**
          * Method to update the cholesterol values of a particular patient
          * @Param patient: The patient to update the cholesterolValues of
          */
-        Base cholesterolLevel = cholesterolGetter.getPatientCholesterol(patient.getID());
-        patient.updateCholesterolAndTime(cholesterolLevel);
+        patient.updateDataValues();
     }
     public void setUpdateFrequency(int timeBetweenUpdates) {
         /**
@@ -46,7 +45,7 @@ public class MonitoredPatientList extends PatientList {
          */
         this.updateCholesterolService.scheduleWithFixedDelay(updateCholesterol, 0, timeBetweenUpdates, TimeUnit.SECONDS);
     }
-    private BigDecimal averageCholestorol() {
+    private BigDecimal averageValue(String dataType) {
         /**
          * Function to obtain the average cholesterol of all the patients being monitored
          * @return: BigDecimal value of the average cholesterol of all patients in self.patients
@@ -54,9 +53,9 @@ public class MonitoredPatientList extends PatientList {
         //Use floating point maths for this calculation as it works better for arithmatics
          float total = 0;
          int patientnum = 0;
-        for (CholesterolPatient patient : patients)
+        for (DataPatient patient : patients)
         {
-            total += patient.getCholesterolValue().floatValue();
+            total += patient.findData(dataType).getValue().floatValue();
             total += 1;
             patientnum += 1;
         }
@@ -65,13 +64,13 @@ public class MonitoredPatientList extends PatientList {
     return returnDecimal;
     }
 
-    public boolean isBelowAverage(CholesterolPatient patient) {
+    public boolean isBelowAverage(DataPatient patient, String dataType) {
         /**
          * Function to check if a patient's cholesterol is below average
          * @param patient: The patient to check
          * @return: True for the patient is below average, false for above or equal to average.
          */
-        if (patient.getCholesterolValue().compareTo(averageCholestorol()) == 1) {
+        if (patient.findData(dataType).getValue().compareTo(averageValue(dataType)) == 1) {
          return true;
         }
         return false;
