@@ -24,12 +24,14 @@ public class DataPatient extends BasePatient{
     public void addPatientData(PatientData data) {
         this.patientDataList.add(data);
     }
-    public void updateDataValues() {
+    public void updateDataValues(ArrayList<DataTypes> updateTypes) {
         for (int i=0; i<patientDataList.size(); i++) {
-            patientDataList.get(i).updateValues();
+            if (updateTypes.contains(patientDataList.get(i).getDataType())) {
+                patientDataList.get(i).updateValues();
+            }
             }
     }
-    public PatientData findData(String dataType) {
+    public PatientData findData(DataTypes dataType) {
         PatientData returnData = null;
         for (int i=0; i<patientDataList.size(); i++) {
             if (patientDataList.get(i).getDataType() == dataType) {

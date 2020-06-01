@@ -20,8 +20,8 @@ public class CholesterolData implements PatientData{
     }
 
     @Override
-    public String getDataType() {
-        return "Cholesterol";
+    public DataTypes getDataType() {
+        return DataTypes.Cholesterol;
     }
 
     public void updateValues() {

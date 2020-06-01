@@ -5,21 +5,20 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import java.util.ArrayList;
+
 public class MonitorPatientsTableView extends Region {
     private javafx.scene.control.TableView<DataPatient> patientTable;
     private DetailsView detailsView = new DetailsView();
     private MonitoredPatientList patients;
-    private static String CHOLESTEROL_DATA = "Cholesterol";
+    private static DataTypes CHOLESTEROL_DATA = DataTypes.Cholesterol;
+    private ArrayList<DataTypes> selected_types = new ArrayList();
     public MonitorPatientsTableView(MonitoredPatientList patients) {
         /**
          * Create new MonitorPatientsTableView
@@ -91,7 +90,7 @@ public class MonitorPatientsTableView extends Region {
         patientTable.getColumns().addAll(nameColumn, cholesterolColumn,timeColumn,removeColumn, detailsColumn);
         detailsColumn.setPrefWidth(100);
         //Organise view
-        VBox vBox = new VBox(generateUpdatesView(), patientTable);
+        VBox vBox = new VBox(generateUpdatesView(), patientTable, generateDataCheckBoxes());
         HBox hBox = new HBox(vBox, detailsView);
         this.getChildren().add(hBox);
     }
@@ -108,6 +107,7 @@ public class MonitorPatientsTableView extends Region {
                  * Function to read the text in the textfield and set it as the update frequency when the button is pressed
                  */
                 try {
+
                     patients.setUpdateFrequency(Integer.parseInt(setUpdateFrequencyField.getText()));
                     setUpdateFrequencyField.setText("Success!");
                 } catch (NumberFormatException exception) {
@@ -116,5 +116,30 @@ public class MonitorPatientsTableView extends Region {
             }
         });
         return new HBox(setUpdateFrequencyButton, setUpdateFrequencyField);
+    }
+
+    private Region generateDataCheckBoxes() {
+        ArrayList<CheckBox> checkboxes = new ArrayList();
+
+        for (DataTypes type : DataTypes.values()) {
+            CheckBox cbox = new CheckBox(type.name());
+            cbox.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if (cbox.isSelected()) {
+                        selected_types.add(type);
+                    }
+                    else {
+                        selected_types.remove(type);
+                    }
+                    patients.setUpdateTypes(selected_types);
+                }
+            });
+            checkboxes.add(cbox);
+
+        }
+        HBox returnBox = new HBox();
+        returnBox.getChildren().addAll(checkboxes);
+        return returnBox;
     }
 }
