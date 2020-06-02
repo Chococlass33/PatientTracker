@@ -9,7 +9,7 @@ public class MonitoredPatientList extends PatientList {
     private ScheduledExecutorService updateDataService;
     private Runnable updateData;
     private ArrayList<DataTypes> updateTypes = new ArrayList<>();
-    public MonitoredPatientList(GetCholesterol requests) {
+    public MonitoredPatientList(GetBaseData requests) {
         /**
          * Creates new MonitoredPatientList
          * @param requests: object of type getPatientsCholesterol to get patients from

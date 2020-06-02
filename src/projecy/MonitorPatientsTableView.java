@@ -19,6 +19,8 @@ public class MonitorPatientsTableView extends Region {
     private MonitoredPatientList patients;
     private static DataTypes CHOLESTEROL_DATA = DataTypes.Cholesterol;
     private ArrayList<DataTypes> selected_types = new ArrayList();
+    private int columnsBeforeData = 1;
+    private int columnsAfterData = 2;
     public MonitorPatientsTableView(MonitoredPatientList patients) {
         /**
          * Create new MonitorPatientsTableView
@@ -48,26 +50,9 @@ public class MonitorPatientsTableView extends Region {
             }
         });
         nameColumn.setPrefWidth(175);
-        //Add column for cholesterol
-        TableColumn<DataPatient, String> cholesterolColumn = new TableColumn<DataPatient, String>("Total Cholesterol (mg/dL)");
-        cholesterolColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+        patientTable.getColumns().add(nameColumn);
+        drawDataColumns();
 
-                return param.getValue().findData(CHOLESTEROL_DATA).StringProperty();
-            }
-        });
-        cholesterolColumn.setPrefWidth(100);
-        //Add column for last updated time
-        TableColumn<DataPatient, String> timeColumn = new TableColumn<DataPatient, String>("Time");
-        timeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
-
-                return param.getValue().findData(CHOLESTEROL_DATA).timeProperty();
-            }
-        });
-        timeColumn.setPrefWidth(100);
         //Add column for remove button
         TableColumn<DataPatient, Button> removeColumn = new TableColumn<>("Remove Patient");
         removeColumn.setCellFactory(ActionButtonTableCell.<DataPatient>forTableColumn("Remove", (patient) ->
@@ -87,7 +72,7 @@ public class MonitorPatientsTableView extends Region {
                 ));
 
         //Put together into one table
-        patientTable.getColumns().addAll(nameColumn, cholesterolColumn,timeColumn,removeColumn, detailsColumn);
+        patientTable.getColumns().addAll(removeColumn, detailsColumn);
         detailsColumn.setPrefWidth(100);
         //Organise view
         VBox vBox = new VBox(generateUpdatesView(), patientTable, generateDataCheckBoxes());
@@ -117,7 +102,33 @@ public class MonitorPatientsTableView extends Region {
         });
         return new HBox(setUpdateFrequencyButton, setUpdateFrequencyField);
     }
+    private void drawDataColumns() {
+        this.patientTable.getColumns().remove(columnsBeforeData, patientTable.getColumns().size() - columnsAfterData);
+        for(int i = 0; i < selected_types.size(); i++) {
+            //Add column for cholesterol
+            TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).name());
+            DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
 
+                    return param.getValue().findData(CHOLESTEROL_DATA).StringProperty();
+                }
+            });
+            DataValueColumn.setPrefWidth(100);
+            //Add column for last updated time
+            TableColumn<DataPatient, String> timeColumn = new TableColumn<DataPatient, String>("Time");
+            timeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+
+                    return param.getValue().findData(CHOLESTEROL_DATA).timeProperty();
+                }
+            });
+            timeColumn.setPrefWidth(100);
+            this.patientTable.getColumns().add(columnsBeforeData, timeColumn);
+            this.patientTable.getColumns().add(columnsBeforeData, DataValueColumn);
+        }
+    }
     private Region generateDataCheckBoxes() {
         ArrayList<CheckBox> checkboxes = new ArrayList();
 
@@ -126,12 +137,14 @@ public class MonitorPatientsTableView extends Region {
             cbox.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
+
                     if (cbox.isSelected()) {
                         selected_types.add(type);
                     }
                     else {
                         selected_types.remove(type);
                     }
+                    drawDataColumns();
                     patients.setUpdateTypes(selected_types);
                 }
             });

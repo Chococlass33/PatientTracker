@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Requests implements GetPatients, GetCholesterol, GetWeka
+public class Requests implements GetPatients, GetWeka, GetBaseData
 {
     private IGenericClient client;
     private String baseURL;
@@ -34,29 +34,10 @@ public class Requests implements GetPatients, GetCholesterol, GetWeka
          */
         Patient patient = client.read().resource(Patient.class).withId(patientID).execute();
         DataPatient dataPatient = new DataPatient(patient);
-        PatientData cholesterolData = new CholesterolData(this, dataPatient.id);
-        dataPatient.addPatientData(cholesterolData);
         return dataPatient;
     }
-    public Base getCholesterol(String patientID) {
-        /**
-         * gets base structure containing latest cholesterol infornmation for the patient
-         * @param patientID: the id of the patient to get the cholesterol of
-         * @return: the base structure containing cholesterol infornmation
-         */
-        return getPatientResourceBase(patientID, CHOLESTEROL_CODE);
-    }
-    public Base getPatientBloodPressure(String patientID) {
-        /**
-         * gets base structure containing latest cholesterol infornmation for the patient
-         * @param patientID: the id of the patient to get the cholesterol of
-         * @return: the base structure containing cholesterol infornmation
-         */
-
-        return getPatientResourceBase(patientID, BLOODPRESSURE);
-    }
-    private Base getPatientResourceBase(String patientID, String resourceCode) {
-        Bundle results = getPatientResourceBundle(patientID, resourceCode, "13");
+    public Base getPatientResourceBase(String patientID, DataTypes dataType) {
+        Bundle results = getPatientResourceBundle(patientID, dataType.code, "13");
         //Parse relevant data out of bundle result
         return results.getEntry().get(0).getResource();
     }
