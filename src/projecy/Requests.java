@@ -33,7 +33,7 @@ public class Requests implements GetPatients, GetWeka, GetBaseData
          * @return: a DataPatient object with the details of the patient from the server
          */
         Patient patient = client.read().resource(Patient.class).withId(patientID).execute();
-        DataPatient dataPatient = new DataPatient(patient);
+        DataPatient dataPatient = new DataPatient(patient, this);
         return dataPatient;
     }
     public Base getPatientResourceBase(String patientID, DataTypes dataType) {

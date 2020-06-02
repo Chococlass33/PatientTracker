@@ -6,19 +6,25 @@ import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.Quantity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
-public abstract class PatientData {
+public class PatientData {
 
     protected GetBaseData dataGetter;
     protected String patientID;
     private BigDecimal dataValue;
     private StringProperty dataString = new SimpleStringProperty();
     private StringProperty updateTime = new SimpleStringProperty();
-    public abstract DataTypes getDataType();
+    private DataTypes dataType;
+    public DataTypes getDataType() {
+        return this.dataType;
+    }
 
-    public PatientData(GetBaseData cholesterolGetter, String patientID) {
-        this.dataGetter = cholesterolGetter;
+    public PatientData(GetBaseData dataGetter, String patientID, DataTypes dataType) {
+        this.dataGetter = dataGetter;
         this.patientID = patientID;
+        this.dataType = dataType;
+        this.updateValues();
     }
 
     public void updateValues() {
@@ -26,7 +32,7 @@ public abstract class PatientData {
          * Updates the patient's cholesteral values and updated time with a new value based on cholesterolBase
          * @param CholesterolBase: the base class that contains relevant data for cholesterol
          */
-        Base cholesterolBase = this.dataGetter.getPatientResourceBase(patientID, this.getDataType());
+        Base cholesterolBase = this.dataGetter.getPatientResourceBase(patientID, this.dataType);
         //Unwrap and set cholesterol value and string
         Base valueQuantity = cholesterolBase.getNamedProperty("valueQuantity").getValues().get(0);
         Quantity cholesterolLevel = valueQuantity.castToQuantity(valueQuantity);
@@ -49,4 +55,5 @@ public abstract class PatientData {
     public String getUpdateTime() {return updateTime.get();}
 
     public BigDecimal getValue(){return dataValue;}
+
 }

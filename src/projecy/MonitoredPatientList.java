@@ -9,6 +9,15 @@ public class MonitoredPatientList extends PatientList {
     private ScheduledExecutorService updateDataService;
     private Runnable updateData;
     private ArrayList<DataTypes> updateTypes = new ArrayList<>();
+    @Override
+    public void addPatient(DataPatient patient) {
+        /**
+         * Add Patient to self.patients
+         * @param patient: The patient to add
+         */
+        patient.updateDataValues(updateTypes);
+        super.addPatient(patient);
+    }
     public MonitoredPatientList(GetBaseData requests) {
         /**
          * Creates new MonitoredPatientList
@@ -21,10 +30,7 @@ public class MonitoredPatientList extends PatientList {
                 /**
                  * Function that is run asynchronously every DEFAULT_UPDATE_PERIOD seconds
                  */
-                for (DataPatient patient : patients){
-                    updateValues(patient);
-                    System.out.println("Updating Cholesterol");
-                }
+                updatePatientsValues();
             }
         };
         this.updateDataService = Executors.newScheduledThreadPool(1);
@@ -33,13 +39,17 @@ public class MonitoredPatientList extends PatientList {
     public void setUpdateTypes(ArrayList<DataTypes> updateTypes) {
         this.updateTypes = new ArrayList<>();
         this.updateTypes.addAll(updateTypes);
+        updatePatientsValues();
     }
-    private void updateValues(DataPatient patient) {
+    private void updatePatientsValues() {
         /**
          * Method to update the cholesterol values of a particular patient
          * @Param patient: The patient to update the cholesterolValues of
          */
-        patient.updateDataValues((ArrayList<DataTypes>) updateTypes.clone());
+        for (DataPatient patient : patients){
+            patient.updateDataValues((ArrayList<DataTypes>) updateTypes.clone());
+        }
+        System.out.println("Updated Cholesterol");
     }
     public void setUpdateFrequency(int timeBetweenUpdates) {
         /**
@@ -67,12 +77,15 @@ public class MonitoredPatientList extends PatientList {
     return returnDecimal;
     }
 
-    public boolean isBelowAverage(DataPatient patient, DataTypes dataType) {
+    public Boolean isBelowAverage(DataPatient patient, DataTypes dataType) {
         /**
          * Function to check if a patient's cholesterol is below average
          * @param patient: The patient to check
          * @return: True for the patient is below average, false for above or equal to average.
          */
+        if (patient.findData(dataType).getValue() == null) {
+            return null;
+        }
         if (patient.findData(dataType).getValue().compareTo(averageValue(dataType)) == 1) {
          return true;
         }

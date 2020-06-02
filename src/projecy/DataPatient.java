@@ -13,22 +13,28 @@ public class DataPatient extends BasePatient{
     protected Enumerations.AdministrativeGender gender;
     protected DateType birthDate;
     private ArrayList<PatientData> patientDataList;
+    private GetBaseData dataGetter;
 
-    public DataPatient(Patient patient) {
+    public DataPatient(Patient patient, GetBaseData dataGetter) {
         super(patient.getName().get(0).getNameAsSingleString(),patient.getIdElement().getIdPart());
         address = patient.getAddress().get(0);
         gender = patient.getGender();
         birthDate = patient.getBirthDateElement();
         patientDataList = new ArrayList<>();
+        this.dataGetter = dataGetter;
     }
-    public void addPatientData(PatientData data) {
-        this.patientDataList.add(data);
+    public void addPatientData(DataTypes dataType) {
+        this.patientDataList.add(new PatientData(dataGetter, this.getID(), dataType));
     }
     public void updateDataValues(ArrayList<DataTypes> updateTypes) {
-        for (int i=0; i<patientDataList.size(); i++) {
-            if (updateTypes.contains(patientDataList.get(i).getDataType())) {
-                patientDataList.get(i).updateValues();
+        for (int i=0; i<updateTypes.size(); i++) {
+            for (int j = 0; i < patientDataList.size(); j++) {
+                if (updateTypes.get(i) == patientDataList.get(j).getDataType()) {
+                    patientDataList.get(j).updateValues();
+                    break;
+                }
             }
+            addPatientData(updateTypes.get(i));
             }
     }
     public PatientData findData(DataTypes dataType) {

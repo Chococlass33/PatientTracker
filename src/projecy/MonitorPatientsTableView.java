@@ -17,7 +17,6 @@ public class MonitorPatientsTableView extends Region {
     private javafx.scene.control.TableView<DataPatient> patientTable;
     private DetailsView detailsView = new DetailsView();
     private MonitoredPatientList patients;
-    private static DataTypes CHOLESTEROL_DATA = DataTypes.Cholesterol;
     private ArrayList<DataTypes> selected_types = new ArrayList();
     private int columnsBeforeData = 1;
     private int columnsAfterData = 2;
@@ -37,6 +36,7 @@ public class MonitorPatientsTableView extends Region {
                 {
                     public void updateItem(DataPatient patient, boolean empty) {
                     super.updateItem(patient, empty) ;
+                    /*
                     if (patient == null) {
                         setStyle("");
                     } else if (patients.isBelowAverage(patient, CHOLESTEROL_DATA)) {
@@ -44,6 +44,7 @@ public class MonitorPatientsTableView extends Region {
                     } else {
                         setStyle("-fx-background-color: green;");
                     }
+                    */
                 }
                 });
                 return new ReadOnlyStringWrapper(p.getValue().getName());
@@ -105,13 +106,28 @@ public class MonitorPatientsTableView extends Region {
     private void drawDataColumns() {
         this.patientTable.getColumns().remove(columnsBeforeData, patientTable.getColumns().size() - columnsAfterData);
         for(int i = 0; i < selected_types.size(); i++) {
-            //Add column for cholesterol
+            //Add column for Data Value
             TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).name());
+            int finalI = i;
             DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+                    param.getTableView().setRowFactory(q -> new TableRow<DataPatient>()
+                    {
+                        public void updateItem(DataPatient patient, boolean empty) {
+                            super.updateItem(patient, empty) ;
 
-                    return param.getValue().findData(CHOLESTEROL_DATA).StringProperty();
+                            if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI)) == null) {
+                                setStyle("");
+                            } else if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI))) {
+                                setStyle("-fx-background-color: tomato;");
+                            } else {
+                                setStyle("-fx-background-color: green;");
+                            }
+
+                        }
+                    });
+                    return param.getValue().findData(selected_types.get(finalI)).StringProperty();
                 }
             });
             DataValueColumn.setPrefWidth(100);
@@ -121,7 +137,7 @@ public class MonitorPatientsTableView extends Region {
                 @Override
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
 
-                    return param.getValue().findData(CHOLESTEROL_DATA).timeProperty();
+                    return param.getValue().findData(selected_types.get(finalI)).timeProperty();
                 }
             });
             timeColumn.setPrefWidth(100);
@@ -144,8 +160,8 @@ public class MonitorPatientsTableView extends Region {
                     else {
                         selected_types.remove(type);
                     }
-                    drawDataColumns();
                     patients.setUpdateTypes(selected_types);
+                    drawDataColumns();
                 }
             });
             checkboxes.add(cbox);
