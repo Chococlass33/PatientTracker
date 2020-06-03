@@ -4,8 +4,6 @@ import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.DateType;
 import org.hl7.fhir.r4.model.Enumerations;
 import org.hl7.fhir.r4.model.Patient;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class DataPatient extends BasePatient{
@@ -14,6 +12,7 @@ public class DataPatient extends BasePatient{
     protected DateType birthDate;
     private ArrayList<PatientData> patientDataList;
     private GetBaseData dataGetter;
+    private PatientDataFactory dataFactory = new PatientDataFactory();
 
     public DataPatient(Patient patient, GetBaseData dataGetter) {
         super(patient.getName().get(0).getNameAsSingleString(),patient.getIdElement().getIdPart());
@@ -24,11 +23,11 @@ public class DataPatient extends BasePatient{
         this.dataGetter = dataGetter;
     }
     public void addPatientData(DataTypes dataType) {
-        this.patientDataList.add(new PatientData(dataGetter, this.getID(), dataType));
+        this.patientDataList.add(dataFactory.createPatientData(dataGetter, this.getID(), dataType));
     }
     public void updateDataValues(ArrayList<DataTypes> updateTypes) {
         for (int i=0; i<updateTypes.size(); i++) {
-            for (int j = 0; i < patientDataList.size(); j++) {
+            for (int j = 0; j < patientDataList.size(); j++) {
                 if (updateTypes.get(i) == patientDataList.get(j).getDataType()) {
                     patientDataList.get(j).updateValues();
                     break;

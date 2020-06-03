@@ -58,7 +58,7 @@ public class MonitoredPatientList extends PatientList {
          */
         this.updateDataService.scheduleWithFixedDelay(updateData, 0, timeBetweenUpdates, TimeUnit.SECONDS);
     }
-    private BigDecimal averageValue(DataTypes dataType) {
+    private BigDecimal averageValue(DataTypes dataType, int dataIndex) {
         /**
          * Function to obtain the average cholesterol of all the patients being monitored
          * @return: BigDecimal value of the average cholesterol of all patients in self.patients
@@ -68,7 +68,7 @@ public class MonitoredPatientList extends PatientList {
          int patientnum = 0;
         for (DataPatient patient : patients)
         {
-            total += patient.findData(dataType).getValue().floatValue();
+            total += patient.findData(dataType).getValue(dataIndex).floatValue();
             total += 1;
             patientnum += 1;
         }
@@ -77,16 +77,16 @@ public class MonitoredPatientList extends PatientList {
     return returnDecimal;
     }
 
-    public Boolean isBelowAverage(DataPatient patient, DataTypes dataType) {
+    public Boolean isBelowAverage(DataPatient patient, DataTypes dataType, int dataIndex) {
         /**
          * Function to check if a patient's cholesterol is below average
          * @param patient: The patient to check
          * @return: True for the patient is below average, false for above or equal to average.
          */
-        if (patient.findData(dataType).getValue() == null) {
+        if (patient.findData(dataType).getValue(dataIndex) == null) {
             return null;
         }
-        if (patient.findData(dataType).getValue().compareTo(averageValue(dataType)) == 1) {
+        if (patient.findData(dataType).getValue(dataIndex).compareTo(averageValue(dataType, dataIndex)) == 1) {
          return true;
         }
         return false;

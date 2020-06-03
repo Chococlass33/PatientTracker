@@ -6,54 +6,37 @@ import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.Quantity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Objects;
 
-public class PatientData {
+public abstract class PatientData {
 
     protected GetBaseData dataGetter;
     protected String patientID;
-    private BigDecimal dataValue;
-    private StringProperty dataString = new SimpleStringProperty();
-    private StringProperty updateTime = new SimpleStringProperty();
-    private DataTypes dataType;
-    public DataTypes getDataType() {
-        return this.dataType;
-    }
+    protected ArrayList<BigDecimal> dataValue = new ArrayList();
+    protected ArrayList<StringProperty> dataString = new ArrayList();
+    protected StringProperty updateTime = new SimpleStringProperty();
+    public abstract DataTypes getDataType();
 
-    public PatientData(GetBaseData dataGetter, String patientID, DataTypes dataType) {
+    public PatientData(GetBaseData dataGetter, String patientID) {
         this.dataGetter = dataGetter;
         this.patientID = patientID;
-        this.dataType = dataType;
-        this.updateValues();
+        for (int i=0; i < getDataType().dataValueCount; i++) {
+            this.dataString.add(new SimpleStringProperty(""));
+            this.dataValue.add(null);
+        }
+        updateValues();
     }
 
-    public void updateValues() {
-        /**
-         * Updates the patient's cholesteral values and updated time with a new value based on cholesterolBase
-         * @param CholesterolBase: the base class that contains relevant data for cholesterol
-         */
-        Base cholesterolBase = this.dataGetter.getPatientResourceBase(patientID, this.dataType);
-        //Unwrap and set cholesterol value and string
-        Base valueQuantity = cholesterolBase.getNamedProperty("valueQuantity").getValues().get(0);
-        Quantity cholesterolLevel = valueQuantity.castToQuantity(valueQuantity);
-        dataValue = cholesterolLevel.getValue();
-        dataString.set(dataValue.toString() + ' ' + cholesterolLevel.getUnit());
-        //Unwrap, process and set date of birth
-        String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();
-        rawDate = rawDate.replace("DateTimeType[", "");
-        rawDate = rawDate.replace("T", " ");
-        String processedDate = rawDate.replace("]", "");
-        this.updateTime.set(processedDate);
-    }
-
-    public StringProperty StringProperty() {return dataString;}
+    public abstract void updateValues();
+    public StringProperty StringProperty(int propertyIndex) {return dataString.get(propertyIndex);}
 
     public StringProperty timeProperty() {return updateTime;}
 
-    public String getValueString() {return dataString.get();}
+    public String getValueString(int propertyIndex) {return dataString.get(propertyIndex).get();}
 
     public String getUpdateTime() {return updateTime.get();}
 
-    public BigDecimal getValue(){return dataValue;}
+    public BigDecimal getValue(int propertyIndex){return dataValue.get(propertyIndex);}
 
 }

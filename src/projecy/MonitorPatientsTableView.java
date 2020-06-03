@@ -106,31 +106,7 @@ public class MonitorPatientsTableView extends Region {
     private void drawDataColumns() {
         this.patientTable.getColumns().remove(columnsBeforeData, patientTable.getColumns().size() - columnsAfterData);
         for(int i = 0; i < selected_types.size(); i++) {
-            //Add column for Data Value
-            TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).name());
             int finalI = i;
-            DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
-                    param.getTableView().setRowFactory(q -> new TableRow<DataPatient>()
-                    {
-                        public void updateItem(DataPatient patient, boolean empty) {
-                            super.updateItem(patient, empty) ;
-
-                            if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI)) == null) {
-                                setStyle("");
-                            } else if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI))) {
-                                setStyle("-fx-background-color: tomato;");
-                            } else {
-                                setStyle("-fx-background-color: green;");
-                            }
-
-                        }
-                    });
-                    return param.getValue().findData(selected_types.get(finalI)).StringProperty();
-                }
-            });
-            DataValueColumn.setPrefWidth(100);
             //Add column for last updated time
             TableColumn<DataPatient, String> timeColumn = new TableColumn<DataPatient, String>("Time");
             timeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
@@ -142,7 +118,45 @@ public class MonitorPatientsTableView extends Region {
             });
             timeColumn.setPrefWidth(100);
             this.patientTable.getColumns().add(columnsBeforeData, timeColumn);
-            this.patientTable.getColumns().add(columnsBeforeData, DataValueColumn);
+            //Add columns for Data Values
+            for (int j=0; j < selected_types.get(i).dataValueCount; j++) {
+                int finalj = j;
+                TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).name());
+
+                if (selected_types.get(i) == DataTypes.Cholesterol) {
+                    DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+                        @Override
+                        public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+                            /*
+                            param.getTableView().setRowFactory(q -> new TableRow<DataPatient>() {
+                                public void updateItem(DataPatient patient, boolean empty) {
+                                    super.updateItem(patient, empty);
+
+                                    if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI), finalj) == null) {
+                                        setStyle("");
+                                    } else if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI), finalj)) {
+                                        setStyle("-fx-background-color: tomato;");
+                                    } else {
+                                        setStyle("-fx-background-color: green;");
+                                    }
+
+                                }
+                            });
+                             */
+                            return param.getValue().findData(selected_types.get(finalI)).StringProperty(finalj);
+                        }
+                    });
+                } else {
+                    DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+                        @Override
+                        public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+                            return param.getValue().findData(selected_types.get(finalI)).StringProperty(finalj);
+                        }
+                    });
+                }
+                DataValueColumn.setPrefWidth(100);
+                this.patientTable.getColumns().add(columnsBeforeData, DataValueColumn);
+            }
         }
     }
     private Region generateDataCheckBoxes() {
