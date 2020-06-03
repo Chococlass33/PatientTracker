@@ -121,7 +121,7 @@ public class MonitorPatientsTableView extends Region {
             //Add columns for Data Values
             for (int j=0; j < selected_types.get(i).dataValueCount; j++) {
                 int finalj = j;
-                TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).name());
+                TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).columnLabels.get(j));
 
                 if (selected_types.get(i) == DataTypes.Cholesterol) {
                     DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
