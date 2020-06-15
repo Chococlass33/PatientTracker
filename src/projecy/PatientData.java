@@ -29,7 +29,7 @@ public abstract class PatientData {
     }
 
     public abstract void updateValues();
-    public StringProperty StringProperty(int propertyIndex) {return dataString.get(propertyIndex);}
+    public StringProperty stringProperty(int propertyIndex) {return dataString.get(propertyIndex);}
 
     public StringProperty timeProperty() {return updateTime;}
 

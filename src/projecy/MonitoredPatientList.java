@@ -1,4 +1,6 @@
 package projecy;
+import weka.core.pmml.jaxbbindings.False;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -9,6 +11,7 @@ public class MonitoredPatientList extends PatientList {
     private ScheduledExecutorService updateDataService;
     private Runnable updateData;
     private ArrayList<DataTypes> updateTypes = new ArrayList<>();
+    private Boolean runningUpdate = false;
     @Override
     public void addPatient(DataPatient patient) {
         /**
@@ -24,7 +27,7 @@ public class MonitoredPatientList extends PatientList {
          * @param requests: object of type getPatientsCholesterol to get patients from
          */
         super(requests);
-        final int DEFAULT_UPDATE_PERIOD = 60;
+        final int DEFAULT_UPDATE_PERIOD = 20;
         this.updateData = new Runnable() {
             public void run() {
                 /**
@@ -40,16 +43,22 @@ public class MonitoredPatientList extends PatientList {
         this.updateTypes = new ArrayList<>();
         this.updateTypes.addAll(updateTypes);
         updatePatientsValues();
+
     }
     private void updatePatientsValues() {
         /**
          * Method to update the cholesterol values of a particular patient
          * @Param patient: The patient to update the cholesterolValues of
          */
-        for (DataPatient patient : patients){
-            patient.updateDataValues((ArrayList<DataTypes>) updateTypes.clone());
+        if (!runningUpdate) {
+            runningUpdate = true;
+            for (DataPatient patient : patients){
+                patient.updateDataValues((ArrayList<DataTypes>) updateTypes.clone());
+            }
+            System.out.println("Updated Cholesterol");
+            runningUpdate = false;
         }
-        System.out.println("Updated Cholesterol");
+
     }
     public void setUpdateFrequency(int timeBetweenUpdates) {
         /**
