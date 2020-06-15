@@ -1,14 +1,15 @@
 package projecy;
-import weka.core.pmml.jaxbbindings.False;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class MonitoredPatientList extends PatientList {
     private ScheduledExecutorService updateDataService;
+    private ScheduledFuture scheduledFutureUpdateService;
     private Runnable updateData;
     private ArrayList<DataTypes> updateTypes = new ArrayList<>();
     private Boolean runningUpdate = false;
@@ -37,7 +38,7 @@ public class MonitoredPatientList extends PatientList {
             }
         };
         this.updateDataService = Executors.newScheduledThreadPool(1);
-        this.updateDataService.scheduleAtFixedRate(updateData, 0, DEFAULT_UPDATE_PERIOD, TimeUnit.SECONDS);
+        scheduledFutureUpdateService = this.updateDataService.scheduleAtFixedRate(updateData, 0, DEFAULT_UPDATE_PERIOD, TimeUnit.SECONDS);
     }
     public void setUpdateTypes(ArrayList<DataTypes> updateTypes) {
         this.updateTypes = new ArrayList<>();
@@ -65,15 +66,16 @@ public class MonitoredPatientList extends PatientList {
          * Method to set how often the scheduled updater will run it's function
          * @param timeBetweenUpdates: the time, in seconds between each update starting
          */
-        this.updateDataService.scheduleWithFixedDelay(updateData, 0, timeBetweenUpdates, TimeUnit.SECONDS);
+        scheduledFutureUpdateService.cancel(false);
+        scheduledFutureUpdateService = this.updateDataService.scheduleWithFixedDelay(updateData, 0, timeBetweenUpdates, TimeUnit.SECONDS);
     }
-    private BigDecimal averageValue(DataTypes dataType, int dataIndex) {
+    private double averageValue(DataTypes dataType, int dataIndex) {
         /**
          * Function to obtain the average cholesterol of all the patients being monitored
          * @return: BigDecimal value of the average cholesterol of all patients in self.patients
          */
         //Use floating point maths for this calculation as it works better for arithmatics
-         float total = 0;
+         double total = 0;
          int patientnum = 0;
         for (DataPatient patient : patients)
         {
@@ -82,7 +84,7 @@ public class MonitoredPatientList extends PatientList {
             patientnum += 1;
         }
         //Cast result back to BigDecimal
-        BigDecimal returnDecimal = new BigDecimal(total/patientnum);
+        double returnDecimal = total/patientnum;
     return returnDecimal;
     }
 

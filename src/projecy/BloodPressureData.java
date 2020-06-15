@@ -1,5 +1,6 @@
 package projecy;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.Quantity;
@@ -28,8 +29,14 @@ public class BloodPressureData extends PatientData {
             Base valueQuantity = (Base) valueQuantities.get(i);
             Base dataLevel = valueQuantity.getNamedProperty("value").getValues().get(0);
             Quantity dataQuantity = dataLevel.castToQuantity(dataLevel);
-            dataValue.set(i, dataQuantity.getValue());
-            dataString.get(i).set(dataValue.get(i).toString() + ' ' + dataQuantity.getUnit());
+            if (dataValue.get(i) == null) {
+                dataValue.set(i, new SimpleDoubleProperty(dataQuantity.getValue().doubleValue()));
+            }
+            else {
+                dataValue.get(i).set(dataQuantity.getValue().doubleValue());
+            }
+
+            dataString.get(i).set(dataValue.get(i).doubleValue() + ' ' + dataQuantity.getUnit());
         }
         //Unwrap, process and set date of birth
         String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();

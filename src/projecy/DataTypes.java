@@ -1,9 +1,7 @@
 package projecy;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public enum DataTypes {
     Cholesterol("2093-3", 1, new ArrayList(Arrays.asList("Cholesterol"))),
@@ -15,5 +13,13 @@ public enum DataTypes {
         this.code = s;
         this.dataValueCount = valueCount;
         this.columnLabels = columnLabels;
+    }
+    public static DataTypes findFromString(String columnLabel) {
+        for(DataTypes type : DataTypes.values()) {
+            if (type.columnLabels.contains(columnLabel)) {
+                return type;
+            }
+        }
+        return null;
     }
 }

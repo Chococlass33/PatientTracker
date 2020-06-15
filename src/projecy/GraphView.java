@@ -1,5 +1,8 @@
 package projecy;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -7,6 +10,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.Region;
 
+import javax.swing.event.ChangeEvent;
 import java.util.ArrayList;
 
 public class GraphView extends Region implements ListChangeListener<DataPatient> {
@@ -28,8 +32,11 @@ public class GraphView extends Region implements ListChangeListener<DataPatient>
                 XYChart.Series dataSeries = new XYChart.Series();
                 dataSeries.setName(selected_types.get(j).columnLabels.get(k));
                 for (int i=0; i < patientList.patients.size(); i++) {
-                    Number datapoint = patientList.patients.get(i).findData(selected_types.get(j)).dataValue.get(k);
-                    dataSeries.getData().add(new XYChart.Data(patientList.patients.get(i).getName(), datapoint));
+                    DoubleProperty propertyDataValue = patientList.patients.get(i).findData(selected_types.get(j)).dataValue.get(k);
+                    XYChart.Data chartData = new XYChart.Data(patientList.patients.get(i).getName(), propertyDataValue.doubleValue());
+                    new DatapointChangeListner(chartData, propertyDataValue);
+                    dataSeries.getData().add(chartData);
+
                 }
                 barChart.getData().add(dataSeries);
             }
@@ -48,16 +55,36 @@ public class GraphView extends Region implements ListChangeListener<DataPatient>
             }
             else{
                 for(DataPatient patient : c.getRemoved()){
-                    for(XYChart.Series<String, Number> dataSeries: barChart.getData()){
-                        if (dataSeries.getName() == patient.getName()) {
-                            barChart.getData().remove(dataSeries);
+                    for(XYChart.Series<String, Number> dataSeries: barChart.getData()) {
+                        for(XYChart.Data chartData : dataSeries.getData()) {
+                            if (chartData.getXValue() == patient.getName()) {
+                                dataSeries.getData().remove(chartData);
+                                break;
+                            }
                         }
                     }
-
+                }
+                for (DataPatient patient : c.getAddedSubList()) {
+                    int valueCounter = 0;
+                    DataTypes currentDataType = null;
+                    for (XYChart.Series dataSeries : barChart.getData()) {
+                        DataTypes newDataType = DataTypes.findFromString(dataSeries.getName());
+                        if (currentDataType == newDataType){
+                            valueCounter += 1;
+                        } else {
+                            currentDataType  = newDataType;
+                        }
+                        DoubleProperty propertyDataValue = patient.findData(currentDataType).dataValue.get(valueCounter);
+                        XYChart.Data chartData = new XYChart.Data(patient.getName(), propertyDataValue.doubleValue());
+                        new DatapointChangeListner(chartData, propertyDataValue);
+                        dataSeries.getData().add(chartData);
+                    }
                 }
                 System.out.println("Was added or removed");
             }
 
         }
     }
+
+
 }

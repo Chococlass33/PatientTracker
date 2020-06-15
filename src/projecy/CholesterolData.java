@@ -1,5 +1,7 @@
 package projecy;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.Quantity;
@@ -26,21 +28,26 @@ public class CholesterolData extends PatientData {
         //Unwrap and set cholesterol value and string
         Base valueQuantity = cholesterolBase.getNamedProperty("valueQuantity").getValues().get(0);
         Quantity cholesterolLevel = valueQuantity.castToQuantity(valueQuantity);
-        /* Debug changing cholesterol value
-        if (dataValue.get(0) != null) {
-            BigDecimal num = dataValue.get(0);
-            dataValue.set(0, dataValue.get(0).add(num));
-        }else {
-        */
 
-            dataValue.set(0, cholesterolLevel.getValue());
-        //}
+        if (dataValue.get(0) == null) {
+            dataValue.set(0, new SimpleDoubleProperty(cholesterolLevel.getValue().doubleValue()));
+        } else {
+            dataValue.get(0).set(cholesterolLevel.getValue().doubleValue());
+
+            //Testing changing values
+            /*
+            Double num = dataValue.get(0).doubleValue() + 3;
+            dataValue.get(0).set(num);
+            */
+
+        }
+
 
 
         if (dataString.size() == 0) {
-            dataString.add(new SimpleStringProperty(dataValue.toString() + ' ' + cholesterolLevel.getUnit()));
+            dataString.add(new SimpleStringProperty(dataValue.get(0).doubleValue() + ' ' + cholesterolLevel.getUnit()));
         }
-        dataString.get(0).set(dataValue.toString() + ' ' + cholesterolLevel.getUnit());
+        dataString.get(0).set(dataValue.get(0).doubleValue() + ' ' + cholesterolLevel.getUnit());
 
         //Unwrap, process and set date of birth
         String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();
