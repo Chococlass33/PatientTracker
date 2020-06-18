@@ -1,6 +1,5 @@
 package projecy;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -69,7 +68,7 @@ public class MonitoredPatientList extends PatientList {
         scheduledFutureUpdateService.cancel(false);
         scheduledFutureUpdateService = this.updateDataService.scheduleWithFixedDelay(updateData, 0, timeBetweenUpdates, TimeUnit.SECONDS);
     }
-    private double averageValue(DataTypes dataType, int dataIndex) {
+    public double averageValue(DataTypes dataType, int dataIndex) {
         /**
          * Function to obtain the average cholesterol of all the patients being monitored
          * @return: BigDecimal value of the average cholesterol of all patients in self.patients

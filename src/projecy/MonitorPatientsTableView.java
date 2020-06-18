@@ -6,6 +6,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -21,6 +23,9 @@ public class MonitorPatientsTableView extends Region {
     private GraphView graphView;
     private int columnsBeforeData = 1;
     private int columnsAfterData = 2;
+    private Double systolicbloodpressurelimit = 140.0;
+    private Double diastolicbloodpressurelimit = 90.0;
+
     public MonitorPatientsTableView(MonitoredPatientList patients) {
         /**
          * Create new MonitorPatientsTableView
@@ -35,6 +40,7 @@ public class MonitorPatientsTableView extends Region {
             {
                 p.getTableView().setRowFactory(q -> new TableRow<DataPatient>()
                 {
+
                     public void updateItem(DataPatient patient, boolean empty) {
                     super.updateItem(patient, empty) ;
                     /* Obsolete Method. see similar code in DrawDataColumns to re-implement this feature
@@ -47,6 +53,7 @@ public class MonitorPatientsTableView extends Region {
                     }
                     */
                 }
+
                 });
                 return new ReadOnlyStringWrapper(p.getValue().getName());
             }
@@ -79,7 +86,7 @@ public class MonitorPatientsTableView extends Region {
         //Generate Graph View
         graphView = new GraphView(this.patients, this.selected_types);
         //Organise view
-        VBox vBox = new VBox(generateUpdatesView(), patientTable, generateDataCheckBoxes());
+        VBox vBox = new VBox(generateUpdatesView(), patientTable, generateDataCheckBoxes(),generateXY());
         HBox hBox = new HBox(vBox, detailsView, graphView);
         this.getChildren().add(hBox);
     }
@@ -127,33 +134,112 @@ public class MonitorPatientsTableView extends Region {
                 TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).COLUMN_LABELS.get(j));
 
                 if (selected_types.get(i) == DataTypes.Cholesterol) {
+                    DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>()
+                                                        {
+                                                            @Override
+                                                            public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param)
+                                                            {
+                                                                return param.getValue().findData(selected_types.get(finalI)).stringProperty(finalj);
+                                                            }
+                                                        });
+                    DataValueColumn.setCellFactory(new Callback<TableColumn<DataPatient, String>, TableCell<DataPatient,String>>() {
+                        @Override
+                        public TableCell call(TableColumn<DataPatient, String> param) {
+                            TableCell cell = new TableCell<DataPatient, String>()
+                            {
+                                @Override
+                                public void updateItem(String item, boolean empty)
+                                {
+                                    super.updateItem(item, empty);
+                                    if (!empty)
+                                    {
+                                        int currentIndex = indexProperty()
+                                                .getValue() < 0 ? 0
+                                                : indexProperty().getValue();
+                                        String clmStatus = param.getCellData(currentIndex);
+//                                        if (Double.parseDouble(clmStatus.replace("mm[Hg]","")) <= patients.averageValue(DataTypes.Blood_Pressure,currentIndex))
+                                        {
+                                            setStyle("-fx-background-color: red");
+                                            setText(clmStatus);
+                                        }
+//                                        else
+//                                        {
+//                                            setStyle("-fx-background-color: blue");
+//                                            setText(clmStatus);
+//                                        }
+                                    }
+                                    else
+                                    {
+                                        setText("");
+                                        setStyle("");
+                                    }
+                                }
+                            };
+                            return cell;
+
+                        }
+                    });
+                }
+                else {
+
+
                     DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
                         @Override
                         public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
-                            /*
-                            param.getTableView().setRowFactory(q -> new TableRow<DataPatient>() {
-                                public void updateItem(DataPatient patient, boolean empty) {
-                                    super.updateItem(patient, empty);
-
-                                    if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI), finalj) == null) {
-                                        setStyle("");
-                                    } else if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI), finalj)) {
-                                        setStyle("-fx-background-color: tomato;");
-                                    } else {
-                                        setStyle("-fx-background-color: green;");
-                                    }
-
-                                }
-                            });
-                             */
                             return param.getValue().findData(selected_types.get(finalI)).stringProperty(finalj);
                         }
                     });
-                } else {
-                    DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+                    DataValueColumn.setCellFactory(new Callback<TableColumn<DataPatient, String>, TableCell<DataPatient,String>>() {
                         @Override
-                        public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
-                            return param.getValue().findData(selected_types.get(finalI)).stringProperty(finalj);
+                        public TableCell call(TableColumn<DataPatient, String> param) {
+                            TableCell cell = new TableCell<DataPatient, String>()
+                            {
+                                @Override
+                                public void updateItem(String item, boolean empty)
+                                {
+                                    super.updateItem(item, empty);
+                                    if (!empty)
+                                    {
+                                        int currentIndex = indexProperty()
+                                                .getValue() < 0 ? 0
+                                                : indexProperty().getValue();
+                                        String clmStatus = param.getCellData(currentIndex);
+                                        if(param.getText().contains("Systolic"))
+                                        {
+                                            if (Double.parseDouble(clmStatus.replace("mm[Hg]", "")) <= systolicbloodpressurelimit)
+                                            {
+                                                setStyle("-fx-background-color: green");
+                                                setText(clmStatus);
+                                            }
+                                            else
+                                            {
+                                                setStyle("-fx-background-color: red");
+                                                setText(clmStatus);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Double.parseDouble(clmStatus.replace("mm[Hg]", "")) <= diastolicbloodpressurelimit)
+                                            {
+                                                setStyle("-fx-background-color: blue");
+                                                setText(clmStatus);
+                                            }
+                                            else
+                                            {
+                                                setStyle("-fx-background-color: red");
+                                                setText(clmStatus);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        setText("");
+                                        setStyle("");
+                                    }
+                                }
+                                };
+                            return cell;
+
                         }
                     });
                 }
@@ -187,6 +273,83 @@ public class MonitorPatientsTableView extends Region {
         }
         HBox returnBox = new HBox();
         returnBox.getChildren().addAll(checkboxes);
+        return returnBox;
+    }
+    private Region generateXY() {
+        GridPane grid = new GridPane();
+        Label xlabel = new Label("X Value:");
+        grid.add(xlabel,0,0);
+        TextField xfield = new TextField();
+        xfield.setText("140");
+        grid.add(xfield,1,0);
+        Label ylabel = new Label("Y Value:");
+        grid.add(ylabel,2,0);
+        TextField yfield = new TextField();
+        yfield.setText("90");
+        grid.add(yfield,3,0);
+
+        xfield.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                try
+                {
+                    systolicbloodpressurelimit = Double.parseDouble(xfield.getText());
+                }
+                catch(Exception e)
+                {
+
+                }
+                drawDataColumns();
+            }
+        });
+        xfield.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                try
+                {
+                    systolicbloodpressurelimit = Double.parseDouble(xfield.getText());
+                }
+                catch(Exception e)
+                {
+
+                }
+                drawDataColumns();
+            }
+        });
+        yfield.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                try
+                {
+                    diastolicbloodpressurelimit = Double.parseDouble(yfield.getText());
+                }
+                catch(Exception e)
+                {
+
+                }
+
+                drawDataColumns();
+            }
+        });
+        yfield.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                try
+                {
+                    diastolicbloodpressurelimit = Double.parseDouble(yfield.getText());
+                }
+                catch(Exception e)
+                {
+
+                }
+
+                drawDataColumns();
+            }
+        });
+
+
+        HBox returnBox = new HBox();
+        returnBox.getChildren().addAll(grid);
         return returnBox;
     }
 }
