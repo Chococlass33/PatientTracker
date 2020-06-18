@@ -37,7 +37,7 @@ public class Requests implements GetPatients, GetWeka, GetBaseData
         return dataPatient;
     }
     public Base getPatientResourceBase(String patientID, DataTypes dataType) {
-        Bundle results = getPatientResourceBundle(patientID, dataType.code, "13");
+        Bundle results = getPatientResourceBundle(patientID, dataType.CODE, "13");
         //Parse relevant data out of bundle result
         return results.getEntry().get(0).getResource();
     }

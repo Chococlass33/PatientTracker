@@ -1,8 +1,12 @@
 package projecy;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.Quantity;
+
+import java.math.BigDecimal;
 
 public class CholesterolData extends PatientData {
     @Override
@@ -19,24 +23,41 @@ public class CholesterolData extends PatientData {
          * Updates the patient's cholesteral values and updated time with a new value based on cholesterolBase
          * @param CholesterolBase: the base class that contains relevant data for cholesterol
          */
-        Base cholesterolBase = this.dataGetter.getPatientResourceBase(patientID, this.getDataType());
+
+        Base cholesterolBase = this.getDataGetter().getPatientResourceBase(this.getPatientID(), this.getDataType());
         //Unwrap and set cholesterol value and string
         Base valueQuantity = cholesterolBase.getNamedProperty("valueQuantity").getValues().get(0);
         Quantity cholesterolLevel = valueQuantity.castToQuantity(valueQuantity);
-        if (dataValue.size() == 0) {
-            dataValue.add(cholesterolLevel.getValue());
+
+        if (this.getDataValue().get(0) == null) {
+            this.getDataValue().set(0, new SimpleDoubleProperty(cholesterolLevel.getValue().doubleValue()));
         } else {
-            dataValue.set(0, cholesterolLevel.getValue());
+            this.getDataValue().get(0).set(cholesterolLevel.getValue().doubleValue());
+
+            //Testing changing values
+            /*
+            Double num = dataValue.get(0).doubleValue() + 3;
+            dataValue.get(0).set(num);
+            */
+
         }
-        if (dataString.size() == 0) {
-            dataString.add(new SimpleStringProperty(dataValue.toString() + ' ' + cholesterolLevel.getUnit()));
+        if (getDataString().size() == 0) {
+            getDataString().add(new SimpleStringProperty(getDataValue().get(0).doubleValue() + ' ' + cholesterolLevel.getUnit()));
         }
-        dataString.get(0).set(dataValue.toString() + ' ' + cholesterolLevel.getUnit());
+        getDataString().get(0).set(getDataValue().get(0).doubleValue() + ' ' + cholesterolLevel.getUnit());
+
         //Unwrap, process and set date of birth
         String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();
         rawDate = rawDate.replace("DateTimeType[", "");
         rawDate = rawDate.replace("T", " ");
         String processedDate = rawDate.replace("]", "");
-        this.updateTime.set(processedDate);
+        if (this.updateTimeProperty().getValue() == null) {
+            this.updateTimeProperty().set(processedDate);
+        } else {
+            this.updateTimeProperty().set(this.updateTimeProperty().getValue() + "1");
+        }
+
+
+
     }
 }

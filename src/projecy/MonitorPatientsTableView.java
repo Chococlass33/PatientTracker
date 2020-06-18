@@ -18,6 +18,7 @@ public class MonitorPatientsTableView extends Region {
     private DetailsView detailsView = new DetailsView();
     private MonitoredPatientList patients;
     private ArrayList<DataTypes> selected_types = new ArrayList();
+    private GraphView graphView;
     private int columnsBeforeData = 1;
     private int columnsAfterData = 2;
     public MonitorPatientsTableView(MonitoredPatientList patients) {
@@ -36,7 +37,7 @@ public class MonitorPatientsTableView extends Region {
                 {
                     public void updateItem(DataPatient patient, boolean empty) {
                     super.updateItem(patient, empty) ;
-                    /*
+                    /* Obsolete Method. see similar code in DrawDataColumns to re-implement this feature
                     if (patient == null) {
                         setStyle("");
                     } else if (patients.isBelowAverage(patient, CHOLESTEROL_DATA)) {
@@ -75,9 +76,11 @@ public class MonitorPatientsTableView extends Region {
         //Put together into one table
         patientTable.getColumns().addAll(removeColumn, detailsColumn);
         detailsColumn.setPrefWidth(100);
+        //Generate Graph View
+        graphView = new GraphView(this.patients, this.selected_types);
         //Organise view
         VBox vBox = new VBox(generateUpdatesView(), patientTable, generateDataCheckBoxes());
-        HBox hBox = new HBox(vBox, detailsView);
+        HBox hBox = new HBox(vBox, detailsView, graphView);
         this.getChildren().add(hBox);
     }
     private Region generateUpdatesView() {
@@ -119,9 +122,9 @@ public class MonitorPatientsTableView extends Region {
             timeColumn.setPrefWidth(100);
             this.patientTable.getColumns().add(columnsBeforeData, timeColumn);
             //Add columns for Data Values
-            for (int j=0; j < selected_types.get(i).dataValueCount; j++) {
+            for (int j = 0; j < selected_types.get(i).DATA_VALUE_COUNT; j++) {
                 int finalj = j;
-                TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).columnLabels.get(j));
+                TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).COLUMN_LABELS.get(j));
 
                 if (selected_types.get(i) == DataTypes.Cholesterol) {
                     DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
@@ -143,14 +146,14 @@ public class MonitorPatientsTableView extends Region {
                                 }
                             });
                              */
-                            return param.getValue().findData(selected_types.get(finalI)).StringProperty(finalj);
+                            return param.getValue().findData(selected_types.get(finalI)).stringProperty(finalj);
                         }
                     });
                 } else {
                     DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
                         @Override
                         public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
-                            return param.getValue().findData(selected_types.get(finalI)).StringProperty(finalj);
+                            return param.getValue().findData(selected_types.get(finalI)).stringProperty(finalj);
                         }
                     });
                 }
@@ -176,6 +179,7 @@ public class MonitorPatientsTableView extends Region {
                     }
                     patients.setUpdateTypes(selected_types);
                     drawDataColumns();
+                    graphView.updateData(patients, selected_types);
                 }
             });
             checkboxes.add(cbox);
