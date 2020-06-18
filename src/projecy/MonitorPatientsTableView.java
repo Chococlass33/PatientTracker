@@ -122,9 +122,9 @@ public class MonitorPatientsTableView extends Region {
             timeColumn.setPrefWidth(100);
             this.patientTable.getColumns().add(columnsBeforeData, timeColumn);
             //Add columns for Data Values
-            for (int j=0; j < selected_types.get(i).dataValueCount; j++) {
+            for (int j = 0; j < selected_types.get(i).DATA_VALUE_COUNT; j++) {
                 int finalj = j;
-                TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).columnLabels.get(j));
+                TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).COLUMN_LABELS.get(j));
 
                 if (selected_types.get(i) == DataTypes.Cholesterol) {
                     DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {

@@ -1,8 +1,6 @@
 package projecy;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -10,7 +8,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.Region;
 
-import javax.swing.event.ChangeEvent;
 import java.util.ArrayList;
 
 public class GraphView extends Region implements ListChangeListener<DataPatient> {
@@ -28,11 +25,11 @@ public class GraphView extends Region implements ListChangeListener<DataPatient>
     public void updateData(MonitoredPatientList patientList, ArrayList<DataTypes> selected_types) {
         barChart.getData().clear();
         for (int j=0; j < selected_types.size(); j++) {
-            for ( int k = 0; k < selected_types.get(j).dataValueCount; k++)  {
+            for (int k = 0; k < selected_types.get(j).DATA_VALUE_COUNT; k++)  {
                 XYChart.Series dataSeries = new XYChart.Series();
-                dataSeries.setName(selected_types.get(j).columnLabels.get(k));
+                dataSeries.setName(selected_types.get(j).COLUMN_LABELS.get(k));
                 for (int i=0; i < patientList.patients.size(); i++) {
-                    DoubleProperty propertyDataValue = patientList.patients.get(i).findData(selected_types.get(j)).dataValue.get(k);
+                    DoubleProperty propertyDataValue = patientList.patients.get(i).findData(selected_types.get(j)).getDataValue().get(k);
                     XYChart.Data chartData = new XYChart.Data(patientList.patients.get(i).getName(), propertyDataValue.doubleValue());
                     new DatapointChangeListner(chartData, propertyDataValue);
                     dataSeries.getData().add(chartData);
@@ -74,7 +71,7 @@ public class GraphView extends Region implements ListChangeListener<DataPatient>
                         } else {
                             currentDataType  = newDataType;
                         }
-                        DoubleProperty propertyDataValue = patient.findData(currentDataType).dataValue.get(valueCounter);
+                        DoubleProperty propertyDataValue = patient.findData(currentDataType).getDataValue().get(valueCounter);
                         XYChart.Data chartData = new XYChart.Data(patient.getName(), propertyDataValue.doubleValue());
                         new DatapointChangeListner(chartData, propertyDataValue);
                         dataSeries.getData().add(chartData);

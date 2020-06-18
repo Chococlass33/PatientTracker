@@ -24,15 +24,15 @@ public class CholesterolData extends PatientData {
          * @param CholesterolBase: the base class that contains relevant data for cholesterol
          */
 
-        Base cholesterolBase = this.dataGetter.getPatientResourceBase(patientID, this.getDataType());
+        Base cholesterolBase = this.getDataGetter().getPatientResourceBase(this.getPatientID(), this.getDataType());
         //Unwrap and set cholesterol value and string
         Base valueQuantity = cholesterolBase.getNamedProperty("valueQuantity").getValues().get(0);
         Quantity cholesterolLevel = valueQuantity.castToQuantity(valueQuantity);
 
-        if (dataValue.get(0) == null) {
-            dataValue.set(0, new SimpleDoubleProperty(cholesterolLevel.getValue().doubleValue()));
+        if (this.getDataValue().get(0) == null) {
+            this.getDataValue().set(0, new SimpleDoubleProperty(cholesterolLevel.getValue().doubleValue()));
         } else {
-            dataValue.get(0).set(cholesterolLevel.getValue().doubleValue());
+            this.getDataValue().get(0).set(cholesterolLevel.getValue().doubleValue());
 
             //Testing changing values
             /*
@@ -41,23 +41,20 @@ public class CholesterolData extends PatientData {
             */
 
         }
-
-
-
-        if (dataString.size() == 0) {
-            dataString.add(new SimpleStringProperty(dataValue.get(0).doubleValue() + ' ' + cholesterolLevel.getUnit()));
+        if (getDataString().size() == 0) {
+            getDataString().add(new SimpleStringProperty(getDataValue().get(0).doubleValue() + ' ' + cholesterolLevel.getUnit()));
         }
-        dataString.get(0).set(dataValue.get(0).doubleValue() + ' ' + cholesterolLevel.getUnit());
+        getDataString().get(0).set(getDataValue().get(0).doubleValue() + ' ' + cholesterolLevel.getUnit());
 
         //Unwrap, process and set date of birth
         String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();
         rawDate = rawDate.replace("DateTimeType[", "");
         rawDate = rawDate.replace("T", " ");
         String processedDate = rawDate.replace("]", "");
-        if (this.updateTime.getValue() == null) {
-            this.updateTime.set(processedDate);
+        if (this.updateTimeProperty().getValue() == null) {
+            this.updateTimeProperty().set(processedDate);
         } else {
-            this.updateTime.set(this.updateTime.getValue() + "1");
+            this.updateTimeProperty().set(this.updateTimeProperty().getValue() + "1");
         }
 
 

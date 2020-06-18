@@ -5,8 +5,8 @@ public class BasePatient {
     /**
      * Class for a basic implementation of Patients with a name and ID
      */
-    protected String name;
-    protected String id;
+    private String name;
+    private String id;
 
     public BasePatient(String name, String id) {
         this.name = name;

@@ -7,9 +7,9 @@ import org.hl7.fhir.r4.model.Patient;
 import java.util.ArrayList;
 
 public class DataPatient extends BasePatient{
-    protected Address address;
-    protected Enumerations.AdministrativeGender gender;
-    protected DateType birthDate;
+    private Address address;
+    private Enumerations.AdministrativeGender gender;
+    private DateType birthDate;
     private ArrayList<PatientData> patientDataList;
     private GetBaseData dataGetter;
     private PatientDataFactory dataFactory = new PatientDataFactory();
