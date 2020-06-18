@@ -5,60 +5,58 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import java.util.ArrayList;
+
 public class MonitorPatientsTableView extends Region {
-    private javafx.scene.control.TableView<CholesterolPatient> patientTable;
+    private javafx.scene.control.TableView<DataPatient> patientTable;
     private DetailsView detailsView = new DetailsView();
     private MonitoredPatientList patients;
+    private ArrayList<DataTypes> selected_types = new ArrayList();
+    private int columnsBeforeData = 1;
+    private int columnsAfterData = 2;
     public MonitorPatientsTableView(MonitoredPatientList patients) {
         /**
          * Create new MonitorPatientsTableView
-         * @param patients: The CholesterolPatients to have in the table
+         * @param patients: The DataPatients to have in the table
          */
         this.patients = patients;
-        patientTable = new javafx.scene.control.TableView<CholesterolPatient>(patients.patients);
-        TableColumn<CholesterolPatient,String> nameColumn = new TableColumn<CholesterolPatient,String>("First Name");
-        nameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CholesterolPatient, String>, ObservableValue<String>>() {
+        patientTable = new javafx.scene.control.TableView<DataPatient>(patients.patients);
+        TableColumn<DataPatient,String> nameColumn = new TableColumn<DataPatient,String>("First Name");
+        nameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<CholesterolPatient, String> p)
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> p)
             {
-                p.getTableView().setRowFactory(q -> new TableRow<CholesterolPatient>()
+                p.getTableView().setRowFactory(q -> new TableRow<DataPatient>()
                 {
-                    public void updateItem(CholesterolPatient patient, boolean empty) {
+                    public void updateItem(DataPatient patient, boolean empty) {
                     super.updateItem(patient, empty) ;
+                    /*
                     if (patient == null) {
                         setStyle("");
-                    } else if (patients.isBelowAverage(patient)) {
+                    } else if (patients.isBelowAverage(patient, CHOLESTEROL_DATA)) {
                         setStyle("-fx-background-color: tomato;");
                     } else {
                         setStyle("-fx-background-color: green;");
                     }
+                    */
                 }
                 });
                 return new ReadOnlyStringWrapper(p.getValue().getName());
             }
         });
         nameColumn.setPrefWidth(175);
-        //Add column for cholesterol
-        TableColumn<CholesterolPatient, String> cholesterolColumn = new TableColumn<CholesterolPatient, String>("Total Cholesterol (mg/dL)");
-        cholesterolColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("cholesterolString"));
-        cholesterolColumn.setPrefWidth(100);
-        //Add column for last updated time
-        TableColumn<CholesterolPatient, String> timeColumn = new TableColumn<CholesterolPatient, String>("Time");
-        timeColumn.setCellValueFactory(new PropertyValueFactory<CholesterolPatient, String>("updateTime"));
-        timeColumn.setPrefWidth(100);
+        patientTable.getColumns().add(nameColumn);
+        drawDataColumns();
+
         //Add column for remove button
-        TableColumn<CholesterolPatient, Button> removeColumn = new TableColumn<>("Remove Patient");
-        removeColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Remove", (patient) ->
+        TableColumn<DataPatient, Button> removeColumn = new TableColumn<>("Remove Patient");
+        removeColumn.setCellFactory(ActionButtonTableCell.<DataPatient>forTableColumn("Remove", (patient) ->
                 {
                     patients.removePatient(patient);
                     return patient;
@@ -66,8 +64,8 @@ public class MonitorPatientsTableView extends Region {
         ));
         removeColumn.setPrefWidth(110);
         //Add column for details button
-        TableColumn<CholesterolPatient, Button> detailsColumn = new TableColumn<>("Patient Details");
-        detailsColumn.setCellFactory(ActionButtonTableCell.<CholesterolPatient>forTableColumn("Details", (patient) ->
+        TableColumn<DataPatient, Button> detailsColumn = new TableColumn<>("Patient Details");
+        detailsColumn.setCellFactory(ActionButtonTableCell.<DataPatient>forTableColumn("Details", (patient) ->
                 {
                     detailsView.setDetails(patient);
                     return patient;
@@ -75,10 +73,10 @@ public class MonitorPatientsTableView extends Region {
                 ));
 
         //Put together into one table
-        patientTable.getColumns().addAll(nameColumn, cholesterolColumn,timeColumn,removeColumn, detailsColumn);
+        patientTable.getColumns().addAll(removeColumn, detailsColumn);
         detailsColumn.setPrefWidth(100);
         //Organise view
-        VBox vBox = new VBox(generateUpdatesView(), patientTable);
+        VBox vBox = new VBox(generateUpdatesView(), patientTable, generateDataCheckBoxes());
         HBox hBox = new HBox(vBox, detailsView);
         this.getChildren().add(hBox);
     }
@@ -95,6 +93,7 @@ public class MonitorPatientsTableView extends Region {
                  * Function to read the text in the textfield and set it as the update frequency when the button is pressed
                  */
                 try {
+
                     patients.setUpdateFrequency(Integer.parseInt(setUpdateFrequencyField.getText()));
                     setUpdateFrequencyField.setText("Success!");
                 } catch (NumberFormatException exception) {
@@ -103,5 +102,87 @@ public class MonitorPatientsTableView extends Region {
             }
         });
         return new HBox(setUpdateFrequencyButton, setUpdateFrequencyField);
+    }
+    private void drawDataColumns() {
+        this.patientTable.getColumns().remove(columnsBeforeData, patientTable.getColumns().size() - columnsAfterData);
+        for(int i = 0; i < selected_types.size(); i++) {
+            int finalI = i;
+            //Add column for last updated time
+            TableColumn<DataPatient, String> timeColumn = new TableColumn<DataPatient, String>("Time");
+            timeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+
+                    return param.getValue().findData(selected_types.get(finalI)).timeProperty();
+                }
+            });
+            timeColumn.setPrefWidth(100);
+            this.patientTable.getColumns().add(columnsBeforeData, timeColumn);
+            //Add columns for Data Values
+            for (int j=0; j < selected_types.get(i).dataValueCount; j++) {
+                int finalj = j;
+                TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).columnLabels.get(j));
+
+                if (selected_types.get(i) == DataTypes.Cholesterol) {
+                    DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+                        @Override
+                        public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+                            /*
+                            param.getTableView().setRowFactory(q -> new TableRow<DataPatient>() {
+                                public void updateItem(DataPatient patient, boolean empty) {
+                                    super.updateItem(patient, empty);
+
+                                    if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI), finalj) == null) {
+                                        setStyle("");
+                                    } else if (patients.isBelowAverage(param.getValue(), selected_types.get(finalI), finalj)) {
+                                        setStyle("-fx-background-color: tomato;");
+                                    } else {
+                                        setStyle("-fx-background-color: green;");
+                                    }
+
+                                }
+                            });
+                             */
+                            return param.getValue().findData(selected_types.get(finalI)).StringProperty(finalj);
+                        }
+                    });
+                } else {
+                    DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+                        @Override
+                        public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+                            return param.getValue().findData(selected_types.get(finalI)).StringProperty(finalj);
+                        }
+                    });
+                }
+                DataValueColumn.setPrefWidth(100);
+                this.patientTable.getColumns().add(columnsBeforeData, DataValueColumn);
+            }
+        }
+    }
+    private Region generateDataCheckBoxes() {
+        ArrayList<CheckBox> checkboxes = new ArrayList();
+
+        for (DataTypes type : DataTypes.values()) {
+            CheckBox cbox = new CheckBox(type.name());
+            cbox.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+
+                    if (cbox.isSelected()) {
+                        selected_types.add(type);
+                    }
+                    else {
+                        selected_types.remove(type);
+                    }
+                    patients.setUpdateTypes(selected_types);
+                    drawDataColumns();
+                }
+            });
+            checkboxes.add(cbox);
+
+        }
+        HBox returnBox = new HBox();
+        returnBox.getChildren().addAll(checkboxes);
+        return returnBox;
     }
 }

@@ -24,7 +24,7 @@ public class requestExample {
         //Get cholesterol level on patient
         Bundle results = client
                .search()
-                .byUrl("Observation?patient=" + patientID + "&code=2093-3&_sort=date&_count=13")
+                .byUrl("Observation?patient=" + patientID + "&code=55284-4&_sort=date&_count=13")
                .returnBundle(Bundle.class)
                .execute();
         Quantity quantity1 = new Quantity();
