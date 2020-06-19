@@ -1,7 +1,7 @@
 package projecy;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class DetailsView extends Region {
@@ -11,8 +11,10 @@ public class DetailsView extends Region {
     private Text textBox = new Text();
     private Double systolicLimit = new Double(140);
     private DataPatient patient = null;
+    private LineView lineView = new LineView(patient);
+    private VBox vbox = new VBox(textBox, new Text());
     public DetailsView() {
-        this.getChildren().add(textBox);
+        this.getChildren().add(vbox);
     }
     public void setDetails(DataPatient patient) {
         /**
@@ -23,6 +25,7 @@ public class DetailsView extends Region {
         redrawDetails();
     }
     public void redrawDetails() {
+
         if(patient != null) {
             String displayText = "\n";
             displayText += patient.getName() + "\n";
@@ -37,6 +40,14 @@ public class DetailsView extends Region {
                         displayText += data.systolicHistoryValues.get(i) + " (";
                         displayText += data.systolicHistoryTimes.get(i) + "), \n";
                     }
+                    lineView.updateData(patient);
+                    vbox.getChildren().remove(1);
+                    vbox.getChildren().add(lineView);
+                }
+                else
+                {
+                    vbox.getChildren().remove(1);
+                    vbox.getChildren().add(new Text());
                 }
             }
             textBox.setText(displayText);

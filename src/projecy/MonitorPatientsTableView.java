@@ -88,6 +88,7 @@ public class MonitorPatientsTableView extends Region {
         //Organise view
         VBox vBox = new VBox(generateUpdatesView(), patientTable, generateDataCheckBoxes(),generateXY());
         HBox hBox = new HBox(vBox, detailsView, graphView);
+
         this.getChildren().add(hBox);
     }
     private Region generateUpdatesView() {
@@ -242,6 +243,7 @@ public class MonitorPatientsTableView extends Region {
                 this.patientTable.getColumns().add(columnsBeforeData, DataValueColumn);
             }
         }
+
     }
     private Region generateDataCheckBoxes() {
         ArrayList<CheckBox> checkboxes = new ArrayList();
