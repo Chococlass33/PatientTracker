@@ -295,6 +295,7 @@ public class MonitorPatientsTableView extends Region {
 
                 }
                 drawDataColumns();
+                detailsView.setSystolicLimit(systolicbloodpressurelimit);
             }
         });
         xfield.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -309,6 +310,7 @@ public class MonitorPatientsTableView extends Region {
 
                 }
                 drawDataColumns();
+                detailsView.setSystolicLimit(systolicbloodpressurelimit);
             }
         });
         yfield.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -341,8 +343,6 @@ public class MonitorPatientsTableView extends Region {
                 drawDataColumns();
             }
         });
-
-
         HBox returnBox = new HBox();
         returnBox.getChildren().addAll(grid);
         return returnBox;

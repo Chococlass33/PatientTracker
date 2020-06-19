@@ -43,9 +43,15 @@ public class BloodPressureData extends PatientData {
 
             getDataString().get(i).set(getDataValue().get(i).doubleValue() + " " + dataQuantity.getUnit());
         }
-
+        if(systolicHistoryValues == null) {
+            systolicHistoryValues = FXCollections.observableArrayList();
+            systolicHistoryTimes = FXCollections.observableArrayList();
+        }
+        systolicHistoryTimes.clear();
+        systolicHistoryValues.clear();
         //Fill systolicHistory
         for(int i=0; i < PatientData.observationsNumbersRecorded; i++) {
+
             Base base = cholesterolList.get(cholesterolList.size()-(i+1)).getResource();
             List systolicValueQuantities = base.getNamedProperty("component").getValues();
             Base valueQuantity = (Base) systolicValueQuantities.get(1);
@@ -55,10 +61,6 @@ public class BloodPressureData extends PatientData {
             rawDateSystolic = rawDateSystolic.replace("DateTimeType[", "");
             rawDateSystolic = rawDateSystolic.replace("T", " ");
             String processedDateSystolic = rawDateSystolic.replace("]", "");
-            if(systolicHistoryValues == null) {
-                systolicHistoryValues = FXCollections.observableArrayList();
-                systolicHistoryTimes = FXCollections.observableArrayList();
-            }
             systolicHistoryValues.add(dataQuantity.getValue().doubleValue());
             systolicHistoryTimes.add(processedDateSystolic);
         }
