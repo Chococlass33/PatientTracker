@@ -28,7 +28,7 @@ public class LineView extends Region
         XYChart.Series series = new XYChart.Series();
         for (int i = 0; i < data.systolicHistoryTimes.size(); i++)
         {
-            series.getData().add(new XYChart.Data(i, Float.parseFloat(data.systolicHistoryValues.get(i).toString())));
+            series.getData().add(new XYChart.Data(i+1, Float.parseFloat(data.systolicHistoryValues.get(i).toString())));
         }
         series.setName(patient.getName());
         lineChart.getData().add(series);

@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 public class MonitorPatientsTableView extends Region {
     private javafx.scene.control.TableView<DataPatient> patientTable;
-    private DetailsView detailsView = new DetailsView();
     private MonitoredPatientList patients;
+    private DetailsView detailsView ;
     private ArrayList<DataTypes> selected_types = new ArrayList();
     private GraphView graphView;
     private int columnsBeforeData = 1;
@@ -32,6 +32,7 @@ public class MonitorPatientsTableView extends Region {
          * @param patients: The DataPatients to have in the table
          */
         this.patients = patients;
+        detailsView = new DetailsView(patients);
         patientTable = new javafx.scene.control.TableView<DataPatient>(patients.patients);
         TableColumn<DataPatient,String> nameColumn = new TableColumn<DataPatient,String>("First Name");
         nameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {

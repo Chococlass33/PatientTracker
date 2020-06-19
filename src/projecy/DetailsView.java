@@ -1,10 +1,12 @@
 package projecy;
 
+import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class DetailsView extends Region {
+public class DetailsView extends Region implements ListChangeListener<DataPatient>
+{
     /**
      * Class to generate a region displaying all of a DataPatient's nessesary details
      */
@@ -13,8 +15,10 @@ public class DetailsView extends Region {
     private DataPatient patient = null;
     private LineView lineView = new LineView(patient);
     private VBox vbox = new VBox(textBox, new Text());
-    public DetailsView() {
+    private MonitoredPatientList patientList;
+    public DetailsView(MonitoredPatientList patientList) {
         this.getChildren().add(vbox);
+        patientList.patients.addListener(this);
     }
     public void setDetails(DataPatient patient) {
         /**
@@ -55,6 +59,13 @@ public class DetailsView extends Region {
     }
     public void setSystolicLimit(Double newLimit) {
         systolicLimit = newLimit;
+        redrawDetails();
+    }
+
+
+    @Override
+    public void onChanged(Change<? extends DataPatient> c)
+    {
         redrawDetails();
     }
 }
