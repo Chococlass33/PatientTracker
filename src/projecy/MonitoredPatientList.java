@@ -1,6 +1,7 @@
 package projecy;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -52,10 +53,18 @@ public class MonitoredPatientList extends PatientList {
          */
         if (!runningUpdate) {
             runningUpdate = true;
-            for (DataPatient patient : patients){
-                patient.updateDataValues((ArrayList<DataTypes>) updateTypes.clone());
+            Iterator<DataPatient> itr = patients.iterator();
+            while (itr.hasNext()) {
+                DataPatient patient = itr.next();
+                try {
+                    patient.updateDataValues((ArrayList<DataTypes>) updateTypes.clone());
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Can't update patient as they have no data value");
+                    System.out.println("Removing patient from list");
+                    itr.remove();
+                }
             }
-            System.out.println("Updated Cholesterol");
+            System.out.println("Updated Data Values");
             runningUpdate = false;
         }
 
@@ -85,21 +94,6 @@ public class MonitoredPatientList extends PatientList {
         //Cast result back to BigDecimal
         double returnDecimal = total/patientnum;
     return returnDecimal;
-    }
-
-    public Boolean isBelowAverage(DataPatient patient, DataTypes dataType, int dataIndex) {
-        /**
-         * Function to check if a patient's cholesterol is below average
-         * @param patient: The patient to check
-         * @return: True for the patient is below average, false for above or equal to average.
-         */
-        if (patient.findData(dataType).getValue(dataIndex) == null) {
-            return null;
-        }
-        if (patient.findData(dataType).getValue(dataIndex).compareTo(averageValue(dataType, dataIndex)) == 1) {
-         return true;
-        }
-        return false;
     }
 
 }

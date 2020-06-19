@@ -34,7 +34,7 @@ public class BloodPressureData extends PatientData {
                 this.getDataValue().get(i).set(dataQuantity.getValue().doubleValue());
             }
 
-            getDataString().get(i).set(getDataValue().get(i).doubleValue() + ' ' + dataQuantity.getUnit());
+            getDataString().get(i).set(getDataValue().get(i).doubleValue() + " " + dataQuantity.getUnit());
         }
         //Unwrap, process and set date of birth
         String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();

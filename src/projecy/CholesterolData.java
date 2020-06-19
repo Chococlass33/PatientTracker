@@ -42,9 +42,9 @@ public class CholesterolData extends PatientData {
 
         }
         if (getDataString().size() == 0) {
-            getDataString().add(new SimpleStringProperty(getDataValue().get(0).doubleValue() + ' ' + cholesterolLevel.getUnit()));
+            getDataString().add(new SimpleStringProperty(getDataValue().get(0).doubleValue() + " " + cholesterolLevel.getUnit()));
         }
-        getDataString().get(0).set(getDataValue().get(0).doubleValue() + ' ' + cholesterolLevel.getUnit());
+        getDataString().get(0).set(getDataValue().get(0).doubleValue() + " " + cholesterolLevel.getUnit());
 
         //Unwrap, process and set date of birth
         String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();

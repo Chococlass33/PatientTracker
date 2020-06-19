@@ -132,16 +132,15 @@ public class MonitorPatientsTableView extends Region {
             for (int j = 0; j < selected_types.get(i).DATA_VALUE_COUNT; j++) {
                 int finalj = j;
                 TableColumn<DataPatient, String> DataValueColumn = new TableColumn<DataPatient, String>(selected_types.get(i).COLUMN_LABELS.get(j));
-
+                //Set the values of the new cells with the stringproperty of the datas
+                DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
+                    @Override
+                    public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
+                        return param.getValue().findData(selected_types.get(finalI)).stringProperty(finalj);
+                    }
+                });
+                //Set colouring constraints for each datatype
                 if (selected_types.get(i) == DataTypes.Cholesterol) {
-                    DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>()
-                                                        {
-                                                            @Override
-                                                            public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param)
-                                                            {
-                                                                return param.getValue().findData(selected_types.get(finalI)).stringProperty(finalj);
-                                                            }
-                                                        });
                     DataValueColumn.setCellFactory(new Callback<TableColumn<DataPatient, String>, TableCell<DataPatient,String>>() {
                         @Override
                         public TableCell call(TableColumn<DataPatient, String> param) {
@@ -157,16 +156,17 @@ public class MonitorPatientsTableView extends Region {
                                                 .getValue() < 0 ? 0
                                                 : indexProperty().getValue();
                                         String clmStatus = param.getCellData(currentIndex);
-//                                        if (Double.parseDouble(clmStatus.replace("mm[Hg]","")) <= patients.averageValue(DataTypes.Blood_Pressure,currentIndex))
+
+                                       if (Double.parseDouble(clmStatus.replace("mg/dL","")) >= patients.averageValue(selected_types.get(finalI), finalj))
                                         {
                                             setStyle("-fx-background-color: red");
                                             setText(clmStatus);
                                         }
-//                                        else
-//                                        {
-//                                            setStyle("-fx-background-color: blue");
-//                                            setText(clmStatus);
-//                                        }
+                                        else
+                                        {
+                                            setStyle("-fx-background-color: blue");
+                                            setText(clmStatus);
+                                        }
                                     }
                                     else
                                     {
@@ -180,15 +180,10 @@ public class MonitorPatientsTableView extends Region {
                         }
                     });
                 }
-                else {
+                else { //Selected type is Blood Pressure
 
 
-                    DataValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DataPatient, String>, ObservableValue<String>>() {
-                        @Override
-                        public ObservableValue<String> call(TableColumn.CellDataFeatures<DataPatient, String> param) {
-                            return param.getValue().findData(selected_types.get(finalI)).stringProperty(finalj);
-                        }
-                    });
+
                     DataValueColumn.setCellFactory(new Callback<TableColumn<DataPatient, String>, TableCell<DataPatient,String>>() {
                         @Override
                         public TableCell call(TableColumn<DataPatient, String> param) {
