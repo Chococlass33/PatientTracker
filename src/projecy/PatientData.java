@@ -15,6 +15,7 @@ public abstract class PatientData {
     private ArrayList<DoubleProperty> dataValue = new ArrayList();
     private ArrayList<StringProperty> dataString = new ArrayList();
     private StringProperty updateTime = new SimpleStringProperty();
+    protected static int observationsNumbersRecorded = 5;
     public abstract DataTypes getDataType();
 
     public PatientData(GetBaseData dataGetter, String patientID) {
@@ -29,13 +30,9 @@ public abstract class PatientData {
 
     public abstract void updateValues();
     public StringProperty stringProperty(int propertyIndex) {return dataString.get(propertyIndex);}
-
     public StringProperty timeProperty() {return updateTime;}
-
     public String getValueString(int propertyIndex) {return dataString.get(propertyIndex).get();}
-
     public String getUpdateTime() {return updateTime.get();}
-
     public Double getValue(int propertyIndex){return dataValue.get(propertyIndex).get();}
     public DoubleProperty valueProperty(int propertyIndex) {return dataValue.get(propertyIndex);}
     protected GetBaseData getDataGetter() {

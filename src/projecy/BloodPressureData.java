@@ -1,13 +1,19 @@
 package projecy;
 
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.hl7.fhir.r4.model.Base;
+import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Quantity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BloodPressureData extends PatientData {
-
+    public ObservableList systolicHistoryValues;
+    public ObservableList systolicHistoryTimes;
     @Override
     public DataTypes getDataType() {
         return DataTypes.Blood_Pressure;
@@ -19,7 +25,8 @@ public class BloodPressureData extends PatientData {
 
     @Override
     public void updateValues() {
-        Base cholesterolBase = this.getDataGetter().getPatientResourceBase(this.getPatientID(), this.getDataType());
+        List<Bundle.BundleEntryComponent> cholesterolList = this.getDataGetter().getPatientResourceBase(this.getPatientID(), this.getDataType());
+        Base cholesterolBase = cholesterolList.get(cholesterolList.size()-1).getResource();
         //Unwrap and set cholesterol value and string
         List valueQuantities = cholesterolBase.getNamedProperty("component").getValues();
         assert (valueQuantities.size() == getDataType().DATA_VALUE_COUNT);
@@ -36,7 +43,26 @@ public class BloodPressureData extends PatientData {
 
             getDataString().get(i).set(getDataValue().get(i).doubleValue() + " " + dataQuantity.getUnit());
         }
-        //Unwrap, process and set date of birth
+
+        //Fill systolicHistory
+        for(int i=0; i < PatientData.observationsNumbersRecorded; i++) {
+            Base base = cholesterolList.get(cholesterolList.size()-(i+1)).getResource();
+            List systolicValueQuantities = base.getNamedProperty("component").getValues();
+            Base valueQuantity = (Base) systolicValueQuantities.get(1);
+            Base dataLevel = valueQuantity.getNamedProperty("value").getValues().get(0);
+            Quantity dataQuantity = dataLevel.castToQuantity(dataLevel);
+            String rawDateSystolic = base.getNamedProperty("effective").getValues().get(0).toString();
+            rawDateSystolic = rawDateSystolic.replace("DateTimeType[", "");
+            rawDateSystolic = rawDateSystolic.replace("T", " ");
+            String processedDateSystolic = rawDateSystolic.replace("]", "");
+            if(systolicHistoryValues == null) {
+                systolicHistoryValues = FXCollections.observableArrayList();
+                systolicHistoryTimes = FXCollections.observableArrayList();
+            }
+            systolicHistoryValues.add(dataQuantity.getValue().doubleValue());
+            systolicHistoryTimes.add(processedDateSystolic);
+        }
+        //Unwrap, process and set time of mesurement
         String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();
         rawDate = rawDate.replace("DateTimeType[", "");
         rawDate = rawDate.replace("T", " ");

@@ -4,9 +4,11 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import org.hl7.fhir.r4.model.Base;
+import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Quantity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class CholesterolData extends PatientData {
     @Override
@@ -23,9 +25,8 @@ public class CholesterolData extends PatientData {
          * Updates the patient's cholesteral values and updated time with a new value based on cholesterolBase
          * @param CholesterolBase: the base class that contains relevant data for cholesterol
          */
-
-        Base cholesterolBase = this.getDataGetter().getPatientResourceBase(this.getPatientID(), this.getDataType());
-        //Unwrap and set cholesterol value and string
+        List<Bundle.BundleEntryComponent> cholesterolList = this.getDataGetter().getPatientResourceBase(this.getPatientID(), this.getDataType());
+        Base cholesterolBase = cholesterolList.get(cholesterolList.size()-1).getResource();
         Base valueQuantity = cholesterolBase.getNamedProperty("valueQuantity").getValues().get(0);
         Quantity cholesterolLevel = valueQuantity.castToQuantity(valueQuantity);
 

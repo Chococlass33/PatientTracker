@@ -36,11 +36,11 @@ public class Requests implements GetPatients, GetWeka, GetBaseData
         DataPatient dataPatient = new DataPatient(patient, this);
         return dataPatient;
     }
-    public Base getPatientResourceBase(String patientID, DataTypes dataType) {
+    public List<Bundle.BundleEntryComponent> getPatientResourceBase(String patientID, DataTypes dataType) {
         Bundle results = getPatientResourceBundle(patientID, dataType.CODE, "13");
         //Parse relevant data out of bundle result
 
-        return results.getEntry().get(0).getResource();
+        return results.getEntry();
 
     }
     private Bundle getPatientResourceBundle(String patientID, String resourceCode, String count) {
@@ -56,35 +56,7 @@ public class Requests implements GetPatients, GetWeka, GetBaseData
         //Call the query through the API
         return client.search().byUrl(searchString).returnBundle(Bundle.class).execute();
     }
-    public List<Object> getSystolicHistory(String patientID)
-    {
-        List<Float> values = new ArrayList<Float>();
-        List<String> date = new ArrayList<String>();
 
-        Bundle bundle = getPatientResourceBundle(patientID,BLOODPRESSURE,"5");
-        List<Bundle.BundleEntryComponent> entries = bundle.getEntry();
-        for(Bundle.BundleEntryComponent entry:entries)
-        {
-            Base bloodpressurebase = entry.getResource().getNamedProperty("component").getValues().get(1).getNamedProperty("valueQuantity").getValues().get(0);
-            Float bloodpressure = bloodpressurebase.castToQuantity(bloodpressurebase).getValue().floatValue();
-            values.add(bloodpressure);
-
-            Base bloodpressuredatebase = entry.getResource().getNamedProperty("effectiveDateTime").getValues().get(0);
-            String bloodpressuredate = bloodpressuredatebase.castToDateTime(bloodpressurebase).toString();
-            date.add(bloodpressuredate);
-        }
-
-        List<Object> returnlists= new ArrayList<Object>();
-        returnlists.add(values);
-        returnlists.add(date);
-        return returnlists;
-    }
-
-        /**
-         * Grabs all the codes above, and grabs the latest BundleCount number of them from the server.
-         * @param BundleCount Number of each observation to grab
-         * @return a list of lists containing the bundles of each code type.
-         */
     public List<List<Bundle>> getAllOfObservation(int BundleCount) {
         //Put together search string to query observations
         String[] codes = {CHOLESTEROL_CODE,BLOODPRESSURE,BMI,SMOKING};
