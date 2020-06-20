@@ -115,7 +115,13 @@ public class MonitorPatientsTableView extends Region {
         });
         return new HBox(setUpdateFrequencyButton, setUpdateFrequencyField);
     }
+
+    /**
+     * Draws/redraws the data columns associated with the selected_types chosen for the columns
+     */
     private void drawDataColumns() {
+        String redColour = "-fx-background-color: red";
+        String greenColour = "-fx-background-color: green";
         this.patientTable.getColumns().remove(columnsBeforeData, patientTable.getColumns().size() - columnsAfterData);
         for(int i = 0; i < selected_types.size(); i++) {
             int finalI = i;
@@ -161,12 +167,12 @@ public class MonitorPatientsTableView extends Region {
 
                                        if (Double.parseDouble(clmStatus.replace("mg/dL","")) >= patients.averageValue(selected_types.get(finalI), finalj))
                                         {
-                                            setStyle("-fx-background-color: red");
+                                            setStyle(redColour);
                                             setText(clmStatus);
                                         }
                                         else
                                         {
-                                            setStyle("-fx-background-color: blue");
+                                            setStyle(greenColour);
                                             setText(clmStatus);
                                         }
                                     }
@@ -183,9 +189,6 @@ public class MonitorPatientsTableView extends Region {
                     });
                 }
                 else { //Selected type is Blood Pressure
-
-
-
                     DataValueColumn.setCellFactory(new Callback<TableColumn<DataPatient, String>, TableCell<DataPatient,String>>() {
                         @Override
                         public TableCell call(TableColumn<DataPatient, String> param) {
@@ -205,12 +208,12 @@ public class MonitorPatientsTableView extends Region {
                                         {
                                             if (Double.parseDouble(clmStatus.replace("mm[Hg]", "")) <= systolicbloodpressurelimit)
                                             {
-                                                setStyle("-fx-background-color: green");
+                                                setStyle(greenColour);
                                                 setText(clmStatus);
                                             }
                                             else
                                             {
-                                                setStyle("-fx-background-color: red");
+                                                setStyle(redColour);
                                                 setText(clmStatus);
                                             }
                                         }
@@ -218,12 +221,12 @@ public class MonitorPatientsTableView extends Region {
                                         {
                                             if (Double.parseDouble(clmStatus.replace("mm[Hg]", "")) <= diastolicbloodpressurelimit)
                                             {
-                                                setStyle("-fx-background-color: blue");
+                                                setStyle(greenColour);
                                                 setText(clmStatus);
                                             }
                                             else
                                             {
-                                                setStyle("-fx-background-color: red");
+                                                setStyle(redColour);
                                                 setText(clmStatus);
                                             }
                                         }
@@ -236,7 +239,6 @@ public class MonitorPatientsTableView extends Region {
                                 }
                                 };
                             return cell;
-
                         }
                     });
                 }
@@ -246,9 +248,13 @@ public class MonitorPatientsTableView extends Region {
         }
 
     }
+
+    /**
+     * Generates the checkboxes to choose which data types are displayed and updated on the monitorPatientsTableView
+     * @return: the region containing the checkboxes to display
+     */
     private Region generateDataCheckBoxes() {
         ArrayList<CheckBox> checkboxes = new ArrayList();
-
         for (DataTypes type : DataTypes.values()) {
             CheckBox cbox = new CheckBox(type.name());
             cbox.setOnAction(new EventHandler<ActionEvent>() {
@@ -273,6 +279,11 @@ public class MonitorPatientsTableView extends Region {
         returnBox.getChildren().addAll(checkboxes);
         return returnBox;
     }
+
+    /**
+     * Generates entry boxes for the X and Y value limits on blood pressure colouring and display
+     * @return: the region containing the entry and set UI elements to enter the X Y limits
+     */
     private Region generateXY() {
         GridPane grid = new GridPane();
         Label xlabel = new Label("X Value:");

@@ -13,15 +13,7 @@ public class MonitoredPatientList extends PatientList {
     private Runnable updateData;
     private ArrayList<DataTypes> updateTypes = new ArrayList<>();
     private Boolean runningUpdate = false;
-    @Override
-    public void addPatient(DataPatient patient) {
-        /**
-         * Add Patient to self.patients
-         * @param patient: The patient to add
-         */
-        patient.updateDataValues(updateTypes);
-        super.addPatient(patient);
-    }
+
     public MonitoredPatientList(GetBaseData requests) {
         /**
          * Creates new MonitoredPatientList
@@ -39,6 +31,15 @@ public class MonitoredPatientList extends PatientList {
         };
         this.updateDataService = Executors.newScheduledThreadPool(1);
         scheduledFutureUpdateService = this.updateDataService.scheduleAtFixedRate(updateData, 0, DEFAULT_UPDATE_PERIOD, TimeUnit.SECONDS);
+    }
+    @Override
+    public void addPatient(DataPatient patient) {
+        /**
+         * Add Patient to self.patients
+         * @param patient: The patient to add
+         */
+        patient.updateDataValues(updateTypes);
+        super.addPatient(patient);
     }
     public void setUpdateTypes(ArrayList<DataTypes> updateTypes) {
         this.updateTypes = new ArrayList<>();

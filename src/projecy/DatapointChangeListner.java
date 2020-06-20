@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.chart.XYChart;
 
+
 public class DatapointChangeListner implements ChangeListener<Number> {
     private XYChart.Data dataPoint;
     private DoubleProperty doubleProperty;

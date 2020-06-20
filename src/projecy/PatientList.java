@@ -5,7 +5,9 @@ import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 
-
+/**
+ * class to organise and manage lists of DataPatients within the application
+ */
 public class PatientList {
 
     public ObservableList<DataPatient> patients;

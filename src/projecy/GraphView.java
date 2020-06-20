@@ -10,6 +10,9 @@ import javafx.scene.layout.Region;
 
 import java.util.ArrayList;
 
+/**
+ * Class managing the bar chart displaying the data values for each patient in the monitoredPatientList
+ */
 public class GraphView extends Region implements ListChangeListener<DataPatient> {
     private BarChart<String, Number> barChart;
 
@@ -18,10 +21,16 @@ public class GraphView extends Region implements ListChangeListener<DataPatient>
         patientAxis.setAnimated(false);
         NumberAxis dataAxis = new NumberAxis();
         barChart = new BarChart<String, Number>(patientAxis, dataAxis);
-        this.updateData(patientList, selected_types);
+        updateData(patientList, selected_types);
         this.getChildren().add(barChart);
         patientList.patients.addListener(this);
     }
+
+    /**
+     * Updates the data in the graph with a new patientList and selected types
+     * @param patientList: The patients to show in the graph
+     * @param selected_types: The data types to show in the graph
+     */
     public void updateData(MonitoredPatientList patientList, ArrayList<DataTypes> selected_types) {
         barChart.getData().clear();
         for (int j=0; j < selected_types.size(); j++) {
@@ -33,19 +42,21 @@ public class GraphView extends Region implements ListChangeListener<DataPatient>
                     XYChart.Data chartData = new XYChart.Data(patientList.patients.get(i).getName(), propertyDataValue.doubleValue());
                     new DatapointChangeListner(chartData, propertyDataValue);
                     dataSeries.getData().add(chartData);
-
                 }
                 barChart.getData().add(dataSeries);
             }
-
         }
     }
 
+    /**
+     * Listener method to observe the patient list, and to update the chart if there are any changes
+     * @param c: the change that has occured in the observableList
+     */
     @Override
     public void onChanged(Change<? extends DataPatient> c) {
         while (c.next()) {
             if (c.wasPermutated()){
-                System.out.println("Was permutated");
+                return;
             }
             if (c.wasUpdated()) {
                 System.out.println("Was Updated");
@@ -77,11 +88,7 @@ public class GraphView extends Region implements ListChangeListener<DataPatient>
                         dataSeries.getData().add(chartData);
                     }
                 }
-                System.out.println("Was added or removed");
             }
-
         }
     }
-
-
 }

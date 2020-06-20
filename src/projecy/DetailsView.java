@@ -13,7 +13,7 @@ public class DetailsView extends Region implements ListChangeListener<DataPatien
     private Text textBox = new Text();
     private Double systolicLimit = new Double(140);
     private DataPatient patient = null;
-    private LineView lineView = new LineView(patient);
+    private LineView lineView =null;
     private VBox vbox = new VBox(textBox, new Text());
     private MonitoredPatientList patientList;
     public DetailsView(MonitoredPatientList patientList) {
@@ -28,6 +28,10 @@ public class DetailsView extends Region implements ListChangeListener<DataPatien
         this.patient = patient;
         redrawDetails();
     }
+
+    /**
+     * Method to add/update text and lineView to detailsView
+     */
     public void redrawDetails() {
 
         if(patient != null) {
@@ -40,11 +44,17 @@ public class DetailsView extends Region implements ListChangeListener<DataPatien
             BloodPressureData data = (BloodPressureData) patient.findData(DataTypes.Blood_Pressure);
             if (systolicLimit != null && data != null) {
                 if (data.valueProperty(1).getValue() > systolicLimit) {
+                    displayText += "Systolic Blood Pressure: \n";
                     for (int i = 0; i < data.systolicHistoryTimes.size(); i++) {
                         displayText += data.systolicHistoryValues.get(i) + " (";
                         displayText += data.systolicHistoryTimes.get(i) + "), \n";
                     }
-                    lineView.updateData(patient);
+                    if(this.lineView == null) {
+                        lineView = new LineView(this.patient);
+                    } else {
+                        lineView.updatePatient(this.patient);
+                        lineView.updateData();
+                    }
                     vbox.getChildren().remove(1);
                     vbox.getChildren().add(lineView);
                 }
@@ -57,6 +67,11 @@ public class DetailsView extends Region implements ListChangeListener<DataPatien
             textBox.setText(displayText);
         }
     }
+
+    /**
+     * Sets the limit where if above, the systolic blood pressure levels are displayed
+     * @param newLimit: The new limit of systolic blood pressure to set
+     */
     public void setSystolicLimit(Double newLimit) {
         systolicLimit = newLimit;
         redrawDetails();

@@ -49,16 +49,7 @@ public class CholesterolData extends PatientData {
 
         //Unwrap, process and set date of birth
         String rawDate = cholesterolBase.getNamedProperty("effective").getValues().get(0).toString();
-        rawDate = rawDate.replace("DateTimeType[", "");
-        rawDate = rawDate.replace("T", " ");
-        String processedDate = rawDate.replace("]", "");
-        if (this.updateTimeProperty().getValue() == null) {
-            this.updateTimeProperty().set(processedDate);
-        } else {
-            this.updateTimeProperty().set(this.updateTimeProperty().getValue() + "1");
-        }
-
-
+        updateTimeProperty(rawDate);
 
     }
 }
