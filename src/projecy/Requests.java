@@ -36,13 +36,26 @@ public class Requests implements GetPatients, GetWeka, GetBaseData
         DataPatient dataPatient = new DataPatient(patient, this);
         return dataPatient;
     }
+
+    /**
+     * Method to request the list of relevant infornmation from the server according to relevant parameters
+     * @param patientID: The ID of the patient of which the data is being requested from
+     * @param dataType: The dataType of the data that is requred
+     * @return: A list of bundle entry components of each instance of resource requested
+     */
     public List<Bundle.BundleEntryComponent> getPatientResourceBase(String patientID, DataTypes dataType) {
         Bundle results = getPatientResourceBundle(patientID, dataType.CODE, "13");
-        //Parse relevant data out of bundle result
-
         return results.getEntry();
 
     }
+
+    /**
+     * Method to request a bundle of information from the server according to the relevant parameters
+     * @param patientID: The patient to request the resource of
+     * @param resourceCode: The string code of the resource type to request
+     * @param count: The maximum amount of resources to get
+     * @return: The bundle containing the infornmation requested
+     */
     private Bundle getPatientResourceBundle(String patientID, String resourceCode, String count) {
         //Put together search string to query for the data
         String searchString;

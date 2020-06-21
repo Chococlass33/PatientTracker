@@ -52,8 +52,7 @@ public class DetailsView extends Region implements ListChangeListener<DataPatien
                     if(this.lineView == null) {
                         lineView = new LineView(this.patient);
                     } else {
-                        lineView.updatePatient(this.patient);
-                        lineView.updateData();
+                        lineView.updateData(this.patient);
                     }
                     vbox.getChildren().remove(1);
                     vbox.getChildren().add(lineView);

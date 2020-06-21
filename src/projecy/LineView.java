@@ -19,17 +19,20 @@ public class LineView extends Region implements ListChangeListener<Double> {
         lineChart = new LineChart<String, Number>(xAxis, yAxis);
         lineChart.setAnimated(false);
         this.patient = patient;
-        this.updateData();
         this.getChildren().add(lineChart);
         BloodPressureData data = (BloodPressureData) this.patient.findData(DataTypes.Blood_Pressure);
         data.systolicHistoryValues.addListener(this);
-        this.updateData();
-    }
-    public void updatePatient(DataPatient patient) {
-        this.patient = patient;
+        this.updateData(null);
     }
 
-    public void updateData() {
+    /**
+     * Method to update the data in the lineview with new systolicHistory values
+     * @param newPatient: new patient to show the data of. Null if using the same patient as previous
+     */
+    public void updateData(DataPatient newPatient) {
+        if(newPatient != null) {
+            this.patient = newPatient;
+        }
         if (patient == null) return;
         BloodPressureData data = (BloodPressureData) patient.findData(DataTypes.Blood_Pressure);
         XYChart.Series series;
@@ -50,7 +53,7 @@ public class LineView extends Region implements ListChangeListener<Double> {
 
     @Override
     public void onChanged(Change<? extends Double> c) {
-        Platform.runLater(this::updateData);
+        Platform.runLater(() -> updateData(null));
     }
 }
 
