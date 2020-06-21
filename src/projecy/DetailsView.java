@@ -15,7 +15,7 @@ public class DetailsView extends Region implements ListChangeListener<DataPatien
     private DataPatient patient = null;
     private LineView lineView =null;
     private VBox vbox = new VBox(textBox, new Text());
-    private MonitoredPatientList patientList;
+    private Boolean systolicVisible = false;
     public DetailsView(MonitoredPatientList patientList) {
         this.getChildren().add(vbox);
         patientList.patients.addListener(this);
@@ -43,7 +43,7 @@ public class DetailsView extends Region implements ListChangeListener<DataPatien
 
             BloodPressureData data = (BloodPressureData) patient.findData(DataTypes.Blood_Pressure);
             if (systolicLimit != null && data != null) {
-                if (data.valueProperty(1).getValue() > systolicLimit) {
+                if (data.valueProperty(1).getValue() > systolicLimit && systolicVisible) {
 
                     if(this.lineView == null) {
                         lineView = new LineView(this.patient);
@@ -70,6 +70,13 @@ public class DetailsView extends Region implements ListChangeListener<DataPatien
     public void setSystolicLimit(Double newLimit) {
         systolicLimit = newLimit;
         redrawDetails();
+    }
+    public void setSystolicVisible(Boolean visible) {
+        if(systolicVisible != visible) {
+            systolicVisible = visible;
+            redrawDetails();
+        }
+
     }
 
 

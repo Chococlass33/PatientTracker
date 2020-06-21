@@ -270,6 +270,11 @@ public class MonitorPatientsTableView extends Region {
                     patients.setUpdateTypes(selected_types);
                     drawDataColumns();
                     graphView.updateData(patients, selected_types);
+                    if(selected_types.contains(DataTypes.Blood_Pressure)) {
+                        detailsView.setSystolicVisible(true);
+                    } else {
+                        detailsView.setSystolicVisible(false);
+                    }
                 }
             });
             checkboxes.add(cbox);
