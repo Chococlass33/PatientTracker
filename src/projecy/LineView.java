@@ -7,10 +7,13 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class LineView extends Region implements ListChangeListener<Double> {
     private LineChart<String, Number> lineChart;
     private DataPatient patient;
+    private Text systolicText = new Text();
 
     public LineView(DataPatient patient) {
         CategoryAxis xAxis = new CategoryAxis();
@@ -19,7 +22,7 @@ public class LineView extends Region implements ListChangeListener<Double> {
         lineChart = new LineChart<String, Number>(xAxis, yAxis);
         lineChart.setAnimated(false);
         this.patient = patient;
-        this.getChildren().add(lineChart);
+        this.getChildren().add(new VBox(systolicText, lineChart));
         BloodPressureData data = (BloodPressureData) this.patient.findData(DataTypes.Blood_Pressure);
         data.systolicHistoryValues.addListener(this);
         this.updateData(null);
@@ -35,6 +38,15 @@ public class LineView extends Region implements ListChangeListener<Double> {
         }
         if (patient == null) return;
         BloodPressureData data = (BloodPressureData) patient.findData(DataTypes.Blood_Pressure);
+        //Set text for requirement 4
+        String displayText = "\n";
+        displayText += "Systolic Blood Pressure: \n";
+        for (int i = 0; i < data.systolicHistoryTimes.size(); i++) {
+            displayText += data.systolicHistoryValues.get(i) + " (";
+            displayText += data.systolicHistoryTimes.get(i) + "), \n";
+        }
+        this.systolicText.setText(displayText);
+        //Set chart for requirement 5
         XYChart.Series series;
         if(lineChart.getData().size() == 0) {
             series = new XYChart.Series();

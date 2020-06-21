@@ -44,11 +44,7 @@ public class DetailsView extends Region implements ListChangeListener<DataPatien
             BloodPressureData data = (BloodPressureData) patient.findData(DataTypes.Blood_Pressure);
             if (systolicLimit != null && data != null) {
                 if (data.valueProperty(1).getValue() > systolicLimit) {
-                    displayText += "Systolic Blood Pressure: \n";
-                    for (int i = 0; i < data.systolicHistoryTimes.size(); i++) {
-                        displayText += data.systolicHistoryValues.get(i) + " (";
-                        displayText += data.systolicHistoryTimes.get(i) + "), \n";
-                    }
+
                     if(this.lineView == null) {
                         lineView = new LineView(this.patient);
                     } else {
